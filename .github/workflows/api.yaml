@@ -25,5 +25,3 @@ jobs:
         working-directory: api
       - run: npm run build
         working-directory: api
-      - run: npm test
-        working-directory: api
