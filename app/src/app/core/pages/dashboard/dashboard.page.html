@@ -1,0 +1,47 @@
+<app-header emptyTitle="Dashboard">
+    <div class="action">
+        <button class="a-button a-button--info" (click)="openItemModal($event)">Add dashboard item</button>
+    </div>
+</app-header>
+<div class="o-page">
+    <div class="o-page__section">
+        <div class="u-display--flex">
+            <div class="m-dashboard-item m-dashboard-item--admin u-margin-bottom u-margin-right u-flex-1" *ngIf="(tenantInfo$ | async)?.settings?.dashboardText">
+                <div class="m-dashboard-item__header">
+                    <span class="m-dashboard-item__title">Admin message</span>
+                </div>
+                <div class="m-dashboard-item__content" [innerHTML]="(tenantInfo$ | async)?.settings?.dashboardText | safe"></div>
+            </div>
+            <div
+                style="min-width: 300px;"
+                class="m-dashboard-item m-dashboard-item--admin u-margin-bottom"
+                *ngIf="(permissions$ | async).includes('dashboard/read-connection-info') && (tenantInfo$ | async)?.settings?.streamConnectionIp"
+            >
+                <div class="m-dashboard-item__header">
+                    <span class="m-dashboard-item__title">Connection info</span>
+                </div>
+                <div class="m-dashboard-item__content">
+                    <p><b>Stream IP:</b><br>{{(tenantInfo$ | async)?.settings?.streamConnectionIp }}</p>
+                    <p><b>Stream Port:</b><br>{{(tenantInfo$ | async)?.settings?.streamConnectionPort }}</p>
+                    <ng-container *ngIf="(tenantInfo$ | async)?.settings?.azuraCastIntegrationEnabled && (user$ | async)?.meta?.azuraAccount?.value?.streamer_username">
+                        <p><b>Username:</b><br>{{ (user$ | async)?.meta?.azuraAccount?.value?.streamer_username }}</p>
+                        <p><b>Password:</b><br>{{ (user$ | async)?.meta?.azuraAccount?.value?.streamer_password }}</p>
+                    </ng-container>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="o-page__section" style="height: 100vh;">
+        <gridster [options]="options">
+            <gridster-item [item]="item" *ngFor="let item of dashboard; let i = index">
+                <app-dashboard-item
+                    (removeItem)="handleItemRemove($event)"
+                    (applyConfiguration)="handleConfiguration(i, $event)"
+                    [index]="i"
+                    [type]="item.type"
+                    [configuration]="item.configuration || null">
+                </app-dashboard-item>
+            </gridster-item>
+        </gridster>
+    </div>
+</div>

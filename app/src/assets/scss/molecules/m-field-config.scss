@@ -1,0 +1,58 @@
+.m-field-config__item {
+    margin-bottom: $spacer;
+    color: $grey-light;
+    transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+
+    &--open {
+        .m-field-config__config {
+            height: auto !important;
+            display: block !important;
+        }
+    }
+
+    .m-field__handle-bar {
+        padding-right: $spacer;
+        cursor: grab;
+        color: $grey-light;
+    }
+
+    .m-field-config__action-bar {
+        margin-bottom: $spacer-x-small;
+        display: flex;
+        border-radius: $border-radius;
+        justify-content: space-between;
+        align-items: center;
+        background-color: $grey-dark;
+        padding: $spacer-small $spacer;
+
+        h4 {
+            display: inline-block;
+            margin: 0;
+        }
+    }
+
+    .m-field-config__config {
+        border-radius: $border-radius;
+        background-color: $grey-darker;
+        padding: $spacer;
+        height: 0;
+        display: none;
+    }
+
+    .m-field-config__subfields {
+        border: 1px dashed $grey;
+        min-height: $spacer;
+    }
+}
+
+.cdk-drag-preview {
+    background-color: $grey-lightest;
+}
+
+.cdk-drag-placeholder {
+    opacity: 0;
+}
+
+.cdk-drag-animating {
+    transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}

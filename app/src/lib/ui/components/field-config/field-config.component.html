@@ -1,0 +1,53 @@
+<div [class]="{
+    'm-field-config__item': true,
+    'm-field-config__item--open': open
+}">
+    <div class="m-field-config__action-bar">
+        <div>
+            <span class="m-field__handle-bar uil uil-ellipsis-v"></span>
+            <h4>
+                {{ item.get('name').value }}
+                <small class="a-badge">{{ findFieldConfiguration(item.get('fieldType')?.value)?.name }}</small>
+            </h4>
+        </div>
+        <div>
+            <a href="#" class="a-button a-button--small a-button--transparant" (click)="toggleFieldExpansion($event)">
+                <span [class]="{
+                    'uil': true,
+                    'uil-angle-down': !open,
+                    'uil-angle-up': open
+                }"></span>
+            </a>
+            <a href="#" class="a-button a-button--small a-button--transparant a-button--danger" (click)="removeField($event)">
+                <span class="uil uil-trash"></span>
+            </a>
+        </div>
+    </div>
+    <div class="m-field-config__config">
+        <div class="u-row">
+            <div class="u-col-6">
+                <app-text-input
+                    label="Name"
+                    [formControl]="item.get('name')"
+                ></app-text-input>
+            </div>
+            <div class="u-col-6">
+                <app-text-input
+                    label="Slug"
+                    [formControl]="item.get('slug')"
+                ></app-text-input>
+            </div>
+        </div>
+        <app-boolean-input
+            label="Show on overview"
+            [formControl]="item.get('showOnOverview')"
+        ></app-boolean-input>
+        <ng-container *ngFor="let config of findFieldConfiguration(item.get('fieldType')?.value)?.config">
+            <app-dynamic-input
+                [label]="config.name"
+                [component]="config.component"
+                [formControl]="item.get('config')?.get(config.identifier)"
+            ></app-dynamic-input>
+        </ng-container>
+    </div>
+</div>

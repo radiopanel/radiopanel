@@ -1,0 +1,36 @@
+<app-header description="My Station" [emptyTitle]="'Editing Socials'"></app-header>
+<div class="o-page" *ngIf="form">
+    <form [formGroup]="form">
+        <div class="o-page__section">
+            <app-text-input
+                [formControl]="form.get('socials').get('facebook')"
+                label="Facebook"
+            ></app-text-input>
+            <app-text-input
+                [formControl]="form.get('socials').get('twitter')"
+                label="Twitter"
+            ></app-text-input>
+            <app-text-input
+                [formControl]="form.get('socials').get('instagram')"
+                label="Instagram"
+            ></app-text-input>
+            <app-text-input
+                [formControl]="form.get('socials').get('discord')"
+                label="Discord"
+            ></app-text-input>
+            <app-text-input
+                [formControl]="form.get('socials').get('youtube')"
+                label="YouTube"
+            ></app-text-input>
+            <app-text-input
+                [formControl]="form.get('socials').get('twitch')"
+                label="Twitch"
+            ></app-text-input>
+        </div>
+        <div class="o-page__section">
+            <div class="u-display--flex u-display--space-between">
+                <button type="submit" class="a-button a-button--success" (click)="submit($event)">Save</button>
+            </div>
+        </div>
+    </form>
+</div>

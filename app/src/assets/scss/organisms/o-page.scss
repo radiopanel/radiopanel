@@ -1,0 +1,32 @@
+.o-page {
+    .o-page__chart {
+        width: 100%;
+        height: 200px;
+
+        text {
+            fill: $white;
+        }
+    }
+
+    .o-page__section {
+        border-top: 1px solid $grey-darker;
+        padding-top: $spacer-x-large;
+        padding-bottom: $spacer-x-large;
+
+        &--borderless {
+            padding-top: 0;
+            border-top: none;
+        }
+
+        .o-page__section-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: $spacer;
+
+            .o-page__section-title {
+                margin: 0;
+            }
+        }
+    }
+}

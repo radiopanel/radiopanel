@@ -1,0 +1,38 @@
+<app-header emptyTitle="Show Types">
+    <div class="action">
+        <a routerLink="create" class="a-button a-button--info"><span class="uil uil-plus"></span> Create show type</a>
+    </div>
+</app-header>
+<div class="o-page">
+    <div class="o-page__section">
+        <app-loading [loading]="loading$ | async">
+            <app-empty-state
+                [empty]="(slotTypes$ | async).length === 0"
+                image="/assets/img/empty-states/ship.png"
+                emptyTitle="There are no show types"
+                description="Show types allow you to categorize your slots. Assign a color and make them easily recognizable in the timetable."
+            >
+                <table class="m-table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Last updated</th>
+                            <th style="width: 50px;"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let slotType of (slotTypes$ | async)">
+                            <td>{{ slotType.name }}</td>
+                            <td>{{ slotType.updatedAt | amTimeAgo }}</td>
+                            <td>
+                                <a [routerLink]="slotType.uuid" class="a-button a-button--small">
+                                    <span class="uil uil-pen"></span>
+                                </a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </app-empty-state>
+        </app-loading>
+    </div>
+</div>

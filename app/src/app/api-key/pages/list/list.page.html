@@ -1,0 +1,86 @@
+<app-header emptyTitle="Api keys">
+    <div class="action">
+        <a routerLink="create" class="a-button a-button--info"><span class="uil uil-plus"></span> Create api key</a>
+    </div>
+</app-header>
+<div class="o-page">
+    <app-loading [loading]="loading$ | async">
+        <app-empty-state
+            [empty]="(apiKeys$ | async).length === 0"
+            image="/assets/img/empty-states/communication.png"
+            emptyTitle="You have no api keys"
+            description="Api keys are used to have other applications (discord bots, external site, etc...) communicate with the panel."
+        >
+            <div class="o-page__section">
+                <div class="o-page__section-info">
+                    <h3 class="o-page__section-title">
+                        Total usage
+                    </h3>
+                </div>
+                <div class="o-page__chart">
+                    <ngx-charts-line-chart
+                        [scheme]="colorScheme"
+                        [results]="(aggregation$ | async) || []"
+                        [curve]="curve"
+                        [gradient]="false"
+                        [xAxis]="false"
+                        [yAxis]="true"
+                        [yScaleMin]="0"
+                        [yScaleMax]="300"
+                        [legend]="false"
+                        [referenceLines]="[{ name: 'Usage limit', value: '150' }]"
+                        [showRefLines]="true"
+                        [showXAxisLabel]="false"
+                        [showYAxisLabel]="false"
+                        [showGridLines]="false">
+                    </ngx-charts-line-chart>
+                </div>
+            </div>
+            <div class="o-page__section">
+                <table class="m-table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Permissions #</th>
+                            <th>Usage</th>
+                            <th style="width: 50px;"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let apiKey of (apiKeys$ | async); trackBy: tracker">
+                            <td>{{ apiKey.name }}</td>
+                            <td>{{ apiKey.permissions?.length }}</td>
+                            <td>
+                                <ngx-charts-line-chart
+                                    [view]="[400, 70]"
+                                    [scheme]="colorScheme"
+                                    [results]="apiKey.usage || []"
+                                    [curve]="curve"
+                                    [gradient]="false"
+                                    [xAxis]="false"
+                                    [yAxis]="true"
+                                    [yScaleMin]="0"
+                                    [legend]="false"
+                                    [showXAxisLabel]="false"
+                                    [showYAxisLabel]="false"
+                                    [showGridLines]="false">
+                                </ngx-charts-line-chart>
+                            </td>
+                            <td>
+                                <a [routerLink]="apiKey.uuid" class="a-button a-button--small">
+                                    <span class="uil uil-pen"></span>
+                                </a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <app-pagination
+                    [currentPage]="(pagination$ | async)?.currentPage"
+                    [totalValues]="(pagination$ | async)?.totalEntities"
+                    [itemsPerPage]="(pagination$ | async)?.itemsPerPage"
+                    (update)="onPageUpdate($event)">
+                </app-pagination>
+            </div>
+        </app-empty-state>
+    </app-loading>
+</div>

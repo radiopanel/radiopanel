@@ -1,0 +1,32 @@
+.m-chart {
+    height: 200px;
+    width: 100%;
+
+    text {
+        font-family: 'Cera Pro';
+    }
+
+    .y {
+        text {
+            display: none;
+        }
+
+        line {
+            stroke: $grey-light;
+            stroke-width: 2px;
+            stroke-dasharray: 0px 10px;
+            stroke-linecap: round;
+        }
+    }
+
+    .x line {
+        stroke: transparent;
+    }
+
+    .line-series {
+        path {
+            stroke-width: 5px;
+            stroke-linecap: round;
+        }
+    }
+}

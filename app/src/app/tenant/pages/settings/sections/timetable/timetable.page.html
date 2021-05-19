@@ -1,0 +1,22 @@
+<app-header description="Settings" [emptyTitle]="'Timetable Settings'" [backLink]="['..']"></app-header>
+<div class="o-page" *ngIf="form">
+    <form [formGroup]="form">
+        <div class="o-page__section">
+            <app-text-input
+                type="number"
+                [formControl]="form.get('settings').get('minimumSlotDuration')"
+                label="Minimum slot time (in minutes)"
+            ></app-text-input>
+            <app-text-input
+                type="number"
+                [formControl]="form.get('settings').get('maximumSlotDuration')"
+                label="Maximum slot time (in minutes)"
+            ></app-text-input>
+        </div>
+        <div class="o-page__section">
+            <div class="u-display--flex u-display--space-between">
+                <button type="submit" class="a-button a-button--success" (click)="submit($event)">Save</button>
+            </div>
+        </div>
+    </form>
+</div>

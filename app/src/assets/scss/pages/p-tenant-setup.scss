@@ -1,0 +1,44 @@
+.p-tenant-setup {
+    margin-top: $spacer-x-large;
+    width: 100%;
+
+    &__logo {
+        height: 30px;
+        width: auto;
+        position: relative;
+        z-index: 1;
+    }
+
+    &__image {
+        background: url(https://images.unsplash.com/photo-1500702790369-fe461685b3c8?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80) center center;
+        background-size: cover;
+        position: relative;
+        border-radius: $border-radius;
+        overflow: hidden;
+        padding: $spacer-large;
+        width: 100%;
+
+        &::before {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            content: "";
+            background-color: rgba(0, 0, 0, 0.7);
+        }
+
+        h2 {
+            position: relative;
+            color: white;
+            margin: $spacer-x-large 0 $spacer 0;
+        }
+
+        p {
+            position: relative;
+            color: white;
+            margin: 0;
+            line-height: 23px;
+        }
+    }
+}

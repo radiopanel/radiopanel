@@ -1,0 +1,34 @@
+<app-header description="Banner" [emptyTitle]="'Editing ' + form.get('name')?.value"></app-header>
+<div class="o-page" *ngIf="form">
+    <form [formGroup]="form">
+        <div class="o-page__section">
+            <app-text-input
+                [formControl]="form.get('name')"
+                label="Name"
+            ></app-text-input>
+            <app-text-input
+                [formControl]="form.get('slug')"
+                label="Slug"
+            ></app-text-input>
+            <app-text-input
+                [formControl]="form.get('link')"
+                label="Link"
+            ></app-text-input>
+            <app-text-input
+                [formControl]="form.get('tag')"
+                label="Tag"
+            ></app-text-input>
+            <app-dynamic-file-input
+                [formControl]="form.get('image')"
+                label="image"
+                [key]="'banner-' + banner.uuid"
+            ></app-dynamic-file-input>
+        </div>
+        <div class="o-page__section">
+            <div class="u-display--flex u-display--space-between">
+                <button type="submit" class="a-button a-button--success" (click)="submit($event)">Save</button>
+                <button type="submit" class="a-button a-button--danger a-button--outline" (confirm)="delete($event)">Delete</button>
+            </div>
+        </div>
+    </form>
+</div>

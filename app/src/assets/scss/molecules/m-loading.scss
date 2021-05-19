@@ -1,0 +1,9 @@
+.m-loading {
+    color: $white;
+    text-align: center;
+    padding: 0 $spacer;
+
+    .m-loading__icon {
+        display: inline-block;
+    }
+}

@@ -1,0 +1,23 @@
+<app-loading [loading]="customisationLoading">
+    <div class="p-login">
+        <div class="p-login__content">
+            <img *ngIf="!customisationLoading" [src]="customisation?.logo || '/assets/img/logo-color-light.png'" alt="Logo" class="p-login__logo u-margin-bottom-lg">
+            <!-- <h1 class="u-margin-bottom-xs">Login to your Panel</h1> -->
+            <form [formGroup]="form" (submit)="handleSubmit($event)">
+                <app-text-input
+                    [formControl]="form.get('email')"
+                    label="Email"
+                    type="email"
+                ></app-text-input>
+                <app-text-input
+                    [formControl]="form.get('password')"
+                    label="Password"
+                    type="password"
+                ></app-text-input>
+                <input type="submit" class="a-button" value="Login">
+                <a routerLink="/auth/reset-password" class="u-margin-left">Reset password</a>
+            </form>
+        </div>
+        <div class="p-login__image" [style.backgroundImage]="'url(' + (customisation?.authBackground || 'https://images.unsplash.com/photo-1500702790369-fe461685b3c8?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80') + ')'"></div>
+    </div>
+</app-loading>

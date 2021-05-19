@@ -1,0 +1,21 @@
+<div class="m-quick-access" (keydown.enter)="handleEnter()" (keydown.arrowup)="handleUp($event)" (keydown.arrowdown)="handleDown($event)">
+    <div class="m-quick-access__search">
+        <app-text-input [formControl]="searchForm" placeholder="Search for something..."></app-text-input>
+    </div>
+    <div class="m-quick-access__results">
+        <ng-container *ngFor="let link of (links$ | async); let i = index">
+            <a
+                [routerLink]="link.link"
+                [ngClass]="{
+                    'm-quick-access__result': true,
+                    'm-quick-access__result--selected': selectedIndex === i
+                }"
+                (mouseenter)="handleMouseEnter(i)"
+                (click)="handleClick()"
+            >
+                <p><span [ngClass]="'uil uil-' + link.icon"></span> {{ link.name }}</p>
+                <span class="uil uil-arrow-right" *ngIf="selectedIndex === i"></span>
+            </a>
+        </ng-container>
+    </div>
+</div>

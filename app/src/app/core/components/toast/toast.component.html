@@ -1,0 +1,9 @@
+<div class="m-toast__content">
+    <div class="m-toast__info">
+        <h3 class="m-toast__title">{{ title }}</h3>
+        <p class="m-toast__message">{{ message }}</p>
+    </div>
+    <ng-container *ngIf="options.progressBar">
+        <div class="m-toast__progress" [style.width]="width + '%'"></div>
+    </ng-container>
+</div>

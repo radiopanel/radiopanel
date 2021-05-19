@@ -1,0 +1,9 @@
+<span *ngIf="errors.required" class="a-input__error">
+    <span class="uil uil-exclamation-triangle"></span> A value is required for this field
+</span>
+<span *ngIf="errors.minlength" class="a-input__error">
+    <span class="uil uil-exclamation-triangle"></span> A value longer then {{ errors.minlength.requiredLength }} characters is required
+</span>
+<span *ngIf="errors.email" class="a-input__error">
+    <span class="uil uil-exclamation-triangle"></span> Please fill in a valid email address
+</span>

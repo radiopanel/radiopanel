@@ -1,0 +1,32 @@
+.m-alert {
+    color: white;
+    background-color: rgb(22, 22, 22);
+    padding: $spacer;
+    border-radius: $border-radius;
+
+    &__title {
+        margin: 0 0 $spacer-small 0;
+        padding: 0;
+    }
+
+    p {
+        margin: 0;
+    }
+
+    ul {
+        margin: 0;
+
+        li {
+            padding: 0;
+            margin: 0;
+        }
+    }
+
+    &--danger {
+        background-color: $state-danger;
+    }
+
+    &--info {
+        background-color: $state-info;
+    }
+}

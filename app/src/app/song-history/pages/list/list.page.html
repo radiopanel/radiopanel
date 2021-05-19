@@ -1,0 +1,38 @@
+<app-header emptyTitle="Song History">
+</app-header>
+<div class="o-page">
+    <div class="o-page__section">
+        <table class="m-table">
+            <thead>
+                <tr>
+                    <td></td>
+                    <th>Artist</th>
+                    <th>Title</th>
+                    <th>Played</th>
+                    <th feature-hoc feature="song-database" style="width: 50px;"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let entry of (history$ | async)">
+                    <td>
+                        <div class="m-image-input__preview"><img [src]="entry.song.graphic?.small" alt=""></div>
+                    </td>
+                    <td>{{ entry.song.artist }}</td>
+                    <td>{{ entry.song.title }}</td>
+                    <td>{{ entry.createdAt | amTimeAgo }}</td>
+                    <td feature-hoc feature="song-database">
+                        <a [routerLink]="'/songs/' + entry?.song?.uuid" class="a-button a-button--small">
+                            <span class="uil uil-pen"></span>
+                        </a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <app-pagination
+            [currentPage]="(pagination$ | async)?.currentPage"
+            [totalValues]="(pagination$ | async)?.totalEntities"
+            [itemsPerPage]="(pagination$ | async)?.itemsPerPage"
+            (update)="onPageUpdate($event)">
+        </app-pagination>
+    </div>
+</div>

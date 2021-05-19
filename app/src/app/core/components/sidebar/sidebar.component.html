@@ -1,0 +1,57 @@
+<div [ngClass]="{
+    'o-sidebar': true,
+    'o-sidebar--open': open
+}">
+    <div class="o-sidebar__branding">
+        <img [src]="(tenant$ | async)?.settings?.logo || '/assets/img/logo-color-light.png'" alt="Logo" />
+    </div>
+    <ng-scrollbar [ngClass]="{
+        'o-sidebar__wrapper': true,
+        'o-sidebar__wrapper--top': scrolledToTop,
+        'o-sidebar__wrapper--bottom': scrolledToBottom
+    }" visibility="hover">
+        <div class="o-sidebar__links">
+            <app-menu [links]="coreLinks"></app-menu>
+        </div>
+        <div class="o-sidebar__links" *ngIf="pageTypeLinks.length > 0">
+            <app-menu [links]="pageTypeLinks" description="Pages"></app-menu>
+        </div>
+        <div class="o-sidebar__links" *ngIf="contentTypeLinks.length > 0">
+            <app-menu [links]="contentTypeLinks" description="Content items"></app-menu>
+        </div>
+        <div class="o-sidebar__links" *ngIf="adminLinks.length > 0">
+            <app-menu [links]="adminLinks" description="Admin"></app-menu>
+        </div>
+        <div class="o-sidebar__links" *ngIf="myStationLinks.length > 0">
+            <app-menu [links]="myStationLinks" description="My station"></app-menu>
+        </div>
+    </ng-scrollbar>
+    <div class="o-sidebar__user">
+        <div class="o-sidebar__user-container">
+            <img [src]="(user$ | async)?.avatar" alt="Avatar" *ngIf="(user$ | async)?.avatar">
+            <div class="o-sidebar__user-info">
+                <a routerLink="/profile">{{ (user$ | async)?.username }}</a>
+                <a class="o-sidebar__user-tenant">{{ (tenant$ | async)?.name }}</a>
+            </div>
+        </div>
+        <span>
+            <a href="#" (click)="openTenantSelector($event)" *ngIf="(user$ | async)?.tenants?.length > 1">
+                <span class="uil uil-exchange u-margin-right" tooltip="Change radio station" placement="top"></span>
+            </a>
+            <a href="#" (click)="handleLogout($event)">
+                <span class="uil uil-sign-out-alt" tooltip="Logout" placement="top"></span>
+            </a>
+        </span>
+    </div>
+    <div class="o-sidebar__hamburger">
+        <span [ngClass]="{
+            'uil': true,
+            'uil-angle-double-right': !open,
+            'uil-angle-double-left': open
+        }" (click)="toggleOpen($event)"></span>
+    </div>
+    <p class="o-sidebar__version">v{{ version }} •
+        <a href="https://docs.radiopanel.co" rel="noopener noreferrer" target="_blank">API Documentation</a> •
+        <a href="https://discord.gg/Be4QrEv" rel="noopener noreferrer" target="_blank">Support</a>
+    </p>
+</div>

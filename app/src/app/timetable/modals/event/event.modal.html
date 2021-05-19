@@ -1,0 +1,85 @@
+<div class="o-modal o-modal--big">
+    <div class="o-modal__header">
+        <h3>Creating / Editing a slot</h3>
+        <a href="#" (click)="close($event)"><span class="uil uil-times"></span></a>
+    </div>
+    <div class="o-modal__body">
+        <div class="m-tab u-margin-bottom">
+            <a [class]="{
+                'm-tab__item': true,
+                'm-tab__item--active': activeTab === 'general'
+            }" href="#" (click)="setActiveTab($event, 'general')">General info</a>
+            <a [class]="{
+                'm-tab__item': true,
+                'm-tab__item--active': activeTab === 'timing'
+            }" href="#" (click)="setActiveTab($event, 'timing')">Timing</a>
+        </div>
+        <div class="m-alert m-alert--danger" *ngIf="conflictingSlots?.length !== 0">
+            <h4 class="m-alert__title">The following slot conflicts have been found:</h4>
+            <ul>
+                <li *ngFor="let slot of conflictingSlots">
+                    {{ slot.title }}: {{ slot.start * 1000 | amDateFormat:'HH:mm D MMMM' }} - {{ slot.end * 1000 | amDateFormat:'HH:mm D MMMM' }}
+                </li>
+            </ul>
+        </div>
+        <ng-container *ngIf="activeTab === 'general'">
+            <app-text-input
+                [formControl]="form.get('title')"
+                label="Show title"
+            ></app-text-input>
+            <app-select-input
+                [formControl]="form.get('slotTypeUuid')"
+                label="Show type"
+                [options]="slotTypes$ | async"
+            ></app-select-input>
+            <ng-container *ngIf="canBookForOtherUsers()">
+                <app-data-input
+                    [formControl]="form.get('userUuid')"
+                    [itemLabel]="['username']"
+                    label="User"
+                    endpoint="users"
+                ></app-data-input>
+            </ng-container>
+        </ng-container>
+        <ng-container *ngIf="activeTab === 'timing'">
+            <app-time-input
+                [formControl]="form.get('start')"
+                label="Show start"
+            ></app-time-input>
+            <app-time-input
+                [formControl]="form.get('end')"
+                label="Show end"
+            ></app-time-input>
+            <app-boolean-input
+                [formControl]="form.get('recurring')"
+                label="Recurring"
+            ></app-boolean-input>
+            <ng-container *ngIf="form.get('recurring').value">
+                Recurring every {{ form.get('start')?.value | amDateFormat:'dddd' }} at:
+                <p>{{ form.get('start')?.value | amDateFormat:'HH:mm' }} to {{ form.get('end')?.value | amDateFormat:'HH:mm' }}</p>
+            </ng-container>
+            <ng-container *ngIf="!form.get('recurring').value">
+                <p>Start: {{ form.get('start')?.value | amDateFormat:'HH:mm D MMMM' }}</p>
+                <p>End: {{ form.get('end')?.value | amDateFormat:'HH:mm D MMMM' }}</p>
+            </ng-container>
+        </ng-container>
+    </div>
+    <div class="o-modal__footer">
+        <div class="u-display--flex u-display--justify-space-between">
+            <div>
+                <button class="a-button a-button--success" (click)="save($event)" [disabled]="conflictingSlots?.length !== 0">Save</button>
+                <button class="a-button a-button--warning a-button--outline" (click)="close($event)">Cancel</button>
+            </div>
+
+            <div *ngIf="shouldShowDeleteButton()">
+                <ng-container *ngIf="!data.event.recurring">
+                    <button class="a-button a-button--danger a-button--outline" (confirm)="delete($event)">Delete</button>
+                </ng-container>
+                <ng-container *ngIf="data.event.recurring">
+                    <button class="a-button a-button--danger a-button--outline" (confirm)="delete($event)">Delete all</button>
+                    <button class="a-button a-button--danger a-button--outline" (confirm)="delete($event, true)">Delete only this week</button>
+                </ng-container>
+            </div>
+        </div>
+    </div>
+</div>

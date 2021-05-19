@@ -1,0 +1,245 @@
+.a-input {
+    margin-bottom: $spacer;
+
+    &.a-input--has-errors {
+        .a-input__field {
+            border-color: $state-danger;
+        }
+    }
+
+
+    .a-input__permission-wrapper {
+        display: inline-block;
+        border-radius: $border-radius-small;
+        overflow: hidden;
+
+        .a-input__permission-item {
+            background-color: $grey;
+            font-size: .8rem;
+            display: inline-block;
+            padding: $spacer-x-small;
+            cursor: pointer;
+            color: $grey-darkest;
+            opacity: 0.2;
+        }
+
+        .a-input__permission--deny {
+            background-color: $state-danger;
+        }
+
+        .a-input__permission--inherit {
+            // background-color: $state-danger;
+        }
+
+        .a-input__permission--grant {
+            background-color: $state-success;
+        }
+
+        .a-input__permission--checked {
+            opacity: 1;
+        }
+    }
+
+    &__value {
+        display: block;
+        color: $white;
+        padding-bottom: $spacer-small;
+        white-space: pre-wrap;
+    }
+
+    .a-input__label {
+        color: $grey-light;
+        font-size: .9rem;
+        display: inline-block;
+        margin-bottom: $spacer-small;
+
+        &.a-input__label--inline {
+            display: inline-block;
+            margin-left: $spacer;
+            margin-bottom: 0;
+            position: relative;
+            top: -7px;
+        }
+    }
+
+    &__error {
+        color: $state-danger;
+        margin-top: $spacer-2x-small;
+        display: inline-block;
+    }
+
+    .a-input__field {
+        width: 100%;
+        background: $grey-darkest;
+        border: 2px solid $grey;
+        padding: $spacer-small 1rem;
+        color: $grey-light;
+        height: 47px;
+        border-radius: $border-radius-small;
+        outline: 0;
+        transition: border-color .1s ease;
+
+        &:disabled {
+            border: 2px solid $grey-darker;
+            cursor: not-allowed;
+            color: $grey;
+        }
+
+        &:focus {
+            border-color: $grey;
+        }
+
+        &:focus {
+            border-color: $grey;
+        }
+    }
+
+    select.a-input__field {
+        appearance: none;
+        -webkit-appearance: none;
+        background: url('/assets/img/chevron-down.png') no-repeat transparent;
+        background-position: right 12px top 17px;
+        background-size: 10px;
+        cursor: pointer;
+    }
+
+    textarea.a-input__field {
+        min-height: 150px;
+        padding: 1rem;
+        cursor: text;
+    }
+
+    .a-input__hidden {
+        display: none;
+    }
+
+    .a-input__toggle {
+        width: $spacer-2x-large;
+        height: $spacer-large;
+        border-radius: $spacer-large;
+        background-color: $state-danger;
+        position: relative;
+        display: inline-block;
+
+        &.a-input__toggle--checked {
+            background-color: $state-success;
+
+            &::before {
+                left: calc(#{$spacer-large} + #{$spacer-3x-small});
+            }
+        }
+
+        &::before {
+            content: "";
+            position: absolute;
+            left: $spacer-3x-small;
+            top: $spacer-3x-small;
+            background-color: $white;
+            border-radius: 50%;
+            width: $spacer;
+            height: $spacer;
+            transition: all .2s ease;
+        }
+    }
+
+    .ng-dropdown-panel.ng-select-bottom {
+        margin-top: $spacer-x-small;
+        border-radius: $border-radius-small !important;
+        background-color: $grey-dark;
+        padding: $spacer-2x-small 0;
+        overflow: hidden;
+        border: none;
+        -webkit-box-shadow: 0px 0px 5px 1px rgba(0,0,0,0.3);
+        -moz-box-shadow: 0px 0px 5px 1px rgba(0,0,0,0.3);
+        box-shadow: 0px 0px 5px 1px rgba(0,0,0,0.3);
+
+        .ng-dropdown-panel-items .ng-option {
+            background-color: $grey-dark;
+            color: $grey-lighter;
+
+            &.ng-option-selected {
+                color: $white;
+            }
+        }
+    }
+
+    .ng-select.ng-select-multiple .ng-select-container {
+        .ng-value-container {
+            padding: $spacer-small $spacer-small calc(#{$spacer-small} - 5px);
+
+            > span {
+                display: inherit;
+            }
+
+            .ng-value {
+                border-radius: $border-radius-x-small;
+                background-color: $grey-dark;
+                color: $grey-lighter;
+                overflow: hidden;
+
+                .ng-value-icon {
+                    padding: $spacer-3x-small $spacer-2x-small $spacer-3x-small $spacer-x-small;
+                    border-right: none !important;
+                    display: inline-block;
+                    background-color: $grey;
+
+                    &:hover {
+                        background-color: $grey-dark;
+                    }
+                }
+
+                .ng-value-label {
+                    padding: $spacer-3x-small $spacer-x-small;
+                    display: inline-block;
+                }
+            }
+
+            .ng-input {
+                padding-left: $spacer-small;
+                top: $spacer-small;
+            }
+        }
+    }
+
+    .ng-select.ng-select-single .ng-select-container {
+        .ng-value-container {
+            padding: calc(#{$spacer-small} - 5px) $spacer;
+            color: $grey-light;
+        }
+    }
+
+    .ng-select .ng-select-container {
+        position: relative;
+        width: 100%;
+        background: transparent;
+        border: 2px solid $grey;
+        color: $grey;
+        min-height: 47px;
+        border-radius: $border-radius-small !important;
+
+        &.ng-select-opened .ng-arrow-wrapper .ng-arrow {
+            border-color: transparent transparent $grey-dark;
+        }
+
+        .ng-clear-wrapper {
+            margin-right: 10px;
+        }
+
+        .ng-arrow-wrapper {
+            padding-right: 28px;
+        }
+
+        .ng-arrow-wrapper .ng-arrow {
+            border-color: $grey-light transparent transparent;
+        }
+
+        .ng-value-container .ng-input > input {
+            color: $grey-light;
+            margin-top: 0.4rem;
+        }
+
+        .ng-clear-wrapper {
+            color: $grey-light;
+        }
+    }
+}

@@ -1,0 +1,84 @@
+<app-header emptyTitle="Users">
+    <!-- <div class="action">
+        <a routerLink="create" class="a-button a-button--info"><span class="uil uil-plus"></span> Create user</a>
+    </div> -->
+</app-header>
+<div class="o-page">
+    <div class="o-page__section">
+        <div class="o-page__section-info">
+            <h3 class="o-page__section-title">
+                Invites
+            </h3>
+            <div class="o-page__section-action">
+                <a href="#" class="a-button a-button--success" (click)="openInviteModal($event)"><span class="uil uil-user-plus"></span> Invite user</a>
+            </div>
+        </div>
+        <table class="m-table" *ngIf="(invites$ | async).length">
+            <thead>
+                <tr>
+                    <th>Email address</th>
+                    <th>Role</th>
+                    <th>Invited at</th>
+                    <th style="width: 110px;"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let invite of (invites$ | async)">
+                    <td>{{ invite.emailAddress }}</td>
+                    <td>{{ invite.role?.name }}</td>
+                    <td>{{ invite.createdAt | amDateFormat:'D MMMM YYYY' }}</td>
+                    <td>
+                        <div class="m-button-group">
+                            <a (click)="resendInvite($event, invite.uuid)" class="a-button a-button--small">
+                                <span class="uil uil-refresh"></span>
+                            </a>
+                            <a (click)="deleteInvite($event, invite.uuid)" class="a-button a-button--small a-button--danger">
+                                <span class="uil uil-trash"></span>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="a-empty" *ngIf="!(invites$ | async).length">
+            There are no pending invites
+        </div>
+    </div>
+    <div class="o-page__section">
+        <div class="o-page__section-info">
+            <h3 class="o-page__section-title">
+                Users
+            </h3>
+        </div>
+        <table class="m-table">
+            <thead>
+                <tr>
+                    <th>Username</th>
+                    <th>email</th>
+                    <th>Roles</th>
+                    <th style="width: 50px;"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let user of (users$ | async)">
+                    <td>{{ user.username }}</td>
+                    <td>{{ user.email }}</td>
+                    <td>
+                        <span class="a-badge u-margin-right-xs" *ngFor="let role of user.roles">{{ role.name }}</span>
+                    </td>
+                    <td>
+                        <a [routerLink]="user.uuid" class="a-button a-button--small">
+                            <span class="uil uil-pen"></span>
+                        </a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <app-pagination
+            [currentPage]="(pagination$ | async)?.currentPage"
+            [totalValues]="(pagination$ | async)?.totalEntities"
+            [itemsPerPage]="(pagination$ | async)?.itemsPerPage"
+            (update)="onPageUpdate($event)">
+        </app-pagination>
+    </div>
+</div>

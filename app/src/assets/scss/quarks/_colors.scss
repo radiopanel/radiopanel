@@ -1,0 +1,19 @@
+$grey-darkest: rgb(24, 24, 24) !default;
+$grey-darker: rgb(41, 41, 41) !default;
+$grey-dark: rgb(60, 60, 60) !default;
+$grey-medium: rgb(83, 83, 83) !default;
+$grey: rgb(148, 148, 148) !default;
+$grey-light: rgb(199, 199, 199) !default;
+$grey-lighter: rgb(236, 236, 236) !default;
+$grey-lightest: rgb(245, 245, 245) !default;
+$white: rgb(255, 255, 255) !default;
+
+// https://flatuicolors.com/palette/fr
+$state-danger: rgb(229, 80, 57);
+$state-warning: rgb(250, 152, 58);
+$state-info: rgb(74, 105, 189);
+$state-success: rgb(94, 212, 119);
+
+:root {
+    --color-primary: #FF926B;
+}

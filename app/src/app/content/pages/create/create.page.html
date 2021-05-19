@@ -1,0 +1,10 @@
+<app-header description="Content types" emptyTitle="New content type"></app-header>
+<div class="o-page">
+    <app-entity-type-form
+        [contentFields]="contentFields"
+        (formChange)="handleContentTypeChange($event)"
+    ></app-entity-type-form>
+    <div class="o-page__section">
+        <button type="submit" class="a-button a-button--success" (click)="submit($event)">Save</button>
+    </div>
+</div>

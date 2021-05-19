@@ -1,0 +1,14 @@
+<app-header description="Page Types" [emptyTitle]="pageTypeValues?.name"></app-header>
+<div class="o-page">
+    <app-entity-type-form
+        [entityType]="pageType"
+        [contentFields]="pageFields"
+        (formChange)="handlePageTypeChange($event)"
+    ></app-entity-type-form>
+    <div class="o-page__section">
+        <div class="u-display--flex u-display--space-between">
+            <button type="submit" class="a-button a-button--success" (click)="submit($event)">Save</button>
+            <button type="submit" class="a-button a-button--danger a-button--outline" (confirm)="delete($event)">Delete</button>
+        </div>
+    </div>
+</div>

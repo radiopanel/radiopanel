@@ -1,0 +1,12 @@
+.m-key-value {
+    margin-bottom: $spacer;
+
+    &__value {
+        margin: 0;
+    }
+
+    &__label {
+        margin: 0 0 $spacer-2x-small 0;
+        font-weight: bold;
+    }
+}

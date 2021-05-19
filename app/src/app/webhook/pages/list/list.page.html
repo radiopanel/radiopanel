@@ -1,0 +1,40 @@
+<app-header emptyTitle="Webhooks">
+    <div class="action">
+        <a routerLink="create" class="a-button a-button--info"><span class="uil uil-plus"></span> Create webhook</a>
+    </div>
+</app-header>
+<div class="o-page">
+    <div class="o-page__section">
+        <app-loading [loading]="loading$ | async">
+            <app-empty-state
+                [empty]="(webhooks$ | async).length === 0"
+                image="/assets/img/empty-states/communication.png"
+                emptyTitle="You have no webhooks"
+                description="Webhooks can be used to trigger custom actions."
+            >
+                <table class="m-table">
+                    <thead>
+                        <tr>
+                            <th>Type</th>
+                            <th>Link</th>
+                            <th>Last status</th>
+                            <th style="width: 50px;"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let webhook of (webhooks$ | async)">
+                            <td>{{ webhook.type }}</td>
+                            <td>{{ webhook.url }}</td>
+                            <td>{{ webhook.updatedAt | amTimeAgo }}</td>
+                            <td>
+                                <a [routerLink]="webhook.uuid" class="a-button a-button--small">
+                                    <span class="uil uil-pen"></span>
+                                </a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </app-empty-state>
+        </app-loading>
+    </div>
+</div>

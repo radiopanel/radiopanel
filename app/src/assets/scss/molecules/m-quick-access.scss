@@ -1,0 +1,36 @@
+.m-quick-access {
+    border-radius: $border-radius;
+    overflow: hidden;
+    background-color: $grey-darker;
+    width: 500px;
+
+    &__search {
+        padding: $spacer $spacer 1px $spacer;
+        border-radius: $border-radius;
+        background-color: $grey-darkest;
+    }
+
+    &__results {
+        padding: $spacer;
+        background-color: $grey-darker;
+        max-height: 300px;
+        overflow-y: auto;
+    }
+
+    &__result {
+        padding: $spacer-small;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-radius: $border-radius;
+
+        p {
+            padding: 0;
+            margin: 0;
+        }
+
+        &--selected {
+            background-color: $grey-dark;
+        }
+    }
+}

@@ -1,0 +1,34 @@
+<ng-container [ngSwitch]="fieldType">
+    <ng-container *ngSwitchCase="'text-input'">
+        <p class="u-text-overflow u-padding-right">{{ content }}</p>
+    </ng-container>
+
+    <ng-container *ngSwitchCase="'boolean-input'">
+        <p class="u-text-overflow u-padding-right">
+            <span *ngIf="content" class="uil uil-check"></span>
+            <span *ngIf="!content" class="uil uil-times"></span>
+        </p>
+    </ng-container>
+
+    <ng-container *ngSwitchCase="'textarea-input'">
+        <p class="u-text-overflow u-padding-right">{{ content }}</p>
+    </ng-container>
+
+    <ng-container *ngSwitchCase="'icon-input'">
+        <span [class]="'uil uil-' + content"></span>
+    </ng-container>
+
+    <ng-container *ngSwitchCase="'image-input'">
+        <ng-container *ngIf="isArray(content)">
+            <div class="m-image-input__preview" *ngFor="let image of content | slice:0:3">
+                <img [src]="'/api/v1/resources?w=100&h=100&path=' + image" >
+            </div>
+            ...
+        </ng-container>
+        <ng-container *ngIf="!isArray(content)">
+            <div class="m-image-input__preview">
+                <img [src]="'/api/v1/resources?w=100&h=100&path=' + content" >
+            </div>
+        </ng-container>
+    </ng-container>
+</ng-container>

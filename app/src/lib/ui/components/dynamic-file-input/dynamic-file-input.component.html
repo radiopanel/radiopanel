@@ -1,0 +1,45 @@
+<div [ngClass]="{'a-input--has-errors': ngControl.errors && ngControl.touched, 'a-input': true, 'm-file-input': true }">
+    <div class="a-input__label">{{ label }}</div>
+    <label class="m-file-input__wrapper" [for]="id">
+        <div class="m-file-input__preview" *ngIf="control?.value">
+            <div
+                class="m-file-input__image-preview"
+                [appImageTooltip]="control?.value"
+                [style.backgroundImage]="'url(' + control?.value + ')'"
+                *ngIf="shouldShowImage()"
+            ></div>
+            <span
+                class="m-file-input__icon-preview uil uil-file-blank"
+                *ngIf="!shouldShowImage()"
+            ></span>
+        </div>
+        <div class="a-input__field">
+            <input [type]="type" (change)="onFileChange($event)" class="m-file-input__input" [placeholder]="placeholder" [id]="id">
+            {{ (control?.value || "").split("/").pop() }}
+        </div>
+        <button (click)="clearInput($event)" class="m-file-input__clear">
+            ×
+        </button>
+        <div class="m-file-input__progress">
+            <span class="uil uil-upload"></span>
+            <svg class="m-file-input__progress-ring" width="35" height="35">
+                <circle
+                    [ngClass]="{
+                        'm-file-input__progress-ring__circle': true,
+                        'm-file-input__progress-ring__circle--processing': uploadProgress === 100 && isUploading
+                    }"
+                    [attr.stroke-dasharray]="circumference"
+                    [attr.stroke-dashoffset]="getDashOffset()"
+                    stroke="#FF926B"
+                    stroke-width="3"
+                    fill="transparent"
+                    r="15"
+                    cx="17.5"
+                    cy="17.5"/>
+            </svg>
+        </div>
+    </label>
+    <ng-container *ngIf="ngControl.invalid && ngControl.touched">
+        <app-validation-message [errors]="ngControl.errors"></app-validation-message>
+    </ng-container>
+</div>

@@ -1,0 +1,79 @@
+.m-request {
+    margin-bottom: $spacer;
+    padding: 1.5rem 2rem;
+    color: $grey-light;
+    // border-bottom: 1px solid $grey-lighter;
+    background-color: $grey-darker;
+    border-radius: $border-radius;
+
+    &__meta {
+        display: flex;
+        justify-content: row;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    &__meta-content {
+        display: flex;
+        justify-content: row;
+        justify-content: space-between;
+        align-items: center;
+        flex: 1;
+        width: 100%;
+        margin-right: $spacer;
+    }
+
+    &__type {
+        text-transform: capitalize;
+        font-weight: 500;
+    }
+
+    &__name {
+        text-transform: capitalize;
+        font-weight: 500;
+    }
+
+    &__time {
+        color: $grey;
+    }
+
+    &__info {
+        color: $grey;
+        font-size: .8rem;
+    }
+
+    &__message {
+        white-space: pre-wrap;
+        padding: $spacer 0;
+    }
+
+    &__label {
+        display: block;
+        margin-top: -2px;
+    }
+
+    &__actions {
+        display: flex;
+    }
+
+    .a-button {
+        padding: 0.3rem;
+        max-width: 31px;
+        font-size: 0.8rem;
+        line-height: 1;
+        display: flex;
+        overflow: hidden;
+        align-items: center;
+        transition: 0.5s ease;
+
+        &:hover {
+            padding: 0.3rem .6rem;
+            max-width: 100px;
+        }
+
+        .uil {
+            margin-right: 0.4rem;
+            font-size: 0.9rem;
+        }
+    }
+}

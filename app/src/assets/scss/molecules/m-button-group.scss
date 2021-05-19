@@ -1,0 +1,43 @@
+.m-button-group {
+    display: inline-block;
+
+    > .a-button {
+        margin-right: 0 !important;
+    }
+
+    > .a-button:first-of-type {
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
+    }
+
+    > .a-button:not(:first-of-type):not(:last-of-type) {
+        border-radius: 0;
+    }
+
+    > .a-button:last-of-type {
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
+    }
+}
+
+// @media (max-width: 1300px) {
+//     .m-button-group {
+//         > .a-button {
+//             text-align: center;
+//         }
+
+//         > .a-button:last-of-type {
+//             border-top-left-radius: 0;
+//             border-top-right-radius: 0;
+//             border-bottom-left-radius: $border-radius;
+//             border-bottom-right-radius: $border-radius;
+//         }
+
+//         > .a-button:first-of-type {
+//             border-top-left-radius: $border-radius;
+//             border-top-right-radius: $border-radius;
+//             border-bottom-left-radius: 0;
+//             border-bottom-right-radius: 0;
+//         }
+//     }
+// }

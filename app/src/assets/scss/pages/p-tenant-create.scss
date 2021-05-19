@@ -1,0 +1,36 @@
+.p-tenant-create {
+    flex: 1;
+    margin-top: $spacer;
+    align-self: center;
+    justify-self: center;
+
+    &__logo {
+        height: 50px;
+        width: auto;
+        position: relative;
+        z-index: 1;
+    }
+
+    &__image {
+        background: url(https://images.unsplash.com/photo-1500702790369-fe461685b3c8?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80) center center;
+        background-size: cover;
+        height: 200px;
+        flex: 1;
+        position: relative;
+        border-radius: $border-radius;
+        overflow: hidden;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        &::before {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            content: "";
+            background-color: rgba(0, 0, 0, 0.7);
+        }
+    }
+}

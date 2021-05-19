@@ -1,0 +1,156 @@
+<div class="o-wrapper o-wrapper--small">
+    <div class="p-tenant-setup">
+        <div class="p-tenant-setup__image">
+            <img src="/assets/img/logo-color-light.png" alt="Logo" class="p-tenant-setup__logo">
+            <h2>Setup</h2>
+            <p>Here we will setup your radio station. If you want to skip these steps, feel free to just hit the skip button on the bottom of the page</p>
+        </div>
+        <div class="o-page o-page--small" *ngIf="currentStep === 0">
+            <app-header description="Step 3/4" emptyTitle="Your stream info"></app-header>
+            <form [formGroup]="form" *ngIf="form">
+                <div class="o-page__section">
+                    <app-select-input
+                        [formControl]="form.get('settings').get('configurationType')"
+                        label="Configuration Type"
+                        [options]="[{
+                            label: 'Manual',
+                            value: 'manual'
+                        }, {
+                            label: 'Azuracast',
+                            value: 'azura'
+                        }]"
+                    ></app-select-input>
+                    <p class="u-hint">
+                        If you have an azuracast installation, you can leave the option above selected as-is.<br>
+                        When you some custom setup or use something else like Zeno, Centova, etc... choose "manual" in the dropdown above.<br>
+                        Feel free to join the
+                        <a href="https://discord.gg/Be4QrEv" rel="noopener noreferrer" target="_blank">Radiopanel discord</a> if you need extra help
+                    </p>
+                </div>
+                <div class="o-page__section" *ngIf="form.get('settings').get('configurationType')?.value === 'manual'">
+                    <div class="o-page__section-info">
+                        <h3 class="o-page__section-title">
+                            Manual configuration
+                        </h3>
+                    </div>
+                    <app-select-input
+                        [formControl]="form.get('settings').get('streamType')"
+                        label="Stream Type"
+                        [options]="[{
+                            label: 'Icecast',
+                            value: 'icecast'
+                        },{
+                            label: 'Shoutcast',
+                            value: 'shoutcast'
+                        },{
+                            label: 'Zeno.FM',
+                            value: 'zeno'
+                        }]"
+                    ></app-select-input>
+                    <p class="u-hint u-margin-bottom">
+                        Select here if you're using an icecast server, shoutcast server or if you are using Zeno.FM
+                    </p>
+                    <app-text-input
+                        [formControl]="form.get('settings').get('streamUrl')"
+                        label="Stream Status URL"
+                    ></app-text-input>
+                    <p class="u-hint">
+                        This field should be filled in with a link to your <code>/status-json.xsl</code> for icecast, <code>/stats?json=1</code> for shoutcast
+                        or <code>/now_playing</code> for zeno. for more information regarding this URL take a look at our
+                        <a href="https://docs.radiopanel.co/quick-start#stream-settings" rel="noopener noreferrer" target="_blank">documentation</a>
+                    </p>
+                </div>
+                <div class="o-page__section" *ngIf="form.get('settings').get('configurationType')?.value === 'azura'">
+                    <div class="o-page__section-info">
+                        <h3 class="o-page__section-title">
+                            AzuraCast configuration
+                        </h3>
+                    </div>
+                    <app-text-input
+                        [formControl]="form.get('settings').get('azuraCastBaseUrl')"
+                        label="AzuraCast Base URL"
+                    ></app-text-input>
+                    <p class="u-hint u-margin-bottom">
+                        Your AzuraCast base URL, going to this link should show the AzuraCast login page. This URL should <b>not</b> end with a /
+                    </p>
+                    <app-text-input
+                        [formControl]="form.get('settings').get('azuraCastStationId')"
+                        label="AzuraCast Station ID"
+                    ></app-text-input>
+                    <p class="u-hint u-margin-bottom">
+                        Your AzuraCast Station ID, this is a simple number like: 1, 5, 14, etc... can be typically found on your AzuraCast installation
+                    </p>
+                    <app-text-input
+                        [formControl]="form.get('settings').get('azuraCastApiKey')"
+                        label="AzuraCast Api key"
+                        name="streamUrl"
+                        type="password"
+                    ></app-text-input>
+                    <p class="u-hint">
+                        Your AzuraCast API key, can be created on the AzuraCast user interface and typically looks like this:
+                        <code>f980ef475dacb0a0:385192936adc9a3fec54d663acb522b2</code>
+                    </p>
+                </div>
+            </form>
+            <div class="o-page__section">
+                <div class="u-display--flex u-display--space-between">
+                    <div>
+                        <button type="submit" class="a-button a-button--info" (click)="testStream($event)">Test connection</button>
+                        <button class="a-button a-button--success" [disabled]="!streamConnectionSuccessful" (click)="nextStep($event)">Next step</button>
+                    </div>
+                    <button class="a-button" (click)="skip($event)">Skip</button>
+                </div>
+            </div>
+        </div>
+        <div class="o-page o-page--small" *ngIf="currentStep === 1">
+            <app-header description="Step 4/4" emptyTitle="Matching service"></app-header>
+            <form [formGroup]="form" *ngIf="form">
+                <div class="o-page__section">
+                    <app-select-input
+                        [formControl]="form.get('settings').get('matchingService')"
+                        label="Song matching service"
+                        [options]="[{
+                            label: 'Spotify',
+                            value: 'spotify'
+                        },{
+                            label: 'Deezer',
+                            value: 'deezer'
+                        },{
+                            label: 'Apple Music',
+                            value: 'apple-music'
+                        }]"
+                    ></app-select-input>
+                    <p class="u-hint u-margin-bottom">
+                        Choose how you want your songs to be matched against an external API. Matching songs will cause your
+                        metadata to be enriched with info like album art, genre, release year, etc...<br>
+                        <b>We recommend using spotify since other services are not always available</b>
+                    </p>
+                    <ng-container *ngIf="form.get('settings').get('matchingService').value === 'spotify'">
+                        <app-text-input
+                            [formControl]="form.get('settings').get('spotifyClientId')"
+                            label="Spotify Client Id"
+                        ></app-text-input>
+                        <app-text-input
+                            [formControl]="form.get('settings').get('spotifyClientSecret')"
+                            label="Spotify Client Secret"
+                            type="password"
+                        ></app-text-input>
+                        <p class="u-hint">
+                            Information on how to create a spotify client id & secret can be found
+                            <a href="https://docs.radiopanel.co/quick-start#matching-service" rel="noopener noreferrer" target="_blank">in the radiopanel docs</a>
+                        </p>
+                    </ng-container>
+                </div>
+            </form>
+            <div class="o-page__section">
+                <div class="u-display--flex u-display--space-between">
+                    <div>
+                        <button type="submit" class="a-button a-button--info" (click)="testMatchingService($event)">Test matching service</button>
+                        <button class="a-button a-button--success" [disabled]="!matchingServiceSuccessful" (click)="nextStep($event)">Finish</button>
+                    </div>
+                    <button class="a-button" (click)="skip($event)">Skip</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

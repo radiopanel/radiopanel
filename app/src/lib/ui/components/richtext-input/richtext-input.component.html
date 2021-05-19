@@ -1,0 +1,5 @@
+<div class="a-input">
+    <div class="a-input__label">{{ label }}</div>
+    <jodit-editor [formControl]="control" [config]="options"></jodit-editor>
+    <p *ngIf="ngControl.invalid && ngControl.touched">ERROR</p>
+</div>

@@ -1,0 +1,18 @@
+<div class="o-wrapper" (window:keydown.control.k)="handleQuickAccess($event)" (window:keydown.meta.k)="handleQuickAccess($event)">
+    <app-sidebar
+        [tenants]="availableTenants"
+        (logout)="handleLogout()"
+        (tenantSelected)="handleTenantChange($event)"
+    ></app-sidebar>
+    <div class="o-content" #contentWrapper>
+        <ng-container *ngFor="let message of (tenantMessages$ | async)">
+            <div [class]="'u-margin-top m-alert m-alert--' + message.type">
+                <div class="u-display--flex u-display--space-between">
+                    <p><span [class]="'u-margin-right-sm uil uil-' + message.icon"></span> {{ message.message }}</p>
+                    <button class="a-button a-button--transparant a-button--small" (click)="deleteMessage($event, message.uuid)"><span class="uil uil-times"></span></button>
+                </div>
+            </div>
+        </ng-container>
+        <router-outlet></router-outlet>
+    </div>
+</div>

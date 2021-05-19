@@ -1,0 +1,29 @@
+<div class="a-input m-image-input">
+    <div class="a-input__label">{{ label }}</div>
+    <ng-container *ngIf="!multiple">
+        <div *ngIf="jsonParse(control.value)">
+            <div class="m-image-input__image">
+                <div class="m-image-input__image-container">
+                    <img [src]="'/api/v1/resources?tenant=' + tenant + '&h=200&w=200&path=' + jsonParse(control.value)" alt="">
+                </div>
+            </div>
+            <button class="a-button u-margin-top-sm" (click)="openModal($event)">Change image</button>
+        </div>
+        <div *ngIf="!jsonParse(control.value)">
+            <button class="a-button" (click)="openModal($event)">Select image</button>
+        </div>
+    </ng-container>
+    <ng-container *ngIf="multiple">
+        <div *ngIf="jsonParse(control.value)" dragula="images" [dragulaModel]="jsonParse(control.value)"  (dragulaModelChange)="handleDrop($event)" class="m-image-input__image-list">
+            <div class="m-image-input__image u-margin-right-xs u-margin-bottom-xs" *ngFor="let image of jsonParse(control.value); let i = index">
+                <div class="m-image-input__image-container">
+                    <img [src]="'/api/v1/resources?tenant=' + tenant + '&h=200&w=200&path=' + image" alt="">
+                </div>
+                <button class="m-image-input__delete a-button a-button--danger a-button--small" (click)="removeImage(i)">
+                    <span class="uil uil-times"></span>
+                </button>
+            </div>
+        </div>
+        <div><button class="a-button" (click)="openModal($event)">Add image</button></div>
+    </ng-container>
+</div>

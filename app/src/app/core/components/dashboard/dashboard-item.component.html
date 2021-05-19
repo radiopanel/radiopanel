@@ -1,0 +1,11 @@
+<div class="m-dashboard-item">
+    <div class="m-dashboard-item__header">
+        <span class="m-dashboard-item__title">{{ title }}</span>
+        <button class="m-dashboard-item__remove" class="a-button a-button--small a-button--warning a-button--transparant" (click)="removeItem.emit(index)">
+            <span class="uil uil-times"></span>
+        </button>
+    </div>
+    <div class="m-dashboard-item__content">
+        <div #inputContainer></div>
+    </div>
+</div>

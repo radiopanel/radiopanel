@@ -1,0 +1,15 @@
+<div class="a-input">
+    <div class="a-input__label">{{ label }}</div>
+    <ng-container *ngIf="control.value">
+        <div>
+            <button class="a-button a-button--small u-margin-right-sm" (click)="openSearchModal($event)">Select another song</button>
+            {{ control.value?.artist }} - {{ control.value?.title }}
+        </div>
+    </ng-container>
+    <ng-container *ngIf="!control.value">
+        <div>
+            <button class="a-button a-button--small" (click)="openSearchModal($event)">Select song</button>
+        </div>
+    </ng-container>
+    <p *ngIf="ngControl.invalid && ngControl.touched">ERROR</p>
+</div>

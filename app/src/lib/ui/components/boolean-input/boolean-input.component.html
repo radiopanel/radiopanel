@@ -1,0 +1,16 @@
+<div class="a-input">
+    <ng-container *ngIf="mode === inputMode.EDIT">
+        <label [ngClass]="{
+            'a-input__toggle': true,
+            'a-input__toggle--checked': !!control.value
+        }">
+            <input type="checkbox" [formControl]="control" class="a-input__hidden">
+        </label>
+        <div class="a-input__label a-input__label--inline">{{ label }}</div>
+    </ng-container>
+    <ng-container *ngIf="mode === inputMode.VIEW">
+        <div class="a-input__label">{{ label }}</div>
+        <span class="a-input__value">{{ control.value ? "Yes" : "No" }}</span>
+    </ng-container>
+    <p *ngIf="ngControl.invalid && ngControl.touched">ERROR</p>
+</div>

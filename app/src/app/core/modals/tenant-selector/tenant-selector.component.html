@@ -1,0 +1,15 @@
+<div class="o-modal">
+    <div class="o-modal__header">
+        <h3>Choose a radio station</h3>
+        <a href="#" (click)="close($event)"><span class="uil uil-times"></span></a>
+    </div>
+    <div class="o-modal__body">
+        <div *ngFor="let tenant of (tenants$ | async)" class="u-display--flex u-display--space-between">
+            <h3>{{ tenant.name }}</h3>
+            <button class="a-button a-button--success" (click)="chooseTenant($event, tenant.uuid)">Choose <span class="uil uil-angle-right"></span></button>
+        </div>
+    </div>
+    <div class="o-modal__footer">
+        <button class="a-button a-button--warning a-button--outline" (click)="close($event)">Cancel</button>
+    </div>
+</div>

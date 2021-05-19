@@ -1,0 +1,110 @@
+.m-file-input {
+    position: relative;
+
+    &__wrapper {
+        align-items: center;
+        display: flex;
+    }
+
+    &__input {
+        display: none
+    }
+
+    &__preview {
+        height: 47px;
+        background-color: $grey-dark;
+        width: 60px;
+        min-width: 60px;
+        margin-right: -$border-radius-small;
+        border-top-left-radius: $border-radius-small;
+        border-bottom-left-radius: $border-radius-small;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        &:hover {
+            .m-file-input__delete {
+                display: block;
+            }
+        }
+    }
+
+    &__image-preview {
+        height: 47px;
+        width: 60px;
+        min-width: 60px;
+        background-size: cover;
+        background-position: center center;
+    }
+
+    &__icon-preview {
+        margin-right: 10px;
+    }
+
+    &__progress {
+        height: 47px;
+        width: 47px;
+        position: absolute;
+        right: 0;
+        margin-left: $spacer-small;
+        justify-content: center;
+        align-items: center;
+        display: flex;
+
+        .uil {
+            position: absolute;
+            font-size: 0.8rem;
+        }
+
+        .m-file-input__progress-ring {
+            .m-file-input__progress-ring__circle {
+                transition: 0.35s stroke-dashoffset;
+                transform: rotate(-90deg);
+                transform-origin: 50% 50%;
+
+                &--processing {
+                    animation: rotating 2s linear infinite;
+                }
+            }
+        }
+    }
+
+    &__clear {
+        padding: 0;
+        margin: 0;
+        background: none;
+        border: none;
+        color: $grey-light;
+        position: absolute;
+        cursor: pointer;
+        right: 47px;
+        font-size: 18px;
+
+        &:hover {
+            color: $state-danger;
+        }
+    }
+
+    &__progress-bar {
+        height: 5px;
+        background-color: var(--color-primary);
+    }
+
+    &__file {
+        background-color: $grey-lightest;
+        display: inline-block;
+        padding: $spacer;
+        border-radius: 3px;
+        margin-top: $spacer-small;
+    }
+}
+
+@keyframes rotating {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }

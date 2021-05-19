@@ -1,0 +1,10 @@
+<app-header description="Forms" emptyTitle="New form"></app-header>
+<div class="o-page">
+    <app-entity-type-form
+        [contentFields]="contentFields"
+        (formChange)="handleFormChange($event)"
+    ></app-entity-type-form>
+    <div class="o-page__section">
+        <button type="submit" class="a-button a-button--success" (click)="submit($event)">Save</button>
+    </div>
+</div>

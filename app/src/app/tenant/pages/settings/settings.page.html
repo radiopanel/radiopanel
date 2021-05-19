@@ -1,0 +1,58 @@
+<app-header description="My Radio" [emptyTitle]="'Settings'"></app-header>
+<div class="o-page">
+    <div class="o-page__section">
+        <a class="m-settings__panel m-settings__panel--big" [routerLink]="['general']">
+            <span class="uil uil-cog"></span>
+            <div class="m-settings__panel-info">
+                <h3>General</h3>
+                <p>Edit general settings like your radio name, url, etc...</p>
+            </div>
+        </a>
+    </div>
+    <div class="o-page__section">
+        <div class="m-settings">
+            <a class="m-settings__panel" [routerLink]="['stream']">
+                <span class="uil uil-music-note"></span>
+                <div class="m-settings__panel-info">
+                    <h3>Stream</h3>
+                    <p>Manage how radiopanel fetches data from your radio stream</p>
+                </div>
+            </a>
+            <a class="m-settings__panel" [routerLink]="['matching-service']">
+                <span class="uil uil-image"></span>
+                <div class="m-settings__panel-info">
+                    <h3>Song matching</h3>
+                    <p>Select the service you want to use for fetching album art</p>
+                </div>
+            </a>
+            <a class="m-settings__panel" [routerLink]="['timetable']">
+                <span class="uil uil-calender"></span>
+                <div class="m-settings__panel-info">
+                    <h3>Timetable</h3>
+                    <p>Settings in regards to how the timetable should behave</p>
+                </div>
+            </a>
+            <a class="m-settings__panel" [routerLink]="['requests']">
+                <span class="uil uil-comment-lines"></span>
+                <div class="m-settings__panel-info">
+                    <h3>Requests</h3>
+                    <p>Update your request timeout here</p>
+                </div>
+            </a>
+            <a class="m-settings__panel" [routerLink]="['patreon']">
+                <span class="uil uil-euro"></span>
+                <div class="m-settings__panel-info">
+                    <h3>Patreon</h3>
+                    <p>Allows you to fetch patreons on a api endpoint</p>
+                </div>
+            </a>
+            <a class="m-settings__panel" [routerLink]="['dashboard']">
+                <span class="uil uil-home"></span>
+                <div class="m-settings__panel-info">
+                    <h3>Dashboard</h3>
+                    <p>Edit the text that appears on the dasboard here</p>
+                </div>
+            </a>
+        </div>
+    </div>
+</div>

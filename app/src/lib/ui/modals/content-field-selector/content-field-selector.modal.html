@@ -1,0 +1,24 @@
+<div class="o-modal">
+    <div class="o-modal__header">
+        <h3>Choose a field</h3>
+        <a href="#" (click)="close($event)"><span class="uil uil-times"></span></a>
+    </div>
+    <div class="o-modal__body">
+        <app-loading [loading]="loading$ | async">
+            <div class="m-field-selector">
+                <div class="m-field-selector__item" *ngFor="let field of contentFields$ | async" (click)="addField(field)">
+                    <div class="m-field-select__icon">
+                        <span [class]="'uil uil-' + field.icon"></span>
+                    </div>
+                    <div class="m-field-select__info">
+                        <h4 class="m-field-select__title">{{ field?.name }}</h4>
+                        <p class="m-field-select__description">{{ field?.description }}</p>
+                    </div>
+                    <div class="m-field-select__check">
+                        <span class="uil uil-checkmark"></span>
+                    </div>
+                </div>
+            </div>
+        </app-loading>
+    </div>
+</div>

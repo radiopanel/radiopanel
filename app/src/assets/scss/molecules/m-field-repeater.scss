@@ -1,0 +1,45 @@
+.m-field-repeater {
+    margin-bottom: $spacer;
+    background-color: $grey-lightest;
+    transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+
+    .m-field__handle-bar {
+        padding-right: $spacer;
+        cursor: grab;
+        color: $grey;
+    }
+
+    &--open {
+        .m-field-repeater__config {
+            height: auto !important;
+            display: block !important;
+        }
+    }
+
+    &__title {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background-color: $grey-lighter;
+        padding: $spacer-small $spacer;
+
+        h4 {
+            display: inline-block;
+            margin: 0;
+        }
+    }
+
+    &__config {
+        padding: $spacer;
+        height: 0;
+        display: none;
+    }
+
+    &__fields {
+        border: 2px dashed $grey;
+        border-radius: $border-radius;
+        margin-bottom: $spacer;
+        padding: $spacer;
+        background-color: $white;
+    }
+}

@@ -1,0 +1,12 @@
+<app-loading [loading]="loading">
+    <p *ngIf="!data">No one is live</p>
+    <div *ngIf="data" class="u-display--align-center">
+        <div *ngFor="let play of data" class="u-display--flex u-display--full-width">
+            <img [src]="play?.song?.graphic?.medium || '/assets/img/logo.png'" alt="" class="m-dashboard-item__image">
+            <div class="u-text--align-left u-margin-left">
+                <h4 class="u-margin-bottom-xs">{{ play?.song?.artist }} - {{ play?.song?.title }}</h4>
+                <p class="u-margin-top-xs">Played {{ play?.createdAt | amTimeAgo }} by {{ play?.slot?.user?.username || "AutoDJ" }}</p>
+            </div>
+        </div>
+    </div>
+</app-loading>

@@ -1,0 +1,53 @@
+<app-header description="Content" [emptyTitle]="(contentType$ | async)?.name | plural" backLink="../../">
+    <div class="action">
+        <a routerLink="create" class="a-button a-button--info"><span class="uil uil-plus"></span> Create manual {{ (contentType$ | async)?.name | singular }}</a>
+    </div>
+</app-header>
+<div class="o-page">
+    <div class="o-page__section">
+        <app-loading [loading]="loading$ | async">
+            <app-empty-state
+                [empty]="(content$ | async).length === 0"
+                image="/assets/img/empty-states/communication.png"
+                emptyTitle="This form has no entries"
+                description="Ask some users to fill in your form or create an entry manually."
+            >
+                <table class="m-table">
+                    <thead>
+                        <tr>
+                            <ng-container *ngFor="let field of (contentType$ | async)?.fields">
+                                <th *ngIf="field.showOnOverview">{{ field.name }}</th>
+                            </ng-container>
+                            <th style="width: 150px;">Last updated</th>
+                            <th style="width: 50px;"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let content of (content$ | async)">
+                            <ng-container *ngFor="let field of (contentType$ | async)?.fields">
+                                <td *ngIf="field.showOnOverview">
+                                    <app-table-preview
+                                        [content]="content.fields[field.slug]"
+                                        [fieldType]="field.fieldType"
+                                    ></app-table-preview>
+                                </td>
+                            </ng-container>
+                            <td>{{ content.updatedAt | amTimeAgo }}</td>
+                            <td>
+                                <a [routerLink]="content.uuid" class="a-button a-button--small">
+                                    <span class="uil uil-eye"></span>
+                                </a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <app-pagination
+                    [currentPage]="(pagination$ | async)?.currentPage"
+                    [totalValues]="(pagination$ | async)?.totalEntities"
+                    [itemsPerPage]="(pagination$ | async)?.itemsPerPage"
+                    (update)="onPageUpdate($event)">
+                </app-pagination>
+            </app-empty-state>
+        </app-loading>
+    </div>
+</div>

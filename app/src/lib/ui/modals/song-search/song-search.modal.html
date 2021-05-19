@@ -1,0 +1,49 @@
+<div class="o-modal o-modal--big">
+    <div class="o-modal__header">
+        <h3>Choose a song</h3>
+        <a href="#" (click)="close($event)"><span class="uil uil-times"></span></a>
+    </div>
+    <div class="o-modal__body">
+        <div class="u-row">
+            <div class="u-col-10">
+                <app-text-input
+                    [formControl]="form.get('search')"
+                ></app-text-input>
+            </div>
+            <div class="u-col-2">
+                <button class="a-button" (click)="doSearch($event)">Search</button>
+            </div>
+        </div>
+        <app-loading [loading]="loading">
+            <table class="m-table">
+                <thead>
+                    <tr>
+                        <td></td>
+                        <th>Artist</th>
+                        <th>Title</th>
+                        <th>Album</th>
+                        <th style="width: 115px;"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let song of songs">
+                        <td>
+                            <div class="m-image-input__preview"><img [src]="song.graphic?.small" alt=""></div>
+                        </td>
+                        <td>{{ song.artist }}</td>
+                        <td>{{ song.title }}</td>
+                        <td>{{ song.album }}</td>
+                        <td>
+                            <a href="#" (click)="save($event, song)" class="a-button a-button--small">
+                                <span class="uil uil-music"></span> Choose
+                            </a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </app-loading>
+    </div>
+    <div class="o-modal__footer">
+        <button class="a-button a-button--warning a-button--outline" (click)="close($event)">Cancel</button>
+    </div>
+</div>

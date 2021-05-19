@@ -1,0 +1,49 @@
+.m-settings {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+
+    &__panel {
+        margin: 0 0 $spacer 0;
+        width: 49%;
+        background-color: $grey-darker;
+        display: flex;
+        align-items: center;
+        padding: $spacer-large;
+        border-radius: $border-radius;
+        border: 3px solid transparent;
+        transition: all .2s ease;
+        color: $grey-lightest;
+
+        &:hover {
+            border: 3px solid var(--color-primary)
+        }
+
+        &--big {
+            width: 100%;
+            padding: $spacer-x-large;
+            margin: 0;
+        }
+
+        &-info {
+            margin-left: $spacer;
+
+            h3 {
+                margin: 0;
+                padding: 0;
+            }
+
+            p {
+                margin: 0;
+                padding: 0;
+                color: $grey;
+            }
+        }
+    }
+
+    @media (max-width: 1300px) {
+        &__panel {
+            width: 100%;
+        }
+    }
+}

@@ -1,0 +1,45 @@
+.m-image-input {
+    &__image-list {
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    &__image {
+        height: 200px;
+        width: 200px;
+        position: relative;
+        // transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+
+        .m-image-input__image-container {
+            display: flex;
+            border: 2px solid $grey-darker;
+            height: 200px;
+            width: 200px;
+            overflow: hidden;
+        }
+
+        .m-image-input__delete {
+            position: absolute;
+            top: $spacer-x-small;
+            right: $spacer-x-small;
+        }
+
+        img {
+            object-fit: cover;
+        }
+    }
+}
+
+.m-image-input__preview {
+    height: 30px;
+    width: 30px;
+    border-radius: 50%;
+    overflow: hidden;
+    display: inline-flex;
+    margin-right: $spacer-x-small;
+
+    img {
+        object-fit: cover;
+        width: 100%;
+    }
+}

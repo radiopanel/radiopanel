@@ -1,0 +1,17 @@
+<div class="o-modal o-modal--big">
+    <div class="o-modal__header">
+        <h3>Choose a resource</h3>
+        <a href="#" (click)="close($event)"><span class="uil uil-times"></span></a>
+    </div>
+    <div class="o-modal__body">
+        <app-resources
+            [allowedExtensions]="data?.allowedExtensions"
+            (resourceSelect)="handleSelection($event)"
+            [multiple]="data?.multiple"
+        ></app-resources>
+    </div>
+    <div class="o-modal__footer">
+        <button class="a-button a-button--success" (click)="save()" *ngIf="data?.multiple">Choose</button>
+        <button class="a-button a-button--warning a-button--outline" (click)="close($event)">Close</button>
+    </div>
+</div>

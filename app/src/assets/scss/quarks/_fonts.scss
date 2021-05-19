@@ -1,0 +1,57 @@
+@font-face {
+    font-family: 'Cera Pro';
+    font-style: normal;
+    font-weight: 100;
+
+    src: url(/assets/fonts/cerapro-thin-webfont.woff2) format('woff2'),
+        url(/assets/fonts/cerapro-thin-webfont.woff) format('woff');
+}
+
+@font-face {
+    font-family: 'Cera Pro';
+    font-style: normal;
+    font-weight: 300;
+
+    src: url(/assets/fonts/cerapro-light-webfont.woff2) format('woff2'),
+        url(/assets/fonts/cerapro-light-webfont.woff) format('woff');
+}
+
+@font-face {
+    font-family: 'Cera Pro';
+    font-style: normal;
+    font-weight: 400;
+
+    src: url(/assets/fonts/cerapro-regular-webfont.woff2) format('woff2'),
+        url(/assets/fonts/cerapro-regular-webfont.woff) format('woff');
+}
+
+@font-face {
+    font-family: 'Cera Pro';
+    font-style: normal;
+    font-weight: 500;
+
+    src: url(/assets/fonts/cerapro-medium-webfont.woff2) format('woff2'),
+        url(/assets/fonts/cerapro-medium-webfont.woff) format('woff');
+}
+
+@font-face {
+    font-family: 'Cera Pro';
+    font-style: normal;
+    font-weight: 700;
+
+    src: url(/assets/fonts/cerapro-bold-webfont.woff2) format('woff2'),
+        url(/assets/fonts/cerapro-bold-webfont.woff) format('woff');
+}
+
+@font-face {
+    font-family: 'Cera Pro';
+    font-style: normal;
+    font-weight: 900;
+
+    src: url(/assets/fonts/cerapro-black-webfont.woff2) format('woff2'),
+        url(/assets/fonts/cerapro-black-webfont.woff) format('woff');
+}
+
+.fiv-cla {
+    font-size: 1.5rem;
+}

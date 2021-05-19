@@ -1,0 +1,10 @@
+.o-wrapper {
+    display: flex;
+}
+
+.o-wrapper--small {
+    max-width: 800px;
+    padding: 0 $spacer;
+    margin: 0 auto;
+    min-height: 100vh;
+}

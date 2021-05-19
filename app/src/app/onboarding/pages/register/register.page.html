@@ -1,0 +1,32 @@
+<div class="p-register">
+    <div class="p-register__content">
+        <app-loading [loading]="loading$ | async">
+            <img src="/assets/img/logo-color-light.png" alt="IBS Logo" class="p-register__logo">
+            <h1>Register to access {{ invite?.tenant?.name }}</h1>
+            <form [formGroup]="form" (submit)="handleSubmit($event)" *ngIf="form">
+                <app-text-input
+                    [formControl]="form.get('username')"
+                    [disabled]="true"
+                    label="Username"
+                    type="email"
+                ></app-text-input>
+                <app-text-input
+                    [disabled]="true"
+                    [formControl]="form.get('email')"
+                    label="Email"
+                    type="email"
+                ></app-text-input>
+                <app-text-input
+                    [formControl]="form.get('password')"
+                    label="Password"
+                    type="password"
+                ></app-text-input>
+                <button type="submit" class="a-button" [disabled]="loading">
+                    Register <span *ngIf="loading" class="uil uil-redo animate spin"></span>
+                </button>
+            </form>
+            <p>By registering, you agree to the <a routerLink="/terms-of-service">Terms of Service</a> and <a routerLink="/privacy-policy">Privacy Policy</a></p>
+        </app-loading>
+    </div>
+    <div class="p-register__image"></div>
+</div>

@@ -1,0 +1,17 @@
+<app-header description="Settings" [emptyTitle]="'Patreon Settings'" [backLink]="['..']"></app-header>
+<div class="o-page" *ngIf="form">
+    <form [formGroup]="form">
+        <div class="o-page__section">
+            <app-text-input
+                [formControl]="form.get('settings').get('patreonAccessToken')"
+                label="Patreon Access Token"
+                type="password"
+            ></app-text-input>
+        </div>
+        <div class="o-page__section">
+            <div class="u-display--flex u-display--space-between">
+                <button type="submit" class="a-button a-button--success" (click)="submit($event)">Save</button>
+            </div>
+        </div>
+    </form>
+</div>

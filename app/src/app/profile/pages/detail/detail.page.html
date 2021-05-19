@@ -1,0 +1,78 @@
+<app-header description="Profile" [emptyTitle]="'Editing your profile'"></app-header>
+<div class="o-page" *ngIf="form">
+    <form [formGroup]="form">
+        <div class="o-page__section">
+            <div class="o-page__section-info">
+                <h3 class="o-page__section-title">
+                    General Info
+                </h3>
+            </div>
+            <app-text-input
+                [formControl]="form.get('username')"
+                label="Username"
+            ></app-text-input>
+            <app-textarea-input
+                [formControl]="form.get('bio')"
+                label="Bio"
+            ></app-textarea-input>
+            <app-dynamic-file-input
+                [formControl]="form.get('avatar')"
+                label="Avatar"
+                [key]="'avatar-' + user?.uuid"
+            ></app-dynamic-file-input>
+        </div>
+        <div class="o-page__section">
+            <div class="o-page__section-info">
+                <h3 class="o-page__section-title">
+                    Socials
+                </h3>
+            </div>
+            <app-text-input
+                [formControl]="form.get('socials').get('facebook')"
+                label="Facebook"
+            ></app-text-input>
+            <app-text-input
+                [formControl]="form.get('socials').get('twitter')"
+                label="Twitter"
+            ></app-text-input>
+            <app-text-input
+                [formControl]="form.get('socials').get('instagram')"
+                label="Instagram"
+            ></app-text-input>
+            <app-text-input
+                [formControl]="form.get('socials').get('discord')"
+                label="Discord"
+            ></app-text-input>
+            <app-text-input
+                [formControl]="form.get('socials').get('youtube')"
+                label="YouTube"
+            ></app-text-input>
+            <app-text-input
+                [formControl]="form.get('socials').get('twitch')"
+                label="Twitch"
+            ></app-text-input>
+        </div>
+        <div class="o-page__section" *ngIf="tenant$ && (tenant$ | async)?.profileFields">
+            <div class="o-page__section-info">
+                <h3 class="o-page__section-title">
+                    Custom Fields
+                </h3>
+            </div>
+            <div *ngFor="let field of (tenant$ | async)?.profileFields; let i = index">
+                <app-dynamic-input
+                    [label]="field.name || '' + field.multiLanguage && '(int)'"
+                    [config]="field.config"
+                    [component]="field.fieldType"
+                    [subfields]="field.subfields"
+                    [formControl]="form.get('customData')?.get(field.slug)"
+                    [multiLanguage]="false"
+                ></app-dynamic-input>
+            </div>
+        </div>
+        <div class="o-page__section">
+            <div class="u-display--flex u-display--space-between">
+                <button type="submit" class="a-button a-button--success" (click)="submit($event)">Save</button>
+            </div>
+        </div>
+    </form>
+</div>

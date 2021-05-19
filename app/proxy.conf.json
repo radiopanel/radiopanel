@@ -1,0 +1,15 @@
+{
+    "/api/": {
+      "target": "http://host.docker.internal:3050",
+      "secure": false
+    },
+    "/uploads/": {
+      "target": "http://host.docker.internal:3050",
+      "secure": false
+    },
+    "/socket.io/": {
+      "target": "http://host.docker.internal:3050",
+      "secure": false,
+      "ws": true
+    }
+  }

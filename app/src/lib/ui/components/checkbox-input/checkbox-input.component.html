@@ -1,0 +1,10 @@
+<div class="a-input">
+    <label [ngClass]="{
+        'a-input__toggle': true,
+        'a-input__toggle--checked': !!control.value
+    }" [for]="uuid">
+        <input [id]="uuid" type="checkbox" [formControl]="control" [name]="name" [value]="value" class="a-input__hidden">
+    </label>
+    <label [for]="uuid" class="a-input__label a-input__label--inline" [id]="label">{{ label }}</label>
+    <p *ngIf="ngControl.invalid && ngControl.touched">ERROR</p>
+</div>

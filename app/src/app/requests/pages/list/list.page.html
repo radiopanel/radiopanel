@@ -1,0 +1,43 @@
+<app-header emptyTitle="Requests">
+    <div class="action">
+        <button (click)="clearAll()" class="a-button a-button--danger a-button--outline"><span class="uil uil-trash"></span> Clear all</button>
+        <button (click)="handleCreateRequest()" class="a-button a-button--info"><span class="uil uil-plus"></span> Create manual request</button>
+    </div>
+</app-header>
+<div class="o-page">
+    <div class="o-page__section">
+        <app-loading [loading]="loading$ | async">
+            <app-empty-state
+                [empty]="(requests$ | async).length === 0"
+                image="/assets/img/empty-states/radio.png"
+                emptyTitle="There are no requests left"
+                description="You can either wait for a new request to come in, or make one yourself!"
+            >
+                <div *ngFor="let request of (requests$ | async)" class="m-request">
+                    <div class="m-request__meta">
+                        <div class="m-request__meta-content">
+                            <div>
+                                <span class="m-request__type">{{ request.type}} </span>
+                                <span class="m-request__time">{{ request.createdAt | amTimeAgo }} from </span>
+                                <span class="m-request__name">{{ request.name }}</span>
+                            </div>
+                            <div>
+                                <span class="m-request__info">
+                                    <span permission-hoc permission="requests/read-origin">Origin: {{ request.requestOrigin }}</span>
+                                    <!-- <ng-container permission-hoc permission="requests/read-context">Context: {{ request.requestContext }}</ng-container> -->
+                                </span>
+                            </div>
+                        </div>
+                        <div class="m-request__actions">
+                            <span permission-hoc permission="bans/create">
+                                <a routerLink="/bans/create" [queryParams]="{'identifier': request.requestContext}" class="u-margin-left-sm a-button a-button--danger"><span class="uil uil-ban"></span><span class="m-request__label">Ban</span></a>
+                            </span>
+                            <button (click)="handleDelete(request.uuid)" class="a-button a-button--warning"><span class="uil uil-trash"></span><span class="m-request__label">Remove</span></button>
+                        </div>
+                    </div>
+                    <div class="m-request__message">{{ request.message }}</div>
+                </div>
+            </app-empty-state>
+        </app-loading>
+    </div>
+</div>

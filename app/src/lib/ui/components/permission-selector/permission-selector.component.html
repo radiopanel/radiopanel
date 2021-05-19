@@ -1,0 +1,53 @@
+<div class="o-page__section" *ngFor="let category of (permissions$ | async)">
+    <div class="o-page__section-info">
+        <h3 class="o-page__section-title">
+            {{ category.name }}
+        </h3>
+        <div class="o-page__section-action">
+            <button class="a-button a-button--small" (click)="handleToggleAllChange(category.name, true)">Assign all</button>
+            <button class="a-button a-button--small" (click)="handleToggleAllChange(category.name, false)">Unassign all</button>
+        </div>
+    </div>
+    <div class="m-permissions">
+        <ng-container *ngFor="let group of category.groups">
+            <div
+                class="m-permissions__panel-wrapper"
+                *ngIf="(!group.requiresFeature || (features$ | async).includes(group.requiresFeature)) && group.permissions?.length"
+            >
+                <input type="checkbox" [id]="group.name" class="u-hidden">
+                <label
+                    [for]="group.name"
+                    class="m-permissions__panel"
+                >
+                    <h4>
+                        <span>
+                            <span [class]="'uil uil-' + group.icon" *ngIf="group.icon"></span>
+                            {{ group.name }}
+                        </span>
+                        <span>
+                            <span [class]="{
+                                'm-permissions__count': true,
+                                'm-permissions__count--none': getEnabledPermissionsCount(group.permissions) === 0,
+                                'm-permissions__count--all': getEnabledPermissionsCount(group.permissions) === group.permissions.length
+                            }">{{ getEnabledPermissionsCount(group.permissions) }} / {{ group.permissions.length }}</span>
+                            <span class="uil uil-angle-down"></span>
+                            <span class="uil uil-angle-up"></span>
+                        </span>
+                    </h4>
+                    <div class="m-permissions__permissions">
+                        <ng-container *ngFor="let permission of (group.permissions || [])">
+                            <ng-container *ngIf="control">
+                                <app-checkbox-input
+                                    [formControl]="control?.get(permission.value)"
+                                    [label]="permission.label"
+                                    [value]="permission.value"
+                                    name="permissions"
+                                ></app-checkbox-input>
+                            </ng-container>
+                        </ng-container>
+                    </div>
+                </label>
+            </div>
+        </ng-container>
+    </div>
+</div>

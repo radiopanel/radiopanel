@@ -1,0 +1,17 @@
+<div class="m-header">
+    <div class="m-header__title-container">
+        <p *ngIf="description" class="m-header__description">
+            {{ description }}
+        </p>
+        <h1 class="m-header__title">
+            {{ emptyTitle }}
+        </h1>
+        <div class="m-header__back" *ngIf="backLink">
+            <a [routerLink]="backLink"><span class="uil uil-arrow-left"></span> Back</a>
+        </div>
+    </div>
+    <div class="m-header__action">
+        <div class="m-header__meta" *ngIf="meta">{{ meta }}</div>
+        <ng-content select=".action"></ng-content>
+    </div>
+</div>

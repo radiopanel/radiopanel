@@ -1,0 +1,63 @@
+version: "3"
+services:
+    api:
+        build:
+            context: api
+            dockerfile: Dockerfile.dev
+        container_name: radiopanel-api
+        ports:
+            - 3050:3050
+            - 9229:9229
+        volumes:
+            - ./api:/app:delegated
+            - ./uploads:/app/uploads:delegated
+            - /app/node_modules
+            - /app/data
+            - /app/dist
+        env_file:
+            - .env
+
+    app:
+        build:
+            context: app
+            dockerfile: Dockerfile.dev
+        container_name: radiopanel-app
+        volumes:
+            - ./app:/app:delegated
+            - /app/node_modules
+            - /app/dist
+        ports:
+            - 3051:3051
+
+    postgres:
+        image: "postgres:12.3-alpine"
+        container_name: postgres
+        environment:
+            POSTGRES_DB: radiopanel
+            POSTGRES_USER: localuser
+            POSTGRES_PASSWORD: EHajqEuoPG8wCxfcQRpz
+            PGDATA: /data/db
+        ports:
+            - 5432:5432
+        volumes:
+            - ./data:/data/db
+
+    redis:
+        image: redis:6.0.6-alpine
+        container_name: redis
+        ports:
+            - 6379:6379
+        command: ["redis-server", "--appendonly", "yes"]
+        volumes:
+            - redis-data:/data
+
+    # cron:
+    #     image: xordiv/docker-alpine-cron
+    #     container_name: cron
+    #     volumes:
+    #         - ./crontab:/etc/cron.d/crontab
+
+volumes:
+    postgres-data:
+    redis-data:
+    elastic-data:

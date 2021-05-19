@@ -1,0 +1,49 @@
+.p-register {
+    display: flex;
+    width: 100%;
+    padding: $spacer-x-large $spacer-x-large $spacer-x-large 0;
+    height: 100vh;
+
+    &__image {
+        background: url(https://images.unsplash.com/photo-1500702790369-fe461685b3c8?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80) center center;
+        background-size: cover;
+        height: 100%;
+        flex: 1;
+        position: relative;
+        border-radius: $border-radius;
+        overflow: hidden;
+
+        &::before {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            content: "";
+            background-color: var(--color-primary);
+            opacity: 0.3;
+        }
+    }
+
+    &__logo {
+        width: 250px;
+    }
+
+    &__content {
+        width: 400px;
+        margin: 0 5rem 0 5rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+
+        h1 {
+            color: $grey-light;
+            font-size: 1.3rem;
+            margin-top: $spacer-large;
+        }
+
+        form {
+            width: 400px;
+        }
+    }
+}

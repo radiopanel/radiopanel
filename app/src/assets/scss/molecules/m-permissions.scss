@@ -1,0 +1,109 @@
+.m-permissions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    margin-left: -$spacer-x-small;
+    margin-right: -$spacer-x-small;
+
+    &__panel-wrapper {
+        padding: $spacer-x-small;
+        width: 25%;
+        display: flex;
+
+        @media (max-width: 1500px) {
+            & {
+                width: 33.33%;
+            }
+        }
+
+        @media (max-width: 1200px) {
+            & {
+                width: 50%;
+            }
+        }
+    }
+
+    &__panel {
+        background-color: $grey-darker;
+        align-self: flex-start;
+        flex: 1;
+        padding: $spacer-large;
+        border-radius: $border-radius;
+        border: 3px solid transparent;
+        transition: all .2s ease;
+        color: $grey-lightest;
+
+        h4 {
+            margin: 0;
+            display: flex;
+            justify-content: space-between;
+
+            .m-permissions__count {
+                font-weight: normal;
+                font-size: .8rem;
+                display: inline-block;
+                margin-right: $spacer-small;
+
+                &--all {
+                    color: $state-success;
+                }
+
+                &--none {
+                    color: $grey;
+                }
+
+                &--grant {
+                    color: $state-success;
+                    margin-right: 0;
+                }
+
+                &--inherit {
+                    color: $grey;
+                    margin-right: 0;
+                }
+
+                &--deny {
+                    color: $state-danger;
+                    margin-right: 0;
+                }
+            }
+
+            .uil-angle-up {
+                display: none;
+            }
+
+            .uil-angle-down {
+                display: inline-block;
+            }
+        }
+
+        &:hover {
+            border: 3px solid var(--color-primary);
+        }
+
+        .m-permissions__permissions {
+            // display: flex;
+            margin-top: 0;
+            max-height: 0;
+            overflow: hidden;
+            transition: all .3s ease;
+        }
+    }
+
+    input:checked + .m-permissions__panel {
+        .m-permissions__permissions {
+            max-height: 500px;
+            margin-top: $spacer-large;
+        }
+
+        h4 {
+            .uil-angle-down {
+                display: none;
+            }
+
+            .uil-angle-up {
+                display: inline-block;
+            }
+        }
+    }
+}

@@ -1,0 +1,16 @@
+<app-header description="Settings" [emptyTitle]="'Dashboard Settings'" [backLink]="['..']"></app-header>
+<div class="o-page" *ngIf="form">
+    <form [formGroup]="form">
+        <div class="o-page__section">
+            <app-richtext-input
+                [formControl]="form.get('settings').get('dashboardText')"
+                label="Dashboard text"
+            ></app-richtext-input>
+        </div>
+        <div class="o-page__section">
+            <div class="u-display--flex u-display--space-between">
+                <button type="submit" class="a-button a-button--success" (click)="submit($event)">Save</button>
+            </div>
+        </div>
+    </form>
+</div>

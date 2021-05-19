@@ -1,0 +1,28 @@
+.a-box {
+    border-radius: $border-radius;
+    background-color: $grey-darker;
+    padding: $spacer $spacer-large;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: $grey-lighter;
+
+    &__title {
+        font-weight: bold;
+        text-transform: uppercase;
+        margin: 0 0 $spacer-x-small;
+    }
+
+    &__content {
+        margin: 0;
+    }
+
+    &__meta {
+
+    }
+
+    &--color-primary {
+        background-color: var(--color-primary);
+        color: $white;
+    }
+}

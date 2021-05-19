@@ -1,0 +1,29 @@
+<app-header description="Webhooks" emptyTitle="Create webhook"></app-header>
+<div class="o-page" *ngIf="form">
+    <form [formGroup]="form">
+        <div class="o-page__section">
+            <app-data-input
+                [formControl]="form.get('type')"
+                label="Type"
+                [itemLabel]="['label']"
+                [itemValue]="['value']"
+                endpoint="webhooks/types"
+            ></app-data-input>
+            <app-data-input
+                [formControl]="form.get('destination')"
+                label="Destination"
+                [itemLabel]="['label']"
+                [itemValue]="['value']"
+                endpoint="webhooks/destinations"
+            ></app-data-input>
+            <p class="u-hint u-margin-bottom">The destination option allows you select which application will handle the webhook.<br>If you for example want to send the webhook directly to discord to show an embed then you can select discord.</p>
+            <app-text-input
+                [formControl]="form.get('url')"
+                label="Url"
+            ></app-text-input>
+        </div>
+        <div class="o-page__section">
+            <button type="submit" class="a-button a-button--success" (click)="submit($event)">Save</button>
+        </div>
+    </form>
+</div>

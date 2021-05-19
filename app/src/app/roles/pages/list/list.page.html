@@ -1,0 +1,37 @@
+<app-header emptyTitle="Role">
+    <div class="action">
+        <a routerLink="create" class="a-button a-button--info"><span class="uil uil-plus"></span> Create role</a>
+    </div>
+</app-header>
+<div class="o-page">
+    <div class="o-page__section">
+        <table class="m-table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Weight</th>
+                    <th>Permissions #</th>
+                    <th style="width: 50px;"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let role of (roles$ | async)">
+                    <td>{{ role.name || "unset" }}</td>
+                    <td>{{ role.weight }}</td>
+                    <td>{{ role.permissions?.length }}</td>
+                    <td>
+                        <a [routerLink]="role.uuid" class="a-button a-button--small">
+                            <span class="uil uil-pen"></span>
+                        </a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <app-pagination
+            [currentPage]="(pagination$ | async)?.currentPage"
+            [totalValues]="(pagination$ | async)?.totalEntities"
+            [itemsPerPage]="(pagination$ | async)?.itemsPerPage"
+            (update)="onPageUpdate($event)">
+        </app-pagination>
+    </div>
+</div>

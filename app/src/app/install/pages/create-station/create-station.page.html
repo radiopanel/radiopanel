@@ -1,0 +1,33 @@
+<div class="o-wrapper o-wrapper--small">
+    <div class="p-tenant-setup">
+        <div class="p-tenant-setup__image">
+            <img src="/assets/img/logo-color-light.png" alt="Logo" class="p-tenant-setup__logo">
+            <h2>Station</h2>
+            <p>Fill in some basic details about your radio down here</p>
+        </div>
+        <div class="o-page o-page--small" *ngIf="form">
+            <app-header description="Step 2/4" emptyTitle="Create your station"></app-header>
+            <form [formGroup]="form">
+                <div class="o-page__section">
+                    <app-text-input
+                        [formControl]="form.get('name')"
+                        label="Name"
+                    ></app-text-input>
+                    <p class="u-hint u-margin-bottom">
+                        The name of your radio station, this will be shown on the panel.
+                    </p>
+                    <app-text-input
+                        [formControl]="form.get('url')"
+                        label="URL"
+                    ></app-text-input>
+                    <p class="u-hint u-margin-bottom">
+                        The link to your radio station
+                    </p>
+                </div>
+                <div class="o-page__section">
+                    <button type="submit" class="a-button a-button--success" (click)="submit($event)">Create</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

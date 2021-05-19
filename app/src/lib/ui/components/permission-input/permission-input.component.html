@@ -1,0 +1,30 @@
+<div class="a-input">
+    <div class="a-input__permission-wrapper">
+        <label [ngClass]="{
+            'a-input__permission-item': true,
+            'a-input__permission--deny': true,
+            'a-input__permission--checked': control.value === 'deny'
+        }">
+            <span class="uil uil-times"></span>
+            <input type="radio" [formControl]="control" [name]="value" value="deny" class="a-input__hidden">
+        </label>
+        <label [ngClass]="{
+            'a-input__permission-item': true,
+            'a-input__permission--inherit': true,
+            'a-input__permission--checked': !control.value || control.value === 'inherit'
+        }">
+            <span class="uil uil-minus"></span>
+            <input type="radio" [formControl]="control" [name]="value" value="inherit" class="a-input__hidden">
+        </label>
+        <label [ngClass]="{
+            'a-input__permission-item': true,
+            'a-input__permission--grant': true,
+            'a-input__permission--checked': control.value === 'grant'
+        }">
+            <span class="uil uil-check"></span>
+            <input type="radio" [formControl]="control" [name]="value" value="grant" class="a-input__hidden">
+        </label>
+    </div>
+    <div class="a-input__label a-input__label--inline">{{ label }}</div>
+    <p *ngIf="ngControl.invalid && ngControl.touched">ERROR</p>
+</div>

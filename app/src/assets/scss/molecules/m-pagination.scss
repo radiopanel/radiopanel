@@ -1,0 +1,18 @@
+.m-pagination {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    &__pagesize {
+        display: flex;
+        align-items: center;
+
+        .a-input {
+            margin-bottom: 0;
+        }
+
+        p {
+            margin: 0 $spacer 0 0;
+        }
+    }
+}

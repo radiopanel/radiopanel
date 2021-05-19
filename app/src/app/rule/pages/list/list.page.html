@@ -1,0 +1,50 @@
+<app-header emptyTitle="Rule Pages">
+    <div class="action">
+        <a routerLink="create" class="a-button a-button--info"><span class="uil uil-plus"></span> Create rule page</a>
+    </div>
+</app-header>
+<div class="o-page">
+    <!-- <div class="o-page__section">
+        <app-text-input
+            [formControl]="search"
+            label="Search"
+        ></app-text-input>
+    </div> -->
+    <div class="o-page__section">
+        <app-loading [loading]="loading$ | async">
+            <app-empty-state
+                [empty]="(rulePages$ | async).length === 0"
+                image="/assets/img/empty-states/communication.png"
+                emptyTitle="You have no rule pages"
+                description="Categorize your rules into different section using, wel... different rule pages."
+            >
+                <table class="m-table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Last updated</th>
+                            <th style="width: 50px;"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let rulePage of (rulePages$ | async)">
+                            <td>{{ rulePage.name }}</td>
+                            <td>{{ rulePage.updatedAt | amTimeAgo }}</td>
+                            <td>
+                                <a [routerLink]="rulePage.uuid" class="a-button a-button--small">
+                                    <span class="uil uil-pen"></span>
+                                </a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <app-pagination
+                    [currentPage]="(pagination$ | async)?.currentPage"
+                    [totalValues]="(pagination$ | async)?.totalEntities"
+                    [itemsPerPage]="(pagination$ | async)?.itemsPerPage"
+                    (update)="onPageUpdate($event)">
+                </app-pagination>
+            </app-empty-state>
+        </app-loading>
+    </div>
+</div>

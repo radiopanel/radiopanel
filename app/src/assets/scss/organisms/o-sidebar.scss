@@ -1,0 +1,211 @@
+.o-sidebar {
+    width: 350px;
+    margin-right: $spacer-x-large;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    padding: $spacer;
+    transition: width .2s ease;
+
+    .o-sidebar__hamburger {
+        text-align: center;
+        cursor: pointer;
+        font-size: 1.5rem;
+        display: none;
+    }
+
+    .o-sidebar__wrapper {
+        flex: 1;
+        margin-bottom: $spacer;
+        margin-top: $spacer;
+        position: relative;
+
+        &.o-sidebar__wrapper--top::before {
+            opacity: 0;
+        }
+
+        &.o-sidebar__wrapper--bottom::after {
+            opacity: 0;
+        }
+
+        &::before {
+            transition: opacity .2s ease;
+            pointer-events: none;
+            z-index: 5;
+            opacity: 1;
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 50px;
+            width: 100%;
+            background: linear-gradient(180deg, rgba(24,24,24,1) 0%, rgba(24,24,24,0) 100%);
+        }
+
+        &::after {
+            transition: opacity .2s ease;
+            pointer-events: none;
+            z-index: 5;
+            opacity: 1;
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            height: 50px;
+            width: 100%;
+            background: linear-gradient(0deg, rgba(24,24,24,1) 0%, rgba(24,24,24,0) 100%);
+        }
+
+        .o-sidebar__links:first-of-type {
+            margin-top: 0;
+        }
+    }
+
+    .o-sidebar__branding {
+        padding: $spacer-large $spacer-x-large;
+        background: $grey-darker;
+        border-radius: $border-radius;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        img {
+            height: 23px;
+        }
+
+        small {
+            font-size: .8rem;
+            color: $grey;
+        }
+    }
+
+    &__version {
+        margin: $spacer-3x-small 0 0 0;
+        padding: 0;
+        color: $grey;
+        font-size: .7rem;
+        text-align: center;
+        line-height: 13px;
+    }
+
+    .o-sidebar__tenant-wrapper {
+        padding: $spacer-2x-large $spacer-x-large;
+        display: flex;
+        justify-content: space-between;
+
+        .o-sidebar__tenant-name {
+            margin: 0;
+        }
+
+        .o-sidebar__tenant-url {
+            margin: 0;
+            color: $grey;
+        }
+
+        .o-sidebar__tenant-link {
+            font-size: 1.2rem;
+        }
+    }
+
+    .o-sidebar__links {
+        padding: $spacer-large $spacer-x-large;
+        background: $grey-darker;
+        border-radius: $border-radius;
+        margin-top: $spacer;
+        width: 318px;
+    }
+
+    .o-sidebar__user {
+        padding: $spacer-large $spacer-x-large;
+        background: $grey-darker;
+        border-radius: $border-radius;
+        display: flex;
+        justify-content: space-between;
+        font-weight: bold;
+        align-items: center;
+
+        &-container {
+            display: flex;
+            align-items: center;
+        }
+
+        &-info {
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+        }
+
+        &-tenant {
+            color: $grey-light;
+            font-weight: normal;
+            font-size: .8rem;
+        }
+
+        img {
+            border-radius: 50%;
+            height: 30px;
+            width: 30px;
+            margin-right: $spacer;
+        }
+
+        span.uil-user {
+            display: inline-block;
+            margin-right: $spacer;
+        }
+    }
+}
+
+
+@media (max-width: 1050px) {
+    .o-sidebar:not(.o-sidebar--open) {
+        width: 50px;
+        padding: $spacer 0;
+        margin: 0 $spacer;
+
+        .m-menu__description {
+            display: none;
+        }
+
+        .m-menu__list {
+            .m-menu__item {
+                a span {
+                    padding-right: 0;
+                }
+
+                .m-menu__name {
+                    display: none;
+                }
+            }
+        }
+
+        .o-sidebar__branding {
+            padding: 0;
+            background: none;
+
+            img {
+                width: 100%;
+                height: auto;
+            }
+        }
+
+        .o-sidebar__version {
+            display: none;
+        }
+
+        .o-sidebar__wrapper {
+            .o-sidebar__links {
+                width: 50px;
+                padding: $spacer-large $spacer;
+            }
+        }
+
+        .o-sidebar__user {
+            display: none;
+        }
+    }
+
+    .o-sidebar .o-sidebar__hamburger {
+        display: block;
+    }
+}

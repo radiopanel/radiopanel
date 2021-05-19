@@ -1,0 +1,5 @@
+<div class="a-input">
+    <div class="a-input__label">{{ label }}</div>
+    <ngx-monaco-editor [options]="editorOptions" [formControl]="control"></ngx-monaco-editor>
+    <p *ngIf="ngControl.invalid && ngControl.touched">ERROR</p>
+</div>

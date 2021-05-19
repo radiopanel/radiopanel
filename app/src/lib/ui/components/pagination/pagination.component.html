@@ -1,0 +1,18 @@
+<div class="m-pagination u-margin-top">
+    <div class="m-button-group">
+        <button class="a-button" *ngIf="currentPage > 1" (click)="prev()">Prev</button>
+        <button [ngClass]="{
+            'a-button': true,
+            'a-button--disabled': number === '...',
+            'a-button--active': number?.toString() === currentPage?.toString()
+        }" *ngFor="let number of numbers; let i = index" (click)="onUpdate(number)">{{ number }}</button>
+        <button class="a-button" *ngIf="currentPage < totalPages" (click)="next()">Next</button>
+    </div>
+    <div class="m-pagination__pagesize">
+        <p>Pagesize:</p>
+        <app-select-input
+            [formControl]="pageSize"
+            [options]="pageSizeOptions"
+        ></app-select-input>
+    </div>
+</div>

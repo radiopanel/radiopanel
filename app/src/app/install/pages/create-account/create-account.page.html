@@ -1,0 +1,36 @@
+<div class="o-wrapper o-wrapper--small">
+    <div class="p-tenant-setup">
+        <div class="p-tenant-setup__image">
+            <img src="/assets/img/logo-color-light.png" alt="Logo" class="p-tenant-setup__logo">
+            <h2>Account</h2>
+            <p>Create your initial admin account that you will use to login</p>
+        </div>
+        <div class="o-page o-page--small" *ngIf="form">
+            <app-header description="Step 1/4" emptyTitle="Create your admin account"></app-header>
+            <form [formGroup]="form" (submit)="handleSubmit($event)">
+                <div class="o-page__section">
+                    <app-text-input
+                        [formControl]="form.get('email')"
+                        icon="envelope"
+                        label="Email"
+                        type="email"
+                    ></app-text-input>
+                    <app-text-input
+                        [formControl]="form.get('username')"
+                        icon="user"
+                        label="Username"
+                    ></app-text-input>
+                    <app-text-input
+                        [formControl]="form.get('password')"
+                        label="Password"
+                        icon="key-skeleton"
+                        type="password"
+                    ></app-text-input>
+                </div>
+                <div class="o-page__section">
+                    <button type="submit" class="a-button a-button--success">Next</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

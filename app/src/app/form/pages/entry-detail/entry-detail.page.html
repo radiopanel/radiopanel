@@ -1,0 +1,32 @@
+<app-header backLink="../" description="Content" [emptyTitle]="(mode === inputMode.EDIT ? 'Editing ' : 'Viewing ') + contentType?.name | singular">
+    <div class="action">
+        <ng-container *ngIf="mode === inputMode.EDIT">
+            <button type="submit" class="a-button a-button--warning" (click)="toggleMode(inputMode.VIEW)">Cancel</button>
+        </ng-container>
+        <ng-container *ngIf="mode === inputMode.VIEW">
+            <button type="submit" class="a-button a-button--danger a-button--outline" (confirm)="delete($event)">Delete</button>
+            <button type="submit" class="a-button" (click)="toggleMode(inputMode.EDIT)">Edit</button>
+        </ng-container>
+    </div>
+</app-header>
+<div class="o-page" *ngIf="form">
+    <div class="o-page__section">
+        <div *ngFor="let field of contentType?.fields; let i = index">
+            <app-dynamic-input
+                [label]="field.name || ''"
+                [config]="field.config"
+                [component]="field.fieldType"
+                [subfields]="field.subfields"
+                [formControl]="form.get('fields')?.get(field.slug)"
+                [multiLanguage]="false"
+                [mode]="mode"
+            ></app-dynamic-input>
+        </div>
+    </div>
+    <div class="o-page__section" *ngIf="mode === inputMode.EDIT">
+        <div class="u-display--flex u-display--space-between">
+            <button type="submit" class="a-button a-button--success" (click)="submit($event)">Update</button>
+            <button type="submit" class="a-button a-button--danger a-button--outline" (confirm)="delete($event)">Delete</button>
+        </div>
+    </div>
+</div>

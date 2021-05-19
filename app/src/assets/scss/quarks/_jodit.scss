@@ -1,0 +1,33 @@
+.jodit.jodit-container {
+    border-radius: $border-radius;
+    overflow: hidden;
+
+    .jodit-toolbar-collection {
+        background-color: $grey-lighter;
+        background-image: none;
+        padding: 0 $spacer-small;
+
+        .jodit-toolbar-button {
+            margin: $spacer-2x-small $spacer-3x-small;
+        }
+    }
+
+    .jodit-wysiwyg {
+        color: $grey-darkest;
+    }
+
+    .jodit-workplace {
+        border: none;
+    }
+
+    .jodit-ui-separator {
+        border-right: none;
+        padding: 0 $spacer-small;
+    }
+}
+
+.jodit-status-bar {
+    border: none !important;
+    background-color: $grey-lighter;
+    padding: $spacer-2x-small $spacer;
+}

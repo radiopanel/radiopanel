@@ -1,0 +1,29 @@
+.m-workflow-config__state {
+    margin-bottom: $spacer;
+    background-color: $grey-lightest;
+    transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+
+    &--open {
+        .m-workflow-config__config {
+            height: auto !important;
+            display: block !important;
+        }
+    }
+
+    .m-workflow-config__action-bar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background-color: $grey-lighter;
+        padding: $spacer-small $spacer;
+        h4 {
+            margin: 0;
+        }
+    }
+
+    .m-workflow-config__config {
+        padding: $spacer;
+        height: 0;
+        display: none;
+    }
+}

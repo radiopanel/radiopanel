@@ -1,0 +1,10 @@
+.m-icon-selector {
+    max-width: 983px;
+    margin-right: -$spacer;
+    display: flex;
+    flex-wrap: wrap;
+
+    .m-icon-selector__icon {
+        margin-bottom: $spacer-small;
+    }
+}

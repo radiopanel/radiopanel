@@ -1,0 +1,46 @@
+.m-toast {
+    &.m-toast--success .m-toast__content {
+        background: $state-success;
+    }
+
+    &.m-toast--info .m-toast__content {
+        background: $state-info;
+    }
+
+    &.m-toast--error .m-toast__content {
+        background: $state-danger;
+    }
+
+    &.m-toast--warning .m-toast__content {
+        background: $state-warning;
+    }
+
+    .m-toast__content {
+        margin-top: $spacer;
+        background: $grey-darkest;
+        color: $white;
+        min-width: 400px;
+
+        .m-toast__info {
+            padding: $spacer $spacer-large;
+
+            .m-toast__title {
+                margin: 0;
+                padding: 0;
+            }
+
+            .m-toast__message {
+                font-size: .9rem;
+                color: $white;
+                margin: 0;
+                padding: 0;
+                margin-top: $spacer-x-small;
+            }
+        }
+
+        .m-toast__progress {
+            height: $spacer-x-small;
+            background-color: rgba(255, 255, 255, 0.3);
+        }
+    }
+}

@@ -1,0 +1,75 @@
+.m-dashboard-item {
+    border-radius: $border-radius;
+    background-color: $grey-medium;
+    overflow: hidden;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+
+    &__header {
+        background-color: $grey-medium;
+        color: $white;
+        padding: $spacer $spacer-small $spacer $spacer;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        cursor: grab;
+    }
+
+    &__title {
+        color: $white;
+        font-weight: bold;
+    }
+
+    &__image {
+        height: 70px;
+        width: 70px;
+        border-radius: 50%;
+    }
+
+    &__content {
+        flex: 1;
+        background-color: $grey-dark;
+        color: $white;
+        padding: $spacer $spacer-x-large;
+        position: relative;
+
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+
+        > * {
+            width: 100%;
+        }
+
+        textarea {
+            position: absolute;
+            top: $spacer;
+            left: $spacer;
+            right: $spacer;
+            bottom: $spacer;
+            resize: none;
+            width: calc(100% - #{$spacer-x-large});
+            background: transparent;
+            border: none;
+            color: $grey-lightest;
+
+            &:focus {
+                outline: none;
+            }
+        }
+    }
+}
+
+.m-dashboard-item.m-dashboard-item--admin {
+    .m-dashboard-item__content {
+        display: block;
+        text-align: left;
+    }
+}
+
+gridster-item, gridster {
+    background: none !important;
+}

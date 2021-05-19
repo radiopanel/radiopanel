@@ -1,0 +1,21 @@
+<app-header description="Rule pages" [emptyTitle]="'Editing ' + form?.get('name')?.value"></app-header>
+<div class="o-page" *ngIf="form">
+    <form [formGroup]="form">
+        <div class="o-page__section">
+            <app-text-input
+                [formControl]="form.get('name')"
+                label="Name"
+            ></app-text-input>
+            <app-richtext-input
+                [formControl]="form.get('content')"
+                label="Page content"
+            ></app-richtext-input>
+        </div>
+        <div class="o-page__section">
+            <div class="u-display--flex u-display--space-between">
+                <button type="submit" class="a-button a-button--success" (click)="submit($event)">Save</button>
+                <button type="submit" class="a-button a-button--danger a-button--outline" (confirm)="delete($event)">Delete</button>
+            </div>
+        </div>
+    </form>
+</div>

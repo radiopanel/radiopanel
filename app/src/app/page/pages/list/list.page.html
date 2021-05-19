@@ -1,0 +1,41 @@
+<app-header emptyTitle="Page Types">
+    <div class="action">
+        <a routerLink="create" class="a-button a-button--info"><span class="uil uil-plus"></span> Create page type</a>
+    </div>
+</app-header>
+<div class="o-page">
+    <div class="o-page__section">
+        <app-loading [loading]="loading$ | async">
+            <app-empty-state
+                [empty]="(pageTypes$ | async).length === 0"
+                image="/assets/img/empty-states/search.png"
+                emptyTitle="You have no page types"
+                description="Content types allows you to construct your own data structure."
+            >
+                <table class="m-table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th style="width: 150px;">Last updated</th>
+                            <th style="width: 50px;"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let pageType of (pageTypes$ | async)">
+                            <td>{{ pageType.name }}</td>
+                            <td>{{ pageType.updatedAt | amTimeAgo }}</td>
+                            <td>
+                                <!-- <a [routerLink]="[pageType.uuid, 'page']" class="a-button a-button--small a-button--success u-margin-right-xs">
+                                    <span class="uil uil-eye"></span>
+                                </a> -->
+                                <a [routerLink]="pageType.uuid" class="a-button a-button--small">
+                                    <span class="uil uil-pen"></span>
+                                </a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </app-empty-state>
+        </app-loading>
+    </div>
+</div>

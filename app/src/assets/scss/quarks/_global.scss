@@ -1,0 +1,34 @@
+body {
+    background-color: $grey-darkest;
+    color: $grey-light;
+}
+
+body, select, option {
+    font-family: 'Cera Pro';
+}
+
+a {
+    text-decoration: none;
+    color: var(--color-primary);
+}
+
+* {
+    box-sizing: border-box;
+}
+
+hr {
+    border: none;
+    border-top: 1px solid $grey-lighter;
+}
+
+.u-hint {
+    margin-bottom: $spacer-x-small;
+    font-size: .8rem;
+    margin: 0;
+    display: block;
+    color: $grey;
+
+    code {
+        color: $grey-lighter;
+    }
+}

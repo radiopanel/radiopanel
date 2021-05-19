@@ -1,0 +1,22 @@
+<app-header description="Bans" emptyTitle="Create ban"></app-header>
+<div class="o-page" *ngIf="form">
+    <form [formGroup]="form">
+        <div class="o-page__section">
+            <app-text-input
+                [formControl]="form.get('identifier')"
+                label="Identifier"
+            ></app-text-input>
+            <app-text-input
+                [formControl]="form.get('comment')"
+                label="Comment"
+            ></app-text-input>
+            <app-date-input
+                [formControl]="form.get('expiresAt')"
+                label="Expires at (leave empty for permanent ban)"
+            ></app-date-input>
+        </div>
+        <div class="o-page__section">
+            <button type="submit" class="a-button a-button--success" (click)="submit($event)">Save</button>
+        </div>
+    </form>
+</div>

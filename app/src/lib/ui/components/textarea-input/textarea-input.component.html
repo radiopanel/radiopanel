@@ -1,0 +1,10 @@
+<div class="a-input">
+    <div class="a-input__label">{{ label }}</div>
+    <ng-container *ngIf="mode === inputMode.EDIT">
+        <textarea [formControl]="control" class="a-input__field" [placeholder]="placeholder"></textarea>
+    </ng-container>
+    <ng-container *ngIf="mode === inputMode.VIEW">
+        <span class="a-input__value">{{ control.value }}</span>
+    </ng-container>
+    <p *ngIf="ngControl.invalid && ngControl.touched">ERROR</p>
+</div>

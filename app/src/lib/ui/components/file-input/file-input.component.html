@@ -1,0 +1,10 @@
+<div [ngClass]="{'a-input--has-errors': ngControl.errors && ngControl.touched, 'a-input': true}">
+    <div class="a-input__label">{{ label }}</div>
+    <input [type]="type" (change)="onFileChange($event)" class="a-input__field" [placeholder]="placeholder">
+    <div class="m-file-input__file">
+        <span class="uil uil-file"></span> {{ (control?.value || "").split("/").pop() }}
+    </div>
+    <ng-container *ngIf="ngControl.invalid && ngControl.touched">
+        <app-validation-message [errors]="ngControl.errors"></app-validation-message>
+    </ng-container>
+</div>

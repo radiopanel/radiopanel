@@ -1,0 +1,10 @@
+<div [ngClass]="{'a-input--has-errors': ngControl.errors && ngControl.touched, 'a-input': true}">
+    <div class="a-input__label">{{ label }}</div>
+    <select [formControl]="control" class="a-input__field">
+        <option disabled>Choose an option</option>
+        <option *ngFor="let option of options; trackBy: trackByFn" [value]="option.value">{{ option.label }}</option>
+    </select>
+    <ng-container *ngIf="ngControl.invalid && ngControl.touched">
+        <app-validation-message [errors]="ngControl.errors"></app-validation-message>
+    </ng-container>
+</div>

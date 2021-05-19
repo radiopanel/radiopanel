@@ -1,0 +1,97 @@
+@import '~@angular/cdk/overlay-prebuilt.css';
+@import '~@angular/cdk/overlay-prebuilt.css';
+@import "~@ibsys/ng-select/themes/default.theme.css";
+@import "~@danielmoncada/angular-datetime-picker/assets/style/picker.min.css";
+@import "~angular-calendar/css/angular-calendar.css";
+@import '~ngx-toastr/toastr';
+@import '~jodit/build/jodit.min.css';
+
+@import "./quarks/reset";
+@import "./quarks/colors";
+@import "./quarks/variables";
+@import "./quarks/fonts";
+@import "./quarks/icons";
+@import "./quarks/global";
+@import "./quarks/layout";
+@import "./quarks/grid";
+@import "./quarks/jodit";
+
+@import "./pages/p-login";
+@import "./pages/p-register";
+@import "./pages/p-tenant-create";
+@import "./pages/p-tenant-setup";
+
+@import "./organisms/o-sidebar";
+@import "./organisms/o-wrapper";
+@import "./organisms/o-content";
+@import "./organisms/o-page";
+@import "./organisms/o-modal";
+@import "./organisms/o-calendar";
+
+@import "./molecules/m-menu";
+@import "./molecules/m-alert";
+@import "./molecules/m-header";
+@import "./molecules/m-table";
+@import "./molecules/m-dashboard-item";
+@import "./molecules/m-field-selector";
+@import "./molecules/m-field-config";
+@import "./molecules/m-pagination";
+@import "./molecules/m-field-repeater";
+@import "./molecules/m-toast";
+@import "./molecules/m-icon-selector";
+@import "./molecules/m-image-input";
+@import "./molecules/m-file-input";
+@import "./molecules/m-image-tooltip";
+@import "./molecules/m-chart";
+@import "./molecules/m-button-group";
+@import "./molecules/m-repeater";
+@import "./molecules/m-workflow-config";
+@import "./molecules/m-empty-state";
+@import "./molecules/m-loading";
+@import "./molecules/m-request";
+@import "./molecules/m-key-value";
+@import "./molecules/m-feature";
+@import "./molecules/m-tab";
+@import "./molecules/m-quick-access";
+@import "./molecules/m-settings";
+@import "./molecules/m-permissions";
+
+@import "./atoms/a-button";
+@import "./atoms/a-input";
+@import "./atoms/a-badge";
+@import "./atoms/a-box";
+@import "./atoms/a-empty";
+
+.gu-mirror {
+    position: fixed !important;
+    margin: 0 !important;
+    z-index: 9999 !important;
+    opacity: 0.8;
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=80)";
+    filter: alpha(opacity=80);
+    pointer-events: none;
+}
+
+/* high-performance display:none; helper */
+.gu-hide {
+    left: -9999px !important;
+}
+
+/* added to mirrorContainer (default = body) while dragging */
+.gu-unselectable {
+    -webkit-user-select: none !important;
+    -moz-user-select: none !important;
+    -ms-user-select: none !important;
+    user-select: none !important;
+}
+
+/* added to the source element while its mirror is dragged */
+.gu-transit {
+    opacity: 0.2;
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=30)";
+    filter: alpha(opacity=30);
+}
+
+.cdk-overlay-dark-backdrop {
+    background: rgba(0, 0, 0, 0.5);
+}

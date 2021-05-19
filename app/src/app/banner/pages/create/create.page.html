@@ -1,0 +1,30 @@
+<app-header description="Banners" emptyTitle="Create banner"></app-header>
+<div class="o-page" *ngIf="form">
+    <form [formGroup]="form">
+        <div class="o-page__section">
+            <app-text-input
+                [formControl]="form.get('name')"
+                label="Name"
+            ></app-text-input>
+            <app-text-input
+                [formControl]="form.get('slug')"
+                label="Slug"
+            ></app-text-input>
+            <app-text-input
+                [formControl]="form.get('link')"
+                label="Link"
+            ></app-text-input>
+            <app-text-input
+                [formControl]="form.get('tag')"
+                label="Tag"
+            ></app-text-input>
+            <app-dynamic-file-input
+                [formControl]="form.get('image')"
+                label="image"
+            ></app-dynamic-file-input>
+        </div>
+        <div class="o-page__section">
+            <button type="submit" class="a-button a-button--success" (click)="submit($event)">Save</button>
+        </div>
+    </form>
+</div>

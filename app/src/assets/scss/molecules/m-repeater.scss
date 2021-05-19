@@ -1,0 +1,42 @@
+.m-repeater {
+    // background-color: $grey-lightest;
+
+    &__info {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: $spacer-2x-small;
+    }
+
+    &__label {
+        color: $grey-darker;
+        font-size: 0.9rem;
+    }
+
+    &__group {
+        position: relative;
+        padding-left: $spacer-large;
+        margin-bottom: $spacer;
+
+        &::before {
+            position: absolute;
+            content: "";
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 6px;
+            border-radius: $spacer;
+            background-color: $grey-lighter;
+        }
+    }
+
+    &__empty {
+        text-align: center;
+        padding: $spacer-small 0;
+
+        p {
+            margin: 0;
+            color: $grey;
+        }
+    }
+}

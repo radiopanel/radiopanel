@@ -1,0 +1,21 @@
+<app-header description="AuditLog" [emptyTitle]="'Viewing ' + auditLog.uuid"></app-header>
+<div class="o-page">
+    <div class="o-page__section">
+        <div class="m-key-value">
+            <p class="m-key-value__label">User</p>
+            <p class="m-key-value__value">{{ auditLog?.user?.username }}</p>
+        </div>
+        <div class="m-key-value">
+            <p class="m-key-value__label">Action</p>
+            <p class="m-key-value__value">{{ auditLog?.action }}</p>
+        </div>
+        <div class="m-key-value">
+            <p class="m-key-value__label">Executed at</p>
+            <p class="m-key-value__value">{{ auditLog?.createdAt }}</p>
+        </div>
+        <div class="m-key-value">
+            <p class="m-key-value__label">Action Data</p>
+            <pre class="m-key-value__value">{{ auditLog?.actionData | json }}</pre>
+        </div>
+    </div>
+</div>

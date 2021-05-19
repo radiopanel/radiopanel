@@ -1,0 +1,13 @@
+<div class="o-modal o-modal--small">
+    <div class="o-modal__header">
+        <h3>Confirm</h3>
+        <a href="#" (click)="cancel($event)"><span class="uil uil-times"></span></a>
+    </div>
+    <div class="o-modal__body">
+        <p>Please confirm you wish to {{ data.action }} this item.</p>
+    </div>
+    <div class="o-modal__footer">
+        <button class="a-button a-button--success" (click)="confirm()">{{ data.action }}</button>
+        <button class="a-button a-button--warning a-button--outline" (click)="cancel($event)">Cancel</button>
+    </div>
+</div>

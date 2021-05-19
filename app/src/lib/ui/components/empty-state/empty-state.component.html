@@ -1,0 +1,6 @@
+<div [class]="'m-empty-state m-empty-state--' + size" *ngIf="empty">
+    <img class="m-empty-state__image" [src]="image" />
+    <h3 class="m-empty-state__title">{{ emptyTitle }}</h3>
+    <p class="m-empty-state__description">{{ description }}</p>
+</div>
+<ng-content *ngIf="!empty"></ng-content>

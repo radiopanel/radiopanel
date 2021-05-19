@@ -1,0 +1,56 @@
+<app-header description="My Station" [emptyTitle]="'Customisation'"></app-header>
+<div class="o-page" *ngIf="form">
+    <form [formGroup]="form">
+        <div class="o-page__section">
+            <div class="o-page__section-info">
+                <h3 class="o-page__section-title">
+                    General look and feel
+                </h3>
+            </div>
+            <app-dynamic-file-input
+                [formControl]="form.get('settings').get('logo')"
+                label="Logo"
+                [key]="'tenant-logo'"
+            ></app-dynamic-file-input>
+            <app-text-input
+                [formControl]="form.get('settings').get('primaryColor')"
+                label="Primary Color"
+                type="color"
+            ></app-text-input>
+        </div>
+        <div class="o-page__section">
+            <div class="o-page__section-info">
+                <h3 class="o-page__section-title">
+                    Authentication
+                </h3>
+            </div>
+            <ng-container>
+                <app-dynamic-file-input
+                    [formControl]="form.get('settings').get('authBackground')"
+                    label="Login page background"
+                    [key]="'auth-background'"
+                    [disabled]=""
+                ></app-dynamic-file-input>
+            </ng-container>
+        </div>
+        <div class="o-page__section">
+            <div class="o-page__section-info">
+                <h3 class="o-page__section-title">
+                    Custom CSS
+                </h3>
+            </div>
+            <div class="m-alert m-alert--danger u-margin-bottom">
+                <b>Warning:</b> only edit this if you know what you are doing.
+            </div>
+            <app-code-input
+                [formControl]="form.get('settings').get('customCSS')"
+                label="Custom CSS"
+            ></app-code-input>
+        </div>
+        <div class="o-page__section">
+            <div class="u-display--flex u-display--space-between">
+                <button type="submit" class="a-button a-button--success" (click)="submit($event)">Save</button>
+            </div>
+        </div>
+    </form>
+</div>

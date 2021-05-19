@@ -1,0 +1,68 @@
+<app-header description="Settings" [emptyTitle]="'Stream Settings'" [backLink]="['..']"></app-header>
+<div class="o-page" *ngIf="form">
+    <form [formGroup]="form">
+        <div class="o-page__section">
+            <app-select-input
+                [formControl]="form.get('settings').get('configurationType')"
+                label="Configuration Type"
+                [options]="[{
+                    label: 'Manual',
+                    value: 'manual'
+                }, {
+                    label: 'Azuracast',
+                    value: 'azura'
+                }]"
+            ></app-select-input>
+        </div>
+        <div class="o-page__section" *ngIf="form.get('settings').get('configurationType')?.value === 'manual'">
+            <div class="o-page__section-info">
+                <h3 class="o-page__section-title">
+                    Manual configuration
+                </h3>
+            </div>
+            <app-select-input
+                [formControl]="form.get('settings').get('streamType')"
+                label="Stream Type"
+                [options]="[{
+                    label: 'Icecast',
+                    value: 'icecast'
+                },{
+                    label: 'Shoutcast',
+                    value: 'shoutcast'
+                },{
+                    label: 'Zeno.FM',
+                    value: 'zeno'
+                }]"
+            ></app-select-input>
+            <app-text-input
+                [formControl]="form.get('settings').get('streamUrl')"
+                label="Stream Status URL"
+            ></app-text-input>
+        </div>
+        <div class="o-page__section" *ngIf="form.get('settings').get('configurationType')?.value === 'azura'">
+            <div class="o-page__section-info">
+                <h3 class="o-page__section-title">
+                    AzuraCast configuration
+                </h3>
+            </div>
+            <app-text-input
+                [formControl]="form.get('settings').get('azuraCastBaseUrl')"
+                label="AzuraCast Base URL"
+            ></app-text-input>
+            <app-text-input
+                [formControl]="form.get('settings').get('azuraCastStationId')"
+                label="AzuraCast Station ID"
+            ></app-text-input>
+            <app-text-input
+                [formControl]="form.get('settings').get('azuraCastApiKey')"
+                label="AzuraCast Api key"
+                type="password"
+            ></app-text-input>
+        </div>
+    </form>
+    <div class="o-page__section">
+        <div class="u-display--flex u-display--space-between">
+            <button type="submit" class="a-button a-button--success" (click)="submit($event)">Save</button>
+        </div>
+    </div>
+</div>

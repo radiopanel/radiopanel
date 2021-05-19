@@ -1,0 +1,37 @@
+<div class="o-modal">
+    <div class="o-modal__header">
+        <h3>Create Request</h3>
+        <a href="#" (click)="close($event)"><span class="uil uil-times"></span></a>
+    </div>
+    <div class="o-modal__body">
+        <app-text-input
+            [formControl]="form.get('name')"
+            label="Name"
+        ></app-text-input>
+        <app-select-input
+            [formControl]="form.get('type')"
+            label="Type"
+            [options]="[{
+                label: 'Song request',
+                value: 'songRequest'
+            }, {
+                label: 'Message',
+                value: 'message'
+            }, {
+                label: 'Competition',
+                value: 'competition'
+            }, {
+                label: 'Joke',
+                value: 'joke'
+            }]"
+        ></app-select-input>
+        <app-textarea-input
+            [formControl]="form.get('message')"
+            label="Message"
+        ></app-textarea-input>
+    </div>
+    <div class="o-modal__footer">
+        <button class="a-button a-button--success" (click)="save($event)">Save</button>
+        <button class="a-button a-button--warning a-button--outline" (click)="close($event)">Cancel</button>
+    </div>
+</div>

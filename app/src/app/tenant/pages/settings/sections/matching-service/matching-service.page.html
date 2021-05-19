@@ -1,0 +1,37 @@
+<app-header description="Settings" [emptyTitle]="'Song Matching Settings'" [backLink]="['..']"></app-header>
+<div class="o-page" *ngIf="form">
+    <form [formGroup]="form">
+        <div class="o-page__section">
+            <app-select-input
+                [formControl]="form.get('settings').get('matchingService')"
+                label="Song matching service"
+                [options]="[{
+                    label: 'Spotify',
+                    value: 'spotify'
+                },{
+                    label: 'Deezer',
+                    value: 'deezer'
+                },{
+                    label: 'Apple Music',
+                    value: 'apple-music'
+                }]"
+            ></app-select-input>
+            <ng-container *ngIf="form.get('settings').get('matchingService').value === 'spotify'">
+                <app-text-input
+                    [formControl]="form.get('settings').get('spotifyClientId')"
+                    label="Spotify Client Id"
+                ></app-text-input>
+                <app-text-input
+                    [formControl]="form.get('settings').get('spotifyClientSecret')"
+                    label="Spotify Client Secret"
+                    type="password"
+                ></app-text-input>
+            </ng-container>
+        </div>
+    </form>
+    <div class="o-page__section">
+        <div class="u-display--flex u-display--space-between">
+            <button type="submit" class="a-button a-button--success" (click)="submit($event)">Save</button>
+        </div>
+    </div>
+</div>

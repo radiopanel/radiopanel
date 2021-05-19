@@ -1,0 +1,13 @@
+<div class="p-register">
+    <div class="p-register__content">
+        <app-loading [loading]="loading$ | async">
+            <img src="/assets/img/logo-color-light.png" alt="IBS Logo" class="p-register__logo">
+            <h1>You are invited to {{ invite?.tenant?.name }}</h1>
+            <p class="u-margin-bottom">Just click the button down below to get started!</p>
+            <button (click)="acceptInvite($event)" class="a-button a-button--success" [disabled]="loading">
+                Accept invite <span *ngIf="loading" class="uil uil-redo animate spin"></span>
+            </button>
+        </app-loading>
+    </div>
+    <div class="p-register__image"></div>
+</div>

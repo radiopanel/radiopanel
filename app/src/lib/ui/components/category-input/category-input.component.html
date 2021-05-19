@@ -1,0 +1,10 @@
+<div class="a-input">
+    <div class="a-input__label">{{ label }}</div>
+    <ng-select
+        [items]="data"
+        [formControl]="control"
+        [multiple]="multiple"
+        (search)="handleSearch($event)"
+    ></ng-select>
+    <p *ngIf="ngControl.invalid && ngControl.touched">ERROR</p>
+</div>

@@ -1,0 +1,11 @@
+
+<div class="m-menu">
+    <div class="m-menu__description" *ngIf="description">{{ description }}</div>
+    <ul class="m-menu__list">
+        <li class="m-menu__item" *ngFor="let link of links">
+            <a [routerLink]="link?.link" class="m-menu__link" routerLinkActive="m-menu__link--active">
+                <span [class]="'uil uil-' + link?.icon"></span><span  class="m-menu__name">{{ link?.name }}</span>
+            </a>
+        </li>
+    </ul>
+</div>

@@ -1,0 +1,24 @@
+<div class="o-modal">
+    <div class="o-modal__header">
+        <h3>Invite someone</h3>
+        <a href="#" (click)="close()"><span class="uil uil-times"></span></a>
+    </div>
+    <div class="o-modal__body">
+        <app-text-input
+            [formControl]="form.get('username')"
+            label="Username"
+        ></app-text-input>
+        <app-text-input
+            [formControl]="form.get('emailAddress')"
+            label="Email"
+        ></app-text-input>
+        <app-role-input
+            [formControl]="form.get('roleUuid')"
+            label="Role"
+        ></app-role-input>
+    </div>
+    <div class="o-modal__footer">
+        <button class="a-button a-button--success" (click)="save()">Invite</button>
+        <button class="a-button a-button--warning a-button--outline" (click)="close()">Close</button>
+    </div>
+</div>

@@ -1,0 +1,23 @@
+{
+	"compilerOptions": {
+		"lib": ["ES2020"],
+		"module": "commonjs",
+		"declaration": true,
+		"removeComments": true,
+		"emitDecoratorMetadata": true,
+		"experimentalDecorators": true,
+		"target": "es2017",
+		"sourceMap": true,
+		"outDir": "./dist",
+		"baseUrl": "./",
+		"incremental": true,
+		"esModuleInterop": true,
+		"resolveJsonModule": true,
+		"paths": {
+			"~entities/*": ["src/database/entities/*"],
+			"~entities": ["src/database/entities"],
+			"~shared/*": ["src/modules/shared/*"],
+		},
+	},
+	"exclude": ["node_modules", "dist"]
+}

@@ -1,0 +1,50 @@
+.m-field-selector {
+    .m-field-selector__item {
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+
+        &:not(:last-of-type) {
+            margin-bottom: $spacer;
+        }
+
+        &:hover {
+            background-color: $grey-lighter;
+
+            .m-field-select__check {
+                display: inline-block;
+            }
+        }
+
+        .m-field-select__icon {
+            background-color: $grey-darkest;
+            height: $spacer-2x-large;
+            width: $spacer-2x-large;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: $spacer;
+
+            span {
+                font-size: 1.5rem;
+                color: white;
+            }
+        }
+
+        .m-field-select__title {
+            margin: 0;
+        }
+
+        .m-field-select__description {
+            margin: 0;
+            font-size: 0.8rem;
+            color: $grey;
+        }
+
+        .m-field-select__check {
+            display: none;
+            margin-left: auto;
+            padding: 0 $spacer;
+        }
+    }
+}

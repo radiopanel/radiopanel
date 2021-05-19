@@ -1,0 +1,77 @@
+<app-header emptyTitle="Timetable">
+    <div class="action">
+        <div class="m-button-group">
+            <div class="a-button" mwlCalendarPreviousView [view]="view" [(viewDate)]="viewDate"
+                (viewDateChange)="handleViewDateChange()">
+                Previous
+            </div>
+            <div class="a-button a-button--outline" mwlCalendarToday [(viewDate)]="viewDate"
+            (viewDateChange)="handleViewDateChange()">
+                Today
+            </div>
+            <div class="a-button" mwlCalendarNextView [view]="view" [(viewDate)]="viewDate"
+                (viewDateChange)="handleViewDateChange()">
+                Next
+            </div>
+        </div>
+        <div class="m-header__action-divider"></div>
+        <div (click)="setView(CalendarView.Day)" [class.a-button--active]="view === CalendarView.Day" class="a-button"><span class="uil uil-paragraph"></span> Day view</div>
+        <div (click)="setView(CalendarView.Week)" [class.a-button--active]="view === CalendarView.Week" class="a-button"><span class="uil uil-subject"></span> Week view</div>
+        <!-- <div (click)="setView(CalendarView.Month)" [class.a-button--active]="view === CalendarView.Month" class="a-button"><span class="uil uil-align-left-justify"></span> Month view</div> -->
+    </div>
+</app-header>
+<div class="o-page" #timetableRoot>
+    <div class="o-page__section">
+        <h3>{{ viewDate | calendarDate:(view + 'ViewTitle'):'en' }}</h3>
+        <div [ngSwitch]="view" class="u-margin-top">
+            <!-- <mwl-calendar-month-view
+                *ngSwitchCase="CalendarView.Month"
+                [viewDate]="viewDate"
+                [events]="slots"
+                [weekStartsOn]="1"
+                (viewDateChange)="handleViewDateChange($event)"
+                (eventClicked)="handleSlotEdit($event.event)"
+            ></mwl-calendar-month-view> -->
+            <mwl-calendar-week-view
+                *ngSwitchCase="CalendarView.Week"
+                [viewDate]="viewDate"
+                [events]="slots"
+                [weekStartsOn]="1"
+                (viewDateChange)="handleViewDateChange($event)"
+                [hourSegmentTemplate]="weekViewHourSegmentTemplate"
+                (eventClicked)="handleSlotEdit($event.event)"
+            ></mwl-calendar-week-view>
+            <mwl-calendar-day-view
+                *ngSwitchCase="CalendarView.Day"
+                [viewDate]="viewDate"
+                [events]="slots"
+                [currentTimeMarkerTemplate]="currentTimeMarkerTemplate"
+                (viewDateChange)="handleViewDateChange($event)"
+                [hourSegmentTemplate]="weekViewHourSegmentTemplate"
+                (eventClicked)="handleSlotEdit($event.event)"
+            ></mwl-calendar-day-view>
+        </div>
+    </div>
+</div>
+
+<ng-template
+    #weekViewHourSegmentTemplate
+    let-segment="segment"
+    let-locale="locale"
+    let-segmentHeight="segmentHeight"
+    let-isTimeLabel="isTimeLabel"
+>
+    <div
+        #segmentElement
+        class="cal-hour-segment"
+        [style.height.px]="segmentHeight"
+        [class.cal-hour-start]="segment.isStart"
+        [class.cal-after-hour-start]="!segment.isStart"
+        [ngClass]="segment.cssClass"
+        (mousedown)="startDragToCreate(segment, $event, segmentElement)"
+    >
+        <div class="cal-time" *ngIf="isTimeLabel">
+            {{ segment.date | calendarDate:'weekViewHour':locale }}
+        </div>
+    </div>
+</ng-template>

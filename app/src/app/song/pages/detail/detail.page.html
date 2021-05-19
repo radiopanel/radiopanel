@@ -1,0 +1,44 @@
+<app-header description="Banner" [emptyTitle]="'Editing ' + form.get('title')?.value">
+    <div class="action">
+        <a href="#" (click)="openSearchModal($event)" class="a-button a-button--info"><span class="uil uil-search"></span> Search for new metadata</a>
+    </div>
+</app-header>
+<div class="o-page" *ngIf="form && song">
+    <form [formGroup]="form">
+        <div class="o-page__section">
+            <app-text-input
+                [formControl]="form.get('title')"
+                label="Title"
+            ></app-text-input>
+            <app-text-input
+                [formControl]="form.get('artist')"
+                label="Artist"
+            ></app-text-input>
+            <app-text-input
+                [formControl]="form.get('album')"
+                label="Album"
+            ></app-text-input>
+            <app-dynamic-file-input
+                [formControl]="form.get('graphic').get('large')"
+                label="Large Graphic"
+                [key]="'song_large-' + song.uuid"
+            ></app-dynamic-file-input>
+            <app-dynamic-file-input
+                [formControl]="form.get('graphic').get('medium')"
+                label="Medium Graphic"
+                [key]="'song_medium-' + song.uuid"
+            ></app-dynamic-file-input>
+            <app-dynamic-file-input
+                [formControl]="form.get('graphic').get('small')"
+                label="Small Graphic"
+                [key]="'song_small-' + song.uuid"
+            ></app-dynamic-file-input>
+        </div>
+        <div class="o-page__section">
+            <div class="u-display--flex u-display--space-between">
+                <button type="submit" class="a-button a-button--success" (click)="submit($event)">Save</button>
+                <button type="submit" class="a-button a-button--danger a-button--outline" (confirm)="delete($event)">Delete</button>
+            </div>
+        </div>
+    </form>
+</div>

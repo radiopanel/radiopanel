@@ -1,0 +1,18 @@
+<app-header backLink="../" description="Content" [emptyTitle]="'New ' + (form$ | async)?.name | singular"></app-header>
+<div class="o-page" *ngIf="form">
+    <div class="o-page__section">
+        <div *ngFor="let field of (form$ | async)?.fields; let i = index">
+            <app-dynamic-input
+                [label]="field.name || '' + field.multiLanguage && '(int)'"
+                [config]="field.config"
+                [component]="field.fieldType"
+                [subfields]="field.subfields"
+                [formControl]="form.get('fields')?.get(field.slug)"
+                [multiLanguage]="false"
+            ></app-dynamic-input>
+        </div>
+    </div>
+    <div class="o-page__section">
+        <button type="submit" class="a-button a-button--success" (click)="submit($event)">Create</button>
+    </div>
+</div>

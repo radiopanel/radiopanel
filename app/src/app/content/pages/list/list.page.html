@@ -1,0 +1,47 @@
+<app-header emptyTitle="Content Types">
+    <div class="action">
+        <a routerLink="create" class="a-button a-button--info"><span class="uil uil-plus"></span> Create content type</a>
+    </div>
+</app-header>
+<div class="o-page">
+    <div class="o-page__section">
+        <app-loading [loading]="loading$ | async">
+            <app-empty-state
+                [empty]="(contentTypes$ | async).length === 0"
+                image="/assets/img/empty-states/search.png"
+                emptyTitle="You have no content types"
+                description="Content types allows you to construct your own data structure."
+            >
+                <table class="m-table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th style="width: 150px;">Last updated</th>
+                            <th style="width: 50px;"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let contentType of (contentTypes$ | async)">
+                            <td>{{ contentType.name }}</td>
+                            <td>{{ contentType.updatedAt | amTimeAgo }}</td>
+                            <td>
+                                <!-- <a [routerLink]="[contentType.uuid, 'content']" class="a-button a-button--small a-button--success u-margin-right-xs">
+                                    <span class="uil uil-eye"></span>
+                                </a> -->
+                                <a [routerLink]="contentType.uuid" class="a-button a-button--small">
+                                    <span class="uil uil-pen"></span>
+                                </a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <app-pagination
+                    [currentPage]="(pagination$ | async)?.currentPage"
+                    [totalValues]="(pagination$ | async)?.totalEntities"
+                    [itemsPerPage]="(pagination$ | async)?.itemsPerPage"
+                    (update)="onPageUpdate($event)">
+                </app-pagination>
+            </app-empty-state>
+        </app-loading>
+    </div>
+</div>

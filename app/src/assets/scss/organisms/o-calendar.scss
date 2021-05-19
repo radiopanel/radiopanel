@@ -1,0 +1,122 @@
+.cal-week-view {
+    border-top: 0;
+    background: transparent;
+
+    .cal-day-headers {
+        border-bottom: none;
+        border-right: none;
+
+        .cal-header:first-child {
+            border-left: none;
+        }
+
+        .cal-header:not(:last-child) {
+            border-right: none;
+        }
+
+        .cal-header.cal-today {
+            background-color: $grey-darker;
+        }
+
+        .cal-header {
+            border-radius: $border-radius !important;
+            padding: $spacer-small;
+
+            &:hover {
+                background-color: transparent;
+            }
+        }
+
+        .cal-header.cal-weekend span {
+            color: #c7c7c7;
+        }
+    }
+
+    .cal-hour:last-child :not(:last-child) .cal-hour-segment  {
+        border-bottom: none;
+    }
+
+    .cal-hour:not(:last-child) .cal-hour-segment {
+        border-bottom: none;
+    }
+
+    .cal-time-label-column .cal-hour-odd {
+        border-top-left-radius: $border-radius;
+        border-bottom-left-radius: $border-radius;
+    }
+
+    .cal-day-column {
+        // border-left: 1px solid rgb(58, 58, 58);
+        border-left: none;
+
+        &:last-of-type .cal-hour-odd {
+            border-top-right-radius: $border-radius;
+            border-bottom-right-radius: $border-radius;
+        }
+    }
+
+    .cal-hour-odd {
+        background-color: $grey-darker;
+    }
+
+    .cal-day-headers {
+        border-left: 1px solid transparent;
+    }
+
+    .cal-time-events {
+        border-left: 1px solid transparent;
+    }
+
+    .cal-time-events {
+        border-right: none;
+        border-bottom: none;
+
+        .cal-event {
+            color: white;
+            white-space: normal;
+            border-radius: $border-radius !important;
+            padding: 0 $spacer-small;
+        }
+
+        .cal-day-columns:not(.cal-resize-active) .cal-hour-segment:hover {
+            background-color: $grey-dark;
+        }
+    }
+
+    .o-calendar__wrapper {
+        display: flex;
+        height: 100%;
+        justify-content: space-between;
+
+        .o-calendar__time {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 100%;
+        }
+
+        .o-calendar__title {
+            margin: 0;
+            padding: 0;
+            font-weight: bold;
+        }
+
+        .o-calendar__user {
+            margin: 0;
+            padding: 0;
+        }
+    }
+}
+
+.cal-day-view .cal-week-view {
+    .cal-day-column {
+        // border-left: 1px solid rgb(58, 58, 58);
+        border-left: none;
+
+        &:last-of-type .cal-hour-odd {
+            border-radius: $border-radius;
+        }
+    }
+}

@@ -1,0 +1,52 @@
+<app-header emptyTitle="Banners">
+    <div class="action">
+        <a routerLink="create" class="a-button a-button--info"><span class="uil uil-plus"></span> Create banner</a>
+    </div>
+</app-header>
+<div class="o-page">
+    <div class="o-page__section">
+        <app-loading [loading]="loading$ | async">
+            <app-empty-state
+                [empty]="(banners$ | async).length === 0"
+                image="/assets/img/empty-states/communication.png"
+                emptyTitle="You have no banners"
+                description="Banners can be used to show advertisement."
+            >
+                <table class="m-table">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>Name</th>
+                            <th>Link</th>
+                            <th>Last updated</th>
+                            <th style="width: 50px;"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let banner of (banners$ | async)">
+                            <td>
+                                <div class="m-image-input__preview">
+                                    <img [src]="banner.image" />
+                                </div>
+                            </td>
+                            <td>{{ banner.name }}</td>
+                            <td>{{ banner.link }}</td>
+                            <td>{{ banner.updatedAt | amTimeAgo }}</td>
+                            <td>
+                                <a [routerLink]="banner.uuid" class="a-button a-button--small">
+                                    <span class="uil uil-pen"></span>
+                                </a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <app-pagination
+                    [currentPage]="(pagination$ | async)?.currentPage"
+                    [totalValues]="(pagination$ | async)?.totalEntities"
+                    [itemsPerPage]="(pagination$ | async)?.itemsPerPage"
+                    (update)="onPageUpdate($event)">
+                </app-pagination>
+            </app-empty-state>
+        </app-loading>
+    </div>
+</div>

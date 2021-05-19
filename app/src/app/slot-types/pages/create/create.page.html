@@ -1,0 +1,23 @@
+<app-header description="Show Types" emptyTitle="Create show type"></app-header>
+<div class="o-page" *ngIf="form">
+    <form [formGroup]="form">
+        <div class="o-page__section">
+            <app-text-input
+                [formControl]="form.get('name')"
+                label="Name"
+            ></app-text-input>
+            <app-text-input
+                [formControl]="form.get('description')"
+                label="Description"
+            ></app-text-input>
+            <app-text-input
+                [formControl]="form.get('color')"
+                label="Color"
+                type="color"
+            ></app-text-input>
+        </div>
+        <div class="o-page__section">
+            <button type="submit" class="a-button a-button--success" (click)="submit($event)">Save</button>
+        </div>
+    </form>
+</div>

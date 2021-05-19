@@ -1,0 +1,8 @@
+<app-loading [loading]="loading">
+    <p *ngIf="!data">No one is live</p>
+    <div *ngIf="data">
+        <img [src]="data?.user?.avatar" alt="" class="m-dashboard-item__image">
+        <h4 class="u-margin-bottom-xs">{{ data?.user?.username }}</h4>
+        <p class="u-margin-top-xs">{{ data?.start | amFromUnix | amDateFormat:'HH:mm' }} - {{ data?.end | amFromUnix | amDateFormat:'HH:mm' }}</p>
+    </div>
+</app-loading>

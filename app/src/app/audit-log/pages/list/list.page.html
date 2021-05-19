@@ -1,0 +1,34 @@
+<app-header emptyTitle="Audit Log">
+</app-header>
+<div class="o-page">
+    <div class="o-page__section">
+        <table class="m-table">
+            <thead>
+                <tr>
+                    <th>User</th>
+                    <th>Action</th>
+                    <th>Executed at</th>
+                    <th style="width: 50px;"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let entry of (auditLog$ | async)">
+                    <td>{{ entry.user.username }}</td>
+                    <td>{{ entry.action }}</td>
+                    <td>{{ entry.createdAt | amTimeAgo }}</td>
+                    <td>
+                        <a [routerLink]="entry.uuid" class="a-button a-button--small">
+                            <span class="uil uil-eye"></span>
+                        </a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <app-pagination
+            [currentPage]="(pagination$ | async)?.currentPage"
+            [totalValues]="(pagination$ | async)?.totalEntities"
+            [itemsPerPage]="(pagination$ | async)?.itemsPerPage"
+            (update)="onPageUpdate($event)">
+        </app-pagination>
+    </div>
+</div>

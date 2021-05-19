@@ -1,0 +1,31 @@
+<app-header description="Roles" [emptyTitle]="'Editing ' + role?.name | singular"></app-header>
+<div class="o-page" *ngIf="form">
+    <form [formGroup]="form">
+        <div class="o-page__section">
+            <div class="o-page__section-info">
+                <h3 class="o-page__section-title">
+                    General
+                </h3>
+            </div>
+            <app-text-input
+                [formControl]="form.get('name')"
+                label="Role name"
+            ></app-text-input>
+            <app-text-input
+                [formControl]="form.get('weight')"
+                label="Weight"
+                type="number"
+            ></app-text-input>
+        </div>
+        <app-permission-selector
+            [enabledPermissions]="role?.permissions"
+            [formControl]="form.get('permissions')"
+        ></app-permission-selector>
+        <div class="o-page__section">
+            <div class="u-display--flex u-display--space-between">
+                <button type="submit" class="a-button a-button--success" (click)="submit($event)">Save</button>
+                <button type="submit" class="a-button a-button--danger a-button--outline" (confirm)="delete($event)">Delete</button>
+            </div>
+        </div>
+    </form>
+</div>

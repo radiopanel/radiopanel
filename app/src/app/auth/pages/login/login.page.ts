@@ -1,0 +1,78 @@
+import { ToastrService } from 'ngx-toastr';
+import { prop } from 'ramda';
+import { Subject } from 'rxjs';
+import { first } from 'rxjs/operators';
+
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+import { JwtHelperService } from '@auth0/angular-jwt';
+
+import { AuthService } from '../../../core/services';
+import { HttpClient } from '@angular/common/http';
+
+@Component({
+	templateUrl: './login.page.html'
+})
+export class LoginPageComponent implements OnInit, OnDestroy {
+	private componentDestroyed$: Subject<boolean> = new Subject<boolean>();
+
+	public resources$;
+	public folder: string[] = [];
+	public form: FormGroup;
+	public customisationLoading = true;
+	public customisation = null;
+
+	constructor(
+		private formBuilder: FormBuilder,
+		private authService: AuthService,
+		private toastr: ToastrService,
+		private jwtHelper: JwtHelperService,
+		private router: Router,
+		private http: HttpClient,
+	) { }
+
+	public ngOnInit(): void {
+		this.form = this.formBuilder.group({
+			email: ['', Validators.required],
+			password: ['', Validators.required]
+		});
+
+		this.loadCustomisation();
+	}
+
+	// TODO: move this to a generic service
+	public async loadCustomisation(): Promise<void> {
+		this.http.get('/api/v1/tenants/customisation')
+			.pipe(first())
+			.subscribe((result: any) => {
+				if (!result) {
+					return this.router.navigate(['/', 'install'])
+				}
+				
+				this.customisation = result;
+				this.customisationLoading = false;
+
+				document.documentElement.style.setProperty('--color-primary', result?.primaryColor || '#FF926B');
+			});
+	}
+
+	public handleSubmit(e: Event) {
+		e.preventDefault();
+
+		this.authService.login(this.form.value)
+			.pipe(
+				first()
+			)
+			.subscribe(({ token }) => {
+				const user = prop('user')(this.jwtHelper.decodeToken(token)) as any;
+				this.toastr.success(`Welcome back ${user.username}`, 'Success');
+				this.router.navigate(['/']);
+			});
+	}
+
+	public ngOnDestroy(): void {
+		this.componentDestroyed$.next(true);
+		this.componentDestroyed$.complete();
+	}
+}

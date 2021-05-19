@@ -1,0 +1,42 @@
+<div class="o-page__section">
+    <div class="o-page__section-info">
+        <h3 class="o-page__section-title">
+            General info
+        </h3>
+    </div>
+    <app-text-input
+        [formControl]="form.get('name')"
+        label="Name"
+        placeholder="Competitions"
+    ></app-text-input>
+    <app-text-input
+        [formControl]="form.get('slug')"
+        label="Unique name for this content type"
+        placeholder="competitions"
+    ></app-text-input>
+    <app-text-input
+        [formControl]="form.get('description')"
+        label="Description"
+        placeholder="Some info about this content type"
+    ></app-text-input>
+</div>
+<div class="o-page__section">
+    <div class="o-page__section-info">
+        <h3 class="o-page__section-title">
+            Fields
+        </h3>
+        <button (click)="selectContentField()" class="a-button a-button--success a-button--small">Add field</button>
+    </div>
+    <div class="m-field-config" [dragula]="fieldsIdentifier" [dragulaModel]="form.get('fields').value" (dragulaModelChange)="handleFieldsUpdate($event)">
+        <div *ngFor="let item of form['controls'].fields['controls']; let i = index">
+            <app-field-config
+                *ngIf="item.get('fieldType').value !== 'repeater'"
+                [open]="openFields[i]"
+                [item]="item"
+                [contentFields]="contentFields"
+                (toggleOpen)="toggleFieldExpansion(i)"
+                (remove)="removeField(i)"
+            ></app-field-config>
+        </div>
+    </div>
+</div>

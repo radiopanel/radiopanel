@@ -1,0 +1,14 @@
+<app-header emptyTitle="Rules"></app-header>
+<div class="o-page">
+    <div class="o-page__section">
+        <div class="m-tab u-margin-bottom">
+            <ng-container *ngFor="let page of (rulePages$ | async); let i = index">
+                <a [class]="{
+                    'm-tab__item': true,
+                    'm-tab__item--active': activeTab === i
+                }" href="#" (click)="setActiveTab($event, i)">{{ page.name }}</a>
+            </ng-container>
+        </div>
+        <div [innerHTML]="(rulePages$ | async)[activeTab]?.content | safe"></div>
+    </div>
+</div>
