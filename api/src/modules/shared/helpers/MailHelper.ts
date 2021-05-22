@@ -6,6 +6,7 @@ import { compile } from 'handlebars';
 import mjml2html from 'mjml';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { MAIL_TEMPLATES } from 'src/mail';
 
 
 interface MailArguments {
@@ -25,7 +26,7 @@ export class MailHelper {
 	public async sendMail({
 		to, template, context, subject,
 	}: MailArguments): Promise<void> {
-		const mailTemplate = compile(fs.readFileSync(path.join(process.cwd(), `src/mail/templates/${template}.mjml`)).toString());
+		const mailTemplate = compile(MAIL_TEMPLATES[template]);
 		const html = mjml2html(mailTemplate({ ...context, config: {
 			frontendBaseUrl: this.configService.get('app.frontendBaseUrl')
 		}})).html;
