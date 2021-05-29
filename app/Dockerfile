@@ -10,7 +10,9 @@ COPY . .
 RUN npm run build -- --prod
 
 # Stage 1: Serve Angular
-FROM nginx:stable
+FROM nginx:1.21.0-alpine
+
+RUN apk add certbot
 
 COPY --from=build /usr/build/dist/* /usr/share/nginx/html
 COPY nginx.conf /etc/nginx/nginx.template
