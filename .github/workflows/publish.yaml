@@ -1,13 +1,6 @@
 name: Publish Docker image
 on:
   push:
-    # Sequence of patterns matched against refs/heads
-    branches:
-      - master
-      # Push events to branches matching refs/heads/mona/octocat
-      - 'mona/octocat'
-      # Push events to branches matching refs/heads/releases/10
-      - 'releases/**'
     tags:
       - v*
 
