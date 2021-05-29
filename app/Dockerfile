@@ -14,6 +14,7 @@ FROM nginx:stable
 
 COPY --from=build /usr/build/dist/* /usr/share/nginx/html
 COPY nginx.conf /etc/nginx/nginx.template
+COPY nginx-no-ssl.conf /etc/nginx/nginx-no-ssl.template
 COPY docker-entrypoint.sh /
 RUN chmod +x docker-entrypoint.sh
 
