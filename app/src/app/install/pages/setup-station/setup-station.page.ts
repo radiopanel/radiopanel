@@ -39,8 +39,7 @@ export class SetupStationPageComponent implements OnInit, OnDestroy {
 		this.installService.fetchOne(tenantUuid)
 			.pipe(
 				takeUntil(this.componentDestroyed$)
-			).subscribe((values) => {
-				console.log(values)
+			).subscribe((values) => { 
 				this.form.patchValue(values);
 			});
 	}

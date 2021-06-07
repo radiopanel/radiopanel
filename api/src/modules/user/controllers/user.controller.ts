@@ -52,8 +52,8 @@ export class UserController {
 	@Delete('/:userUuid')
 	@Permissions('users/delete')
 	@AuditLog('users/delete')
-	public async delete(@Param('userUuid') userUuid: string): Promise<User> {
-		return this.userService.deleteFromTenant(userUuid);
+	public async delete(@Param('userUuid') userUuid: string): Promise<void> {
+		return this.userService.delete(userUuid);
 	}
 
 	@Put('/:userUuid/meta/:metaKey')

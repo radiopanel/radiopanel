@@ -1,9 +1,8 @@
-import { Controller, Get, Body, Put, UseGuards, Param, Patch, Post, HttpCode, Delete, Headers, ForbiddenException, Query } from '@nestjs/common';
+import { Controller, Get, Body, Put, UseGuards, Param, Patch, Post, HttpCode, Delete, Headers, ForbiddenException, Query, Request } from '@nestjs/common';
 import { ApiBasicAuth, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { omit, reject, equals, pick } from 'ramda';
-import got from 'got';
 import * as uuid from 'uuid';
-import { ConfigService } from '@nestjs/config';
+import slugify from 'slugify';
 
 import { Tenant } from '~entities/tenant.entity';
 import { TenantService } from '~shared/services/tenant.service';
@@ -11,10 +10,8 @@ import { AuthGuard } from '~shared/guards/auth.guard';
 import { Permissions, AuditLog } from '~shared/decorators';
 import { RoleService } from '~shared/services/role.service';
 import { permissions } from '~shared/permissions';
-import { User } from '~shared/decorators/user.decorator';
 import { UserService } from '~shared/services/user.service';
-import { PermissionService } from '~shared/services/permission.service';
-import slugify from 'slugify';
+import { AuthMethodService } from '~shared/services/auth-method.service';
 
 @Controller('tenants')
 @ApiTags('Tenants')
@@ -24,14 +21,13 @@ export class TenantController {
 	constructor(
 		private tenantService: TenantService,
 		private roleService: RoleService,
-		private configService: ConfigService,
 		private userService: UserService,
-		private permissionService: PermissionService,
+		private authMethodService: AuthMethodService,
 	) { }
 
 	@Post()
 	@ApiOkResponse({ type: Tenant })
-	public async create(@Body() tenant: any, @User() user): Promise<any> { 
+	public async create(@Body() tenant: any, @Request() req): Promise<any> { 
 		if (await this.tenantService.findOne()) {
 			throw new ForbiddenException('The installation process has already concluded')
 		}
@@ -64,23 +60,28 @@ export class TenantController {
 			createdAt: new Date(),
 			updatedAt: new Date(),
 			permissions: permissionsList,
-		})
+		});
 
-		const existingUser = await this.userService.findOne({ uuid: user.uuid });
+		const existingUser = await this.userService.findOne({ uuid: req.user?.uuid });
 		await this.userService.assignRole(existingUser.uuid, createdRole.uuid);
 
 		return this.tenantService.findOne();
 	}
 
 	@Get('/customisation')
-	public async findCustomisation(@Query('host') hostName: string): Promise<any> {
+	public async findCustomisation(): Promise<any> {
 		const tenant = await this.tenantService.findOne();
 
 		if (!tenant) {
 			return null;
 		}
 
-		return tenant?.settings ? pick(['logo', 'primaryColor', 'authBackground'])(tenant?.settings) : undefined;
+		const authMethods = await this.authMethodService.find(1, 100, true);
+
+		return {
+			...pick(['logo', 'primaryColor', 'authBackground'])(tenant?.settings || {}),
+			authMethods: authMethods._embedded.map(pick(['uuid', 'name', 'type']))
+		};
 	}
 
 	@Get('/:tenantUuid')

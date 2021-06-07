@@ -1,0 +1,71 @@
+<app-header description="Rule pages" [emptyTitle]="'Editing ' + form?.get('name')?.value"></app-header>
+<div class="o-page" *ngIf="form">
+    <form [formGroup]="form">
+        <div class="o-page__section">
+            <div class="m-alert m-alert--warning u-margin-bottom" *ngIf="form.get('type').value === 'local'">
+                This is a system integration and can only be enabled or disabled, not removed or edited.
+            </div>
+            <app-text-input
+                *ngIf="form.get('type').value !== 'local'"
+                [formControl]="form.get('name')"
+                label="Name"
+            ></app-text-input>
+            <app-text-input
+                [formControl]="form.get('weight')"
+                label="Weight"
+                type="number"
+            ></app-text-input>
+            <app-select-input
+            *ngIf="form.get('type').value !== 'local'"
+                [formControl]="form.get('type')"
+                label="Authentication Type"
+                [options]="[{
+                    label: 'SAML',
+                    value: 'saml'
+                }, {
+                    label: 'OAuth2',
+                    value: 'oauth2'
+                }]"
+            ></app-select-input>
+            <app-role-input
+            *ngIf="form.get('type').value !== 'local'"
+                [formControl]="form.get('defaultRoleUuid')"
+                label="Default role"
+            ></app-role-input>
+            <app-boolean-input
+                [formControl]="form.get('enabled')"
+                label="Enabled"
+            ></app-boolean-input>
+        </div>
+        <div class="o-page__section" *ngIf="form.get('type').value !== 'local'">
+            <div class="o-page__section-info">
+                <h3 class="o-page__section-title">
+                    Configuration
+                </h3>
+            </div>
+            <div *ngFor="let field of authenticationConfigFields; let i = index">
+                <app-dynamic-input
+                    [label]="field.name"
+                    [config]="{ placeholder: '' }"
+                    [component]="field.fieldType"
+                    [formControl]="form.get('config')?.get(field.slug)"
+                    [multiLanguage]="false"
+                ></app-dynamic-input>
+            </div>
+        </div>
+        <div class="o-page__section" *ngIf="form.get('type').value !== 'local'">
+            <div class="o-page__section-info">
+                <h3 class="o-page__section-title">
+                    Callback URL
+                </h3>
+            </div>
+            <p>If the service requires a callback URL, you can use:</p><pre>{{ getCallbackUrl() }}</pre>
+        </div>
+        <div class="o-page__section">
+            <div class="u-display--flex u-display--space-between">
+                <button type="submit" class="a-button a-button--success" (click)="submit($event)">Save</button>
+                <button *ngIf="form.get('type').value !== 'local'" type="submit" class="a-button a-button--danger a-button--outline" (confirm)="delete($event)">Delete</button>
+            </div>
+        </div>
+    </form>
+</div>

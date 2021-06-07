@@ -15,11 +15,11 @@ export class AuthGuard implements CanActivate {
 	async canActivate(
 		context: ExecutionContext,
 	): Promise<boolean> {
-		const request = context.switchToHttp().getRequest() as IncomingMessage;
+		const request = context.switchToHttp().getRequest() as IncomingMessage & { user: any };
 		const permissions = this.reflector.get<string[]>('permissions', context.getHandler());
 
 		try {
-			const hasPermission = await this.permissionService.hasPermission(request.headers.authorization, permissions)
+			const hasPermission = await this.permissionService.hasPermission(request.user?.uuid || request.headers.authorization, permissions)
 
 			if (!hasPermission) {
 				throw new ForbiddenException(`Missing permissions: ${permissions.join(", ")}`)

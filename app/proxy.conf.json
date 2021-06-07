@@ -3,6 +3,10 @@
       "target": "http://host.docker.internal:3050",
       "secure": false
     },
+    "/embeds/": {
+      "target": "http://host.docker.internal:3052",
+      "secure": false
+    },
     "/uploads/": {
       "target": "http://host.docker.internal:3050",
       "secure": false

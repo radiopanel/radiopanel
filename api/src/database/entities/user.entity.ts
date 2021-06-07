@@ -41,6 +41,9 @@ export class User {
 	public avatar: string;
 
 	@Column()
+	public authenticationMethodUuid: string;
+
+	@Column()
 	public bio: string;
 
 	@IsNotEmpty()

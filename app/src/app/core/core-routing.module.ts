@@ -112,6 +112,10 @@ const routes: Routes = [
 				path: 'pages',
 				loadChildren: () => import('../page/page.module').then(m => m.PageModule),
 			},
+			{
+				path: 'authentication-methods',
+				loadChildren: () => import('../authentication-method/authentication-method.module').then(m => m.AuthenticationMethodModule),
+			},
 		]
 	},
 ];

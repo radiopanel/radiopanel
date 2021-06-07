@@ -12,6 +12,27 @@ import { SocketService } from './socket.service';
 import { Tenant } from '~lib/store/session/session.store';
 import { Router, ActivatedRoute } from '@angular/router';
 
+const setCookie = (name,value,days) => {
+    var expires = "";
+    if (days) {
+        var date = new Date();
+        date.setTime(date.getTime() + (days*24*60*60*1000));
+        expires = "; expires=" + date.toUTCString();
+    }
+    document.cookie = name + "=" + (value || "")  + expires + "; path=/";
+}
+
+const getCookie = (name) => {
+    var nameEQ = name + "=";
+    var ca = document.cookie.split(';');
+    for(var i=0;i < ca.length;i++) {
+        var c = ca[i];
+        while (c.charAt(0)==' ') c = c.substring(1,c.length);
+        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+    }
+    return null;
+}
+
 @Injectable()
 export class AuthService {
 	public availableTenants: any;
@@ -26,7 +47,6 @@ export class AuthService {
 		private socketService: SocketService,
 		private router: Router,
 	) {
-		console.log('construct');
 		this.fetchSessionData();
 		this.socketService.bootstrapSockets();
 		this.bootstrapListeners();
@@ -40,7 +60,6 @@ export class AuthService {
 		await this.http.get<any>('/api/v1/auth/user')
 			.pipe(
 				switchMap((result) => {
-					console.log(result);
 					this.sessionService.updateUser(result.user);
 					this.sessionService.updatePermissions(result.permissions);
 					this.sessionService.updateTenantMessages(result.tenantMessages);
@@ -58,14 +77,6 @@ export class AuthService {
 					document.head.append(style);
 					style.textContent = result.tenant?.settings?.customCSS;
 					document.documentElement.style.setProperty('--color-primary', result.tenant?.settings?.primaryColor || '#FF926B');
-
-					this.sessionService.updateFeatures(result.tenant?.features.reduce((acc, feature) => {
-						if (!path(['feature', 'slug'])(feature)) {
-							return acc;
-						}
-
-						return [...acc, feature.feature.slug];
-					}, []));
 
 					return of({});
 				}),
@@ -90,15 +101,14 @@ export class AuthService {
 	}
 
 	public isAuthenticated(): boolean {
-		const token = localStorage.getItem('token');
-		return !this.jwtHelper.isTokenExpired(token);
+		return getCookie('loggedIn') === 'true';
 	}
 
 	public login(values) {
-		return this.http.post<any>('/api/v1/auth/login', values)
+		return this.http.post<any>('/api/v1/auth/login/local', values)
 			.pipe(
-				tap(async (result) => {
-					localStorage.setItem('token', result.token);
+				tap(async () => {
+					setCookie('loggedIn', 'true', 50);
 					await this.fetchSessionData();
 				})
 			);
@@ -107,8 +117,8 @@ export class AuthService {
 	public register(values) {
 		return this.http.post<any>('/api/v1/auth/register', values)
 			.pipe(
-				tap(async (result) => {
-					localStorage.setItem('token', result.token);
+				tap(async () => {
+					setCookie('loggedIn', 'true', 50);
 					await this.fetchSessionData();
 				})
 			);
@@ -124,10 +134,15 @@ export class AuthService {
 	}
 
 	public logout() {
-		localStorage.removeItem('token');
-		localStorage.removeItem('AkitaStores');
-		localStorage.removeItem('selectedTenant');
-		this.router.navigate(['/', 'auth', 'login']);
-		this.toastr.success('Logged out successfully');
+		this.http.post<any>('/api/v1/auth/logout', {})
+			.pipe(
+				tap(() => {
+					localStorage.removeItem('AkitaStores');
+					setCookie('loggedIn', 'false', 0);
+					this.router.navigate(['/', 'auth', 'login']);
+					this.toastr.success('Logged out successfully');
+				}),
+				first()
+			).subscribe();
 	}
 }

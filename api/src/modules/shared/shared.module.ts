@@ -5,7 +5,7 @@ import { ConfigModule } from '@nestjs/config';
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import { makeGaugeProvider } from '@willsoto/nestjs-prometheus';
 
-import { Tenant, User, UserRole, Role, RolePermission, Webhook, AuditLog, ApiKey, ApiKeyPermission, Slot, UserMeta, UserPermission, Ban, SlotOverwrite, ApiKeyUsage } from '~entities';
+import { Tenant, User, UserRole, Role, RolePermission, Webhook, AuditLog, ApiKey, ApiKeyPermission, Slot, UserMeta, UserPermission, Ban, SlotOverwrite, ApiKeyUsage, AuthenticationMethod } from '~entities';
 
 import { WebhookInterceptor } from '../core/interceptors/webhook.interceptor';
 import { AuditLogInterceptor } from '../core/interceptors/audit-log.interceptor';
@@ -21,6 +21,7 @@ import { ApiKeyService } from './services/api-key.service';
 import { SlotService } from './services/slot.service';
 import { PermissionService } from './services/permission.service';
 import { BanService } from './services/ban.service';
+import { AuthMethodService } from './services/auth-method.service';
 
 @Module({
 	imports: [
@@ -40,6 +41,7 @@ import { BanService } from './services/ban.service';
 			UserMeta,
 			Ban,
 			UserPermission,
+			AuthenticationMethod,
 		]),
 		ConfigModule
 	],
@@ -57,6 +59,7 @@ import { BanService } from './services/ban.service';
 		SlotService,
 		PermissionService,
 		BanService,
+		AuthMethodService,
 
 		// Interceptors
 		{
@@ -93,6 +96,7 @@ import { BanService } from './services/ban.service';
 		SlotService,
 		PermissionService,
 		BanService,
+		AuthMethodService,
 
 		// Modules
 		ConfigModule

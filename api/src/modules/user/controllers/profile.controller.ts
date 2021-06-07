@@ -1,4 +1,4 @@
-import { Controller, Get, UseGuards, Body, Put, Headers } from '@nestjs/common';
+import { Controller, Get, UseGuards, Body, Put, Headers, Request } from '@nestjs/common';
 import { ApiBasicAuth, ApiTags } from '@nestjs/swagger';
 import { omit } from 'ramda';
 
@@ -17,24 +17,17 @@ export class ProfileController {
 	) { }
 
 	@Get()
-	public async findSelf(@User() user): Promise<any> {
-		return this.userService.findOne({ uuid: user.uuid });
+	public async findSelf(@Request() req): Promise<any> {
+		return this.userService.findOne({ uuid: req.user?.uuid });
 	}
 
 	@Put()
-	public async updateSelf(@Body() updatedUser: any, @User() user ): Promise<any> {
-		await this.userService.assignMeta('customData', user.uuid, updatedUser.customData || {})
-		return this.userService.update(user.uuid, {
-			...user,
+	public async updateSelf(@Body() updatedUser: any, @Request() req ): Promise<any> {
+		const currentUser = await this.userService.findOne({ uuid: req.user?.uuid });
+		await this.userService.assignMeta('customData', req.user?.uuid, updatedUser.customData || {})
+		return this.userService.update(req.user?.uuid, {
+			...currentUser,
 			...omit(['tenants', 'admin'])(updatedUser),
-		});
-	}
-
-	@Put('/accept-rules')
-	public async acceptRules(@User() user): Promise<any> {
-		return this.userService.update(user.uuid, {
-			...user,
-			rulesAcceptedAt: new Date()
 		});
 	}
 }

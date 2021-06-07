@@ -462,6 +462,28 @@ export const permissions = [
 					},
 				],
 			},
+			{
+				name: 'Auth Methods',
+				icon: 'eye',
+				permissions: [
+					{
+						label: 'Create auth methods',
+						value: 'authentication-methods/create',
+					},
+					{
+						label: 'Read auth methods',
+						value: 'authentication-methods/read',
+					},
+					{
+						label: 'Update auth methods',
+						value: 'authentication-methods/update',
+					},
+					{
+						label: 'Delete auth methods',
+						value: 'authentication-methods/delete',
+					},
+				],
+			},
 		]
 	}
 ]

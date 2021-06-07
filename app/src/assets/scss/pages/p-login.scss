@@ -26,6 +26,12 @@
         // }
     }
 
+    hr {
+        margin: $spacer 0;
+        border: none;
+        border-bottom: 1px solid $grey-dark;
+    }
+
     &__logo {
         width: 250px;
     }

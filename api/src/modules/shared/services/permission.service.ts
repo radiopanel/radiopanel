@@ -89,29 +89,19 @@ export class PermissionService {
 		return !!permissions.every(permission => availablePermissions.indexOf(permission) > -1);
 	}
 
-	public async hasPermission(authorizationHeader: string, permissions: string[]): Promise<boolean> {
-		let userData = null;
-
+	public async hasPermission(authorizationHeaderOrUserUuid: string, permissions: string[]): Promise<boolean> {
 		if (!permissions || !permissions.length) {
 			return true;
 		}
 
-		if (!authorizationHeader) {
+		if (!authorizationHeaderOrUserUuid) {
 			return false;
 		}
 
-		if (authorizationHeader.startsWith('Basic ')) {
-			return this.handleBasicAuth(authorizationHeader, permissions)
+		if (authorizationHeaderOrUserUuid.startsWith('Basic ')) {
+			return this.handleBasicAuth(authorizationHeaderOrUserUuid, permissions)
 		}
 
-		try {
-			userData = jwt.verify(authorizationHeader.replace('Bearer ', ''), this.configService.get<string>('jwt.privateKey')) as any;
-		} catch (e) {
-			if (e instanceof jwt.JsonWebTokenError) {
-				return false;
-			}
-		}
-
-		return this.userHasPermission(userData?.user?.uuid, permissions)
+		return this.userHasPermission(authorizationHeaderOrUserUuid, permissions)
 	}
 }

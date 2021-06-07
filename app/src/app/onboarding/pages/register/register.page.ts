@@ -64,10 +64,9 @@ export class RegisterPageComponent implements OnInit, OnDestroy {
 			.pipe(
 				first()
 			)
-			.subscribe(({ token }) => {
-				const user = prop('user')(this.jwtHelper.decodeToken(token)) as any;
-				this.toastr.success(`Welcome back ${user.username}`, 'Success');
-				this.router.navigate(['dashboard']);
+			.subscribe(({ username }) => {
+				this.toastr.success(`Welcome back ${username}`, 'Success');
+				this.router.navigate(['/']);
 			});
 	}
 

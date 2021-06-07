@@ -7,7 +7,15 @@ import {
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { SessionQuery } from '~lib/store';
+const setCookie = (name, value, days) => {
+    let expires = '';
+    if (days) {
+        let date = new Date();
+        date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+        expires = '; expires=' + date.toUTCString();
+    }
+    document.cookie = name + '=' + (value || '')  + expires + '; path=/';
+};
 
 @Injectable()
 export class TokenInterceptor implements HttpInterceptor {
@@ -16,13 +24,6 @@ export class TokenInterceptor implements HttpInterceptor {
 	) { }
 
 	intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-		request = request.clone({
-			setHeaders: {
-				Authorization: `Bearer ${localStorage.getItem('token')}`,
-				'X-Tenant': localStorage.getItem('selectedTenant') || 'unset'
-			}
-		});
-
 		return next.handle(request)
 			.pipe(
 				tap(
@@ -33,7 +34,7 @@ export class TokenInterceptor implements HttpInterceptor {
 								return;
 							}
 
-							localStorage.removeItem('token');
+							setCookie('loggedIn', 'false', 0);
 							this.router.navigate(['auth', 'login']);
 						}
 					}

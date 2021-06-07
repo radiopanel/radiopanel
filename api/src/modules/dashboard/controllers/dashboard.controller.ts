@@ -1,4 +1,4 @@
-import { Controller, Headers, Get, UseGuards, UnauthorizedException, Put, Body } from '@nestjs/common';
+import { Controller, Request, Get, UseGuards, UnauthorizedException, Put, Body } from '@nestjs/common';
 import { ApiBasicAuth, ApiTags } from '@nestjs/swagger';
 
 import { AuthGuard } from '~shared/guards/auth.guard';
@@ -16,20 +16,20 @@ export class DashboardController {
 	) {}
 
 	@Get()
-	public async find(@User() user: any): Promise<any> {
-		if (!user) {
+	public async find(@Request() req): Promise<any> {
+		if (!req.user?.uuid) {
 			throw new UnauthorizedException();
 		}
 
-		return this.dashboardService.findOne(user.uuid)
+		return this.dashboardService.findOne(req.user.uuid)
 	}
 
 	@Put()
-	public async update(@User() user: any, @Body() data: any): Promise<any> {
-		if (!user) {
+	public async update(@Request() req, @Body() data: any): Promise<any> {
+		if (!req.user?.uuid) {
 			throw new UnauthorizedException();
 		}
 
-		return this.dashboardService.update(user.uuid, data)
+		return this.dashboardService.update(req.user.uuid, data)
 	}
 }

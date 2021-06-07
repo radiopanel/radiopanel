@@ -1,17 +1,11 @@
-import { Controller, Get, Body, Post, Put, HttpCode, NotFoundException, UnauthorizedException, Param, Req, Headers, UseGuards, ForbiddenException } from '@nestjs/common';
+import { Controller, Get, Body, Post, Put, HttpCode, UnauthorizedException, Param, Req, ForbiddenException, Request, Response } from '@nestjs/common';
 import { ApiBasicAuth, ApiTags } from '@nestjs/swagger';
-import * as jwt from 'jsonwebtoken'
 import * as bcryptjs from 'bcryptjs'
 import * as uuid from 'uuid';
-import got from 'got';
-import { classToPlain } from 'class-transformer';
-import { pathOr, propOr, map, omit } from 'ramda';
-import { Request } from 'express';
 import { ConfigService } from '@nestjs/config';
 
-import { User, PasswordReset } from '~entities';
+import { PasswordReset } from '~entities';
 import { UserService } from '~shared/services/user.service';
-import { AuthGuard } from '~shared/guards/auth.guard';
 
 import { PasswordResetService } from '../services/password-reset.service';
 import { TenantService } from '~shared/services/tenant.service';
@@ -19,7 +13,6 @@ import { TenantService } from '~shared/services/tenant.service';
 @Controller('auth')
 @ApiTags('Authentication')
 @ApiBasicAuth()
-@UseGuards(AuthGuard)
 export class AuthController {
 	constructor(
 		private userService: UserService,
@@ -28,29 +21,32 @@ export class AuthController {
 		private configService: ConfigService,
 	) { }
 
-	@Post('/login')
-	public async login(@Body() body: any): Promise<any> {
-		const user = await this.userService.findOne({ email: body.email });
+	@Post('/login/local')
+	public async localLogin(@Request() req): Promise<any> {
+		return req.user;
+	}
 
-		if (!user) {
-			throw new UnauthorizedException('Please make sure all your details are correct');
-		}
+	@Post('/login/:authMethodUuid')
+	public async dynamicLogin(@Request() req, @Response() res): Promise<any> {
+		res.cookie('loggedIn', true);
+		return res.redirect('/');
+	}
 
-		const isValidUser = await User.comparePassword(user, body.password);
+	@Get('/login/:authMethodUuid')
+	public async dynamicLoginReturn(@Request() req, @Response() res): Promise<any> {
+		res.cookie('loggedIn', true);
+		return res.redirect('/');
+	}
 
-		if (!isValidUser) {
-			throw new UnauthorizedException('Please make sure all your details are correct');
-		}
+	@Post('/logout')
+	public async logout(@Request() req): Promise<any> {
+		req.logout();
 
-		return {
-			token: jwt.sign(classToPlain({
-				user: omit(['tenants'])(await this.userService.findOne({ uuid: user.uuid }))
-			}), this.configService.get<string>('jwt.privateKey')),
-		};
+		return { ok: true }
 	}
 
 	@Post('/register')
-	public async register(@Body() body: any): Promise<any> {
+	public async register(@Body() body: any, @Request() req): Promise<any> {
 		// check if there already is a tenant
 		if (await this.tenantService.findOne()) {
 			throw new ForbiddenException('The installation process has already concluded')
@@ -70,11 +66,8 @@ export class AuthController {
 			avatar: this.configService.get('app.frontendBaseUrl') + '/assets/img/logo-alternative.png',
 		});
 
-		return {
-			token: jwt.sign(classToPlain({
-				user: omit(['tenants'])(user)
-			}), this.configService.get<string>('jwt.privateKey')),
-		};
+		req.login(user, () => {});
+		return { ok: true };
 	}
 
 	@Put('/password-reset/:passwordResetUuid')
@@ -112,10 +105,12 @@ export class AuthController {
 	}
 
 	@Get('/user')
-	public async user(@Req() req: Request ): Promise<any> {
-		const token = pathOr('', ['headers', 'authorization'])(req).replace('Bearer ', '');
+	public async user(@Req() req): Promise<any> {
+		if (!req.user?.uuid) {
+			throw new UnauthorizedException();
+		}
 
-		const user = await this.userService.findOne({ uuid: (jwt.decode(token) as any).user.uuid });
+		const user = await this.userService.findOne({ uuid: req.user?.uuid });
 		const tenant = await this.tenantService.findOne()
 
 		if (!user) {

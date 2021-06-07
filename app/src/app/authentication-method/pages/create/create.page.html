@@ -1,0 +1,33 @@
+<app-header description="Rule pages" emptyTitle="Create rule page"></app-header>
+<div class="o-page" *ngIf="form">
+    <form [formGroup]="form">
+        <div class="o-page__section">
+            <app-text-input
+                [formControl]="form.get('name')"
+                label="Name"
+            ></app-text-input>
+            <app-select-input
+                [formControl]="form.get('type')"
+                label="Authentication Type"
+                [options]="[{
+                    label: 'SAML',
+                    value: 'saml'
+                }, {
+                    label: 'OAuth2',
+                    value: 'oauth2'
+                }]"
+            ></app-select-input>
+            <app-role-input
+                [formControl]="form.get('defaultRoleUuid')"
+                label="Default role"
+            ></app-role-input>
+            <app-boolean-input
+                [formControl]="form.get('enabled')"
+                label="Enabled"
+            ></app-boolean-input>
+        </div>
+        <div class="o-page__section">
+            <button type="submit" class="a-button a-button--success" (click)="submit($event)">Next</button>
+        </div>
+    </form>
+</div>

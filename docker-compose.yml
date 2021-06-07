@@ -5,9 +5,6 @@ services:
             context: api
             dockerfile: Dockerfile.dev
         container_name: radiopanel-api
-        ports:
-            - 3050:3050
-            - 9229:9229
         volumes:
             - ./api:/app:delegated
             - ./uploads:/app/uploads:delegated
@@ -16,6 +13,9 @@ services:
             - /app/dist
         env_file:
             - .env
+        ports:
+            - 3050:3050
+            - 9229:9229
 
     app:
         build:

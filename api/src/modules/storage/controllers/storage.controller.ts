@@ -24,8 +24,8 @@ export class StorageController {
 
 	@Post('upload')
 	@UseInterceptors(FileInterceptor('file'))
-	public async upload (@Request() req: express.Request, @User() user: any, @UploadedFile() file: Express.Multer.File): Promise<any> {
-		if (!user || !req.headers['x-filename']) {
+	public async upload (@Request() req, @UploadedFile() file: Express.Multer.File): Promise<any> {
+		if (!req.user?.uuid || !req.headers['x-filename']) {
 			throw new BadRequestException()
 		}
 

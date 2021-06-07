@@ -1,0 +1,57 @@
+<app-header emptyTitle="Authentication Methods">
+    <div class="action">
+        <a routerLink="create" class="a-button a-button--info"><span class="uil uil-plus"></span> Create auth method</a>
+    </div>
+</app-header>
+<div class="o-page">
+    <!-- <div class="o-page__section">
+        <app-text-input
+            [formControl]="search"
+            label="Search"
+        ></app-text-input>
+    </div> -->
+    <div class="o-page__section">
+        <app-loading [loading]="loading$ | async">
+            <app-empty-state
+                [empty]="(authenticationMethods$ | async).length === 0"
+                image="/assets/img/empty-states/communication.png"
+                emptyTitle="You have no authentication methods"
+                description="This shouldn't happen."
+            >
+                <table class="m-table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Weight</th>
+                            <th>Enabled</th>
+                            <th>Last updated</th>
+                            <th style="width: 50px;"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let authMethod of (authenticationMethods$ | async)">
+                            <td>{{ authMethod.name }}</td>
+                            <td>{{ authMethod.weight }}</td>
+                            <td>
+                                <span class="uil uil-check u-text-success" *ngIf="authMethod.enabled"></span>
+                                <span class="uil uil-times u-text-warning" *ngIf="!authMethod.enabled"></span>
+                            </td>
+                            <td>{{ authMethod.updatedAt | amTimeAgo }}</td>
+                            <td>
+                                <a [routerLink]="authMethod.uuid" class="a-button a-button--small">
+                                    <span class="uil uil-pen"></span>
+                                </a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <app-pagination
+                    [currentPage]="(pagination$ | async)?.currentPage"
+                    [totalValues]="(pagination$ | async)?.totalEntities"
+                    [itemsPerPage]="(pagination$ | async)?.itemsPerPage"
+                    (update)="onPageUpdate($event)">
+                </app-pagination>
+            </app-empty-state>
+        </app-loading>
+    </div>
+</div>

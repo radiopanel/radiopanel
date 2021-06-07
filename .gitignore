@@ -11,6 +11,7 @@ dist
 
 # dependencies
 node_modules
+.eslintcache
 
 # profiling files
 chrome-profiler-events.json

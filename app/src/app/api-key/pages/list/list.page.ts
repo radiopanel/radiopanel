@@ -30,7 +30,6 @@ export class ListPageComponent implements OnInit, OnDestroy {
 	) { }
 
 	public parseResults(results: any[]) {
-		console.log('parse');
 		return ;
 	}
 
