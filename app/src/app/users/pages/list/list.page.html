@@ -54,7 +54,8 @@
             <thead>
                 <tr>
                     <th>Username</th>
-                    <th>email</th>
+                    <th>Email</th>
+                    <th>Auth Method</th>
                     <th>Roles</th>
                     <th style="width: 50px;"></th>
                 </tr>
@@ -62,7 +63,8 @@
             <tbody>
                 <tr *ngFor="let user of (users$ | async)">
                     <td>{{ user.username }}</td>
-                    <td>{{ user.email }}</td>
+                    <td>{{ user.email.length > 40 ? (user.email | slice:0:40) + '...' : user.email }}</td>
+                    <td><span class="a-badge">{{ user.authenticationMethod?.name || 'Local' }}</span></td>
                     <td>
                         <span class="a-badge u-margin-right-xs" *ngFor="let role of user.roles">{{ role.name }}</span>
                     </td>

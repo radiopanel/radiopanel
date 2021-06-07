@@ -2,12 +2,13 @@ import * as bcryptjs from 'bcryptjs';
 import { Exclude } from 'class-transformer';
 import { IsNotEmpty } from 'class-validator';
 import {
-	BeforeInsert, Column, Entity, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn
+	BeforeInsert, Column, Entity, JoinTable, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn
 } from 'typeorm';
 
 import { Tenant } from './tenant.entity';
 import { Role } from './role.entity';
 import { UserMeta } from './user-meta.entity';
+import { AuthenticationMethod } from './authentication-method.entity';
 
 @Entity()
 export class User {
@@ -42,6 +43,9 @@ export class User {
 
 	@Column()
 	public authenticationMethodUuid: string;
+
+	@ManyToOne(() => AuthenticationMethod, authMethod => authMethod.uuid)
+	public authenticationMethod: AuthenticationMethod;
 
 	@Column()
 	public bio: string;

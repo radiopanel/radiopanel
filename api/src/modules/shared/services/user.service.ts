@@ -25,6 +25,7 @@ export class UserService {
 		const query = this.userRepository.createQueryBuilder('User')
 			.leftJoinAndSelect('User.roles', 'Roles')
 			.leftJoinAndSelect('User.userMeta', 'UserMeta')
+			.leftJoinAndSelect('User.authenticationMethod', 'AuthenticationMethod');
 
 		const embedded = await query
 			.skip((page - 1) * pagesize)
