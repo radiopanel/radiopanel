@@ -76,15 +76,15 @@ export class UserService {
 		const query = this.userRepository.createQueryBuilder('User');
 
 		if (search.uuid) {
-			query.where('User.uuid = :uuid', { uuid: search.uuid })
+			query.andWhere('User.uuid = :uuid', { uuid: search.uuid })
 		}
 
 		if (search.email) {
-			query.where('User.email = :email', { email: search.email })
+			query.andWhere('User.email = :email', { email: search.email })
 		}
 
 		if (search.authenticationMethodUuid) {
-			query.where('User.authenticationMethodUuid = :authenticationMethodUuid', { authenticationMethodUuid: search.authenticationMethodUuid })
+			query.andWhere('User.authenticationMethodUuid = :authenticationMethodUuid', { authenticationMethodUuid: search.authenticationMethodUuid })
 		}
 
 		const [user, userMeta] = await Promise.all([
