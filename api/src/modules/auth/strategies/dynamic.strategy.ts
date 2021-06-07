@@ -45,6 +45,13 @@ export class DynamicStrategyProvider implements NestMiddleware {
 	}
 
 	private async createSamlStrategy(authMethod: AuthenticationMethod): Promise<SamlStrategy> {
+		console.log({
+			path: `${this.configService.get('app.frontendBaseUrl')}/api/v1/auth/login/${authMethod.uuid}`,
+			entryPoint: authMethod.config.entryPoint,
+			cert: authMethod.config.cert,
+			issuer: authMethod.config.issuer
+		});
+		
 		return new SamlStrategy(
 			{
 				path: `${this.configService.get('app.frontendBaseUrl')}/api/v1/auth/login/${authMethod.uuid}`,
