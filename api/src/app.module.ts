@@ -3,7 +3,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
 import { ScheduleModule } from '@nestjs/schedule';
 import { RedisModule} from 'nestjs-redis';
-import { PrometheusModule } from "@willsoto/nestjs-prometheus";
 
 // eslint-disable-next-line import/namespace
 import * as ormConfig from './ormconfig';
@@ -30,6 +29,7 @@ import { ImagingModule } from './modules/imaging/banner.module';
 import { BanModule } from './modules/ban/ban.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
+import { AuthModule } from './modules/auth/auth.module';
 
 @Module({
 	imports: [
@@ -49,6 +49,7 @@ import { join } from 'path';
 
 		// Modules
 		CoreModule,
+		AuthModule,
 		DashboardModule,
 		ResourceModule,
 		TenantModule,

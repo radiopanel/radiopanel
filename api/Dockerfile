@@ -12,7 +12,7 @@ RUN npm ci \
 
 # ---
 
-FROM node:erbium-alpine
+FROM node:fermium-alpine
 
 ENV NODE_ENV production
 

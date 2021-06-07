@@ -18,17 +18,14 @@ export class AuditLogInterceptor implements NestInterceptor {
 
 	intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
 		const eventName = this.reflector.get<string>('auditLog', context.getHandler());
-		const request = context.switchToHttp().getRequest() as IncomingMessage;
+		const request = context.switchToHttp().getRequest() as IncomingMessage & { user: any };
 		const body = context.switchToHttp().getRequest()?.body || null;
 
 		if (!eventName) {
 			return next.handle();
 		}
 
-		const user = jwt.decode(request.headers.authorization.replace('Bearer ', ''));
-		const userUuid = pathOr(null, ['user', 'uuid'])(user);
-
-		this.auditLogService.log(userUuid, eventName, body, {
+		this.auditLogService.log(request.user?.uuid, eventName, body, {
 			method: request.method,
 			url: request.url,
 		});

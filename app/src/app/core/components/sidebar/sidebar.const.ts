@@ -157,4 +157,10 @@ export const myStationLinks = (permissions: string[], features: string[]) => [
 		link: '/tenants/customisation',
 		show: permissions.includes('settings/read')
 	},
+	{
+		icon: 'user-plus',
+		name: 'Auth Methods',
+		link: '/authentication-methods',
+		show: permissions.includes('authentication-methods/read')
+	},
 ];

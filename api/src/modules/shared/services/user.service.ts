@@ -83,6 +83,10 @@ export class UserService {
 			query.where('User.email = :email', { email: search.email })
 		}
 
+		if (search.authenticationMethodUuid) {
+			query.where('User.authenticationMethodUuid = :authenticationMethodUuid', { authenticationMethodUuid: search.authenticationMethodUuid })
+		}
+
 		const [user, userMeta] = await Promise.all([
 			query.getOne(),
 			this.getMeta(search.uuid)

@@ -47,7 +47,7 @@ export class DetailPageComponent implements OnInit, OnDestroy {
 		this.form = this.formBuilder.group({
 			name: ['', Validators.required],
 			weight: [0, Validators.required],
-			permissions: [],
+			permissions: []
 		});
 
 		this.form.patchValue(this.role);

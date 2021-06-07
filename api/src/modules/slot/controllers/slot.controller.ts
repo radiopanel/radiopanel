@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Body, Put, Headers, UseGuards, Post, Query, ForbiddenException, Delete, UnauthorizedException} from '@nestjs/common';
+import { Controller, Get, Param, Body, Put, Headers, UseGuards, Post, Query, ForbiddenException, Delete, UnauthorizedException, Request} from '@nestjs/common';
 import { ApiBasicAuth, ApiTags } from '@nestjs/swagger';
 import { omit, pathOr } from 'ramda';
 import moment from 'moment';
@@ -91,10 +91,10 @@ export class SlotController {
 	@Post()
 	@Permissions('timetable/book')
 	@AuditLog('timetable/book')
-	public async create(@Headers('authorization') authorization: string, @Body() slot: Slot, @User() user): Promise<any> {
+	public async create(@Request() req, @Body() slot: Slot): Promise<any> {
 		return await this.slotService.create({
 			...slot,
-			userUuid: this.permissionService.hasPermission(authorization, ['timetable/book-other']) ? slot.userUuid : user.uuid
+			userUuid: this.permissionService.hasPermission(req.user?.uuid, ['timetable/book-other']) ? slot.userUuid : req.user?.uuid
 		});
 	}
 
@@ -107,22 +107,22 @@ export class SlotController {
 	@Put('/:slotUuid')
 	@Permissions('timetable/book')
 	@AuditLog('timetable/update')
-	public async update(@Headers('authorization') authorization: string, @Param('slotUuid') slotUuid: string, @Body() slot: Slot, @User() user: any): Promise<any> {
+	public async update(@Request() req, @Param('slotUuid') slotUuid: string, @Body() slot: Slot): Promise<any> {
 		const existingSlot = await this.slotService.findOne({ uuid: slotUuid });
 		if (!existingSlot) {
 			throw new UnauthorizedException()
 		}
 
 		let sanitizedSlot: any = slot;
-		if (!this.permissionService.hasPermission(authorization, ['timetable/book-other'])) {
+		if (!this.permissionService.hasPermission(req.user?.uuid, ['timetable/book-other'])) {
 			sanitizedSlot = omit(['user', 'userUuid'])(slot);
 		}
 
-		if (this.permissionService.hasPermission(authorization, ['timetable/update-other'])) {
+		if (this.permissionService.hasPermission(req.user?.uuid, ['timetable/update-other'])) {
 			return this.slotService.update(slotUuid, sanitizedSlot);
 		}
 
-		if (existingSlot.userUuid === user.uuid) {
+		if (existingSlot.userUuid === req.user?.uuid) {
 			return this.slotService.update(slotUuid, sanitizedSlot);
 		}
 
@@ -132,14 +132,14 @@ export class SlotController {
 	@Delete('/:slotUuid')
 	@Permissions('timetable/delete-own')
 	@AuditLog('timetable/delete')
-	public async delete(@Headers('authorization') authorization: string, @Param('slotUuid') slotUuid: string, @Body() body: any, @User() user: any): Promise<any> {
+	public async delete(@Request() req, @Param('slotUuid') slotUuid: string, @Body() body: any): Promise<any> {
 		const existingSlot = await this.slotService.findOne({ uuid: slotUuid });
 		if (!existingSlot) {
 			throw new UnauthorizedException()
 		}
 
 		// Check if it is their own slot and they the correct permissions
-		if (this.permissionService.hasPermission(authorization, ['timetable/delete-own']) && existingSlot.userUuid === user.uuid) {
+		if (this.permissionService.hasPermission(req.user?.uuid, ['timetable/delete-own']) && existingSlot.userUuid === req.user?.uuid) {
 			if (body.tempDelete) {
 				return this.slotService.createOverwrite(existingSlot, body.overwriteDate)
 			}
@@ -147,7 +147,7 @@ export class SlotController {
 			return this.slotService.delete(slotUuid);
 		}
 
-		if (this.permissionService.hasPermission(authorization, ['timetable/delete-other'])) {
+		if (this.permissionService.hasPermission(req.user?.uuid, ['timetable/delete-other'])) {
 			if (body.tempDelete) {
 				return this.slotService.createOverwrite(existingSlot, body.overwriteDate)
 			}

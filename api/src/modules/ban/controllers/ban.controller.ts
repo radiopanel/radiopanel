@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Headers, UseGuards, Post, Body, Put, Delete, Query, UnauthorizedException } from '@nestjs/common';
+import { Controller, Get, Param, Headers, UseGuards, Post, Body, Put, Delete, Query, UnauthorizedException, Request } from '@nestjs/common';
 import { ApiBasicAuth, ApiTags } from '@nestjs/swagger';
 
 import { Ban } from '~entities';
@@ -32,9 +32,9 @@ export class BanController {
 	@Post()
 	@Permissions('bans/create')
 	@AuditLog('bans/create')
-	public async create(@Body() category: Ban, @User() user: any): Promise<any> {
+	public async create(@Body() category: Ban, @Request() req): Promise<any> {
 		return this.banService.create({
-			createdByUuid: user.uuid,
+			createdByUuid: req.user?.uuid,
 			...category,
 		});
 	}
