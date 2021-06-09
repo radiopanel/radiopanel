@@ -9,7 +9,7 @@
                     <th>Artist</th>
                     <th>Title</th>
                     <th>Played</th>
-                    <th feature-hoc feature="song-database" style="width: 50px;"></th>
+                    <th permission-hoc permission="songs/read" style="width: 50px;"></th>
                 </tr>
             </thead>
             <tbody>
@@ -20,7 +20,7 @@
                     <td>{{ entry.song.artist }}</td>
                     <td>{{ entry.song.title }}</td>
                     <td>{{ entry.createdAt | amTimeAgo }}</td>
-                    <td feature-hoc feature="song-database">
+                    <td permission-hoc permission="songs/read">
                         <a [routerLink]="'/songs/' + entry?.song?.uuid" class="a-button a-button--small">
                             <span class="uil uil-pen"></span>
                         </a>
