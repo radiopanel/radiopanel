@@ -1,12 +1,13 @@
-import { Controller, Get, Post, Put, Delete, Headers, Param, Body, UseGuards, Query, UnauthorizedException } from "@nestjs/common";
+import { Controller, Get, Post, Put, Delete, Headers, Param, Body, UseGuards, Query, UnauthorizedException, Request, ForbiddenException } from "@nestjs/common";
 import { ApiBasicAuth, ApiTags } from "@nestjs/swagger";
 
 
 import { Paginated } from "~shared/types";
 import { AuthGuard } from "~shared/guards/auth.guard";
 import { Permissions, AuditLog } from "~shared/decorators";
-
-import { ContentTypeService } from "../services/content-type.service";
+import { ContentTypeService } from "~shared/services/content-type.service";
+import { PermissionService } from "~shared/services/permission.service";
+import { path, prop } from "ramda";
 
 @Controller('/content-types')
 @ApiTags('Content Types')
@@ -15,12 +16,17 @@ import { ContentTypeService } from "../services/content-type.service";
 export class ContentTypeController {
 
 	constructor(
-		private contentTypeService: ContentTypeService
+		private contentTypeService: ContentTypeService,
+		private permissionService: PermissionService,
 	) { }
 
 	@Get()
 	@Permissions('content-types/read')
-	public find(@Query('page') page: number, @Query('pagesize') pagesize: number, @Query('all') all: string): Promise<Paginated<any>> {
+	public async find(
+		@Query('page') page: number,
+		@Query('pagesize') pagesize: number,
+		@Query('all') all: string,
+	): Promise<Paginated<any>> {
 		if (all === "true") {
 			// Don't judge haha
 			return this.contentTypeService.find(1, 5000);
@@ -29,9 +35,33 @@ export class ContentTypeController {
 		return this.contentTypeService.find(page, pagesize);
 	}
 
+	@Get('/overview')
+	public async findByPermissions(
+		@Query('page') page: number,
+		@Query('pagesize') pagesize: number,
+		@Query('all') all: string,
+		@Request() req,
+	): Promise<Paginated<any>> {
+		const permissions = await this.permissionService.getPermissions(req.user?.uuid);
+		const contentPermissions = [...new Set(permissions.filter(x => x.startsWith('content')).map(x => path([1])(x.split('/'))))] as string[];
+		
+		if (all === "true") {
+			// Don't judge haha
+			return this.contentTypeService.findByUuids(1, 5000, contentPermissions);
+		}
+
+		return this.contentTypeService.findByUuids(page, pagesize, contentPermissions);
+	}
+
 	@Get('/:id')
-	@Permissions('content-types/read')
-	public one(@Param('id') id: string): Promise<any | undefined> {
+	public async one(@Param('id') id: string, @Request() req): Promise<any | undefined> {
+		if (!(
+			await this.permissionService.hasPermission(req.user?.uuid || req.headers.authorization, [`content/${id}/read`]) || 
+			await this.permissionService.hasPermission(req.user?.uuid || req.headers.authorization, [`content-types/read`])
+		)) {
+			throw new ForbiddenException(`Missing permissions: content/${id}/read`)
+		}
+
 		return this.contentTypeService.findOne(id);
 	}
 

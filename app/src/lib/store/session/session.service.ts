@@ -36,7 +36,7 @@ export class SessionService {
 
 
 	fetchContentTypes() {
-		return this.http.get<any>('/api/v1/content-types?all=true')
+		return this.http.get<any>('/api/v1/content-types/overview?all=true')
 			.pipe(
 				tap(result => {
 					this.sessionStore.update({ contentTypes: result._embedded });
@@ -45,7 +45,7 @@ export class SessionService {
 	}
 
 	fetchPageTypes() {
-		return this.http.get<any>('/api/v1/page-types?all=true')
+		return this.http.get<any>('/api/v1/page-types/overview?all=true')
 			.pipe(
 				tap(result => {
 					this.sessionStore.update({ pageTypes: result._embedded });

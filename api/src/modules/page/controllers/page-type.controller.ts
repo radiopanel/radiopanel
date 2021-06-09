@@ -1,12 +1,12 @@
-import { Controller, Get, Post, Put, Delete, Headers, Param, Body, UseGuards, Query, UnauthorizedException } from "@nestjs/common";
+import { Controller, Get, Post, Put, Delete, Headers, Param, Body, UseGuards, Query, UnauthorizedException, Request, ForbiddenException } from "@nestjs/common";
 import { ApiBasicAuth, ApiTags } from "@nestjs/swagger";
-
 
 import { Paginated } from "~shared/types";
 import { AuthGuard } from "~shared/guards/auth.guard";
 import { Permissions, AuditLog } from "~shared/decorators";
-
-import { PageTypeService } from "../services/page-type.service";
+import { PageTypeService } from "~shared/services/page-type.service";
+import { PermissionService } from "~shared/services/permission.service";
+import { path } from "ramda";
 
 @Controller('/page-types')
 @ApiTags('Page Types')
@@ -15,7 +15,8 @@ import { PageTypeService } from "../services/page-type.service";
 export class PageTypeController {
 
 	constructor(
-		private pageTypeService: PageTypeService
+		private pageTypeService: PageTypeService,
+		private permissionService: PermissionService,
 	) { }
 
 	@Get()
@@ -28,9 +29,33 @@ export class PageTypeController {
 		return this.pageTypeService.find(page, pagesize);
 	}
 
+	@Get('/overview')
+	public async findByPermissions(
+		@Query('page') page: number,
+		@Query('pagesize') pagesize: number,
+		@Query('all') all: string,
+		@Request() req,
+	): Promise<Paginated<any>> {
+		const permissions = await this.permissionService.getPermissions(req.user?.uuid);
+		const contentPermissions = [...new Set(permissions.filter(x => x.startsWith('pages')).map(x => path([1])(x.split('/'))))] as string[];
+		
+		if (all === "true") {
+			// Don't judge haha
+			return this.pageTypeService.findByUuids(1, 5000, contentPermissions);
+		}
+
+		return this.pageTypeService.findByUuids(page, pagesize, contentPermissions);
+	}
+
 	@Get('/:id')
-	@Permissions('page-types/read')
-	public one(@Param('id') id: string): Promise<any | undefined> {
+	public async one(@Param('id') id: string, @Request() req): Promise<any | undefined> {
+		if (!(
+			await this.permissionService.hasPermission(req.user?.uuid || req.headers.authorization, [`pages/${id}/read`]) || 
+			await this.permissionService.hasPermission(req.user?.uuid || req.headers.authorization, [`pages-types/read`])
+		)) {
+			throw new ForbiddenException(`Missing permissions: pages/${id}/read`)
+		}
+
 		return this.pageTypeService.findOne(id);
 	}
 

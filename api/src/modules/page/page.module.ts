@@ -6,7 +6,6 @@ import { SharedModule } from '~shared/shared.module';
 
 import { PageController } from './controllers/page.controller';
 import { PageTypeController } from './controllers/page-type.controller';
-import { PageTypeService } from './services/page-type.service';
 import { PageService } from './services/page.service';
 
 @Module({
@@ -15,6 +14,6 @@ import { PageService } from './services/page.service';
 		SharedModule
 	],
 	controllers: [PageController, PageTypeController],
-	providers: [PageTypeService, PageService]
+	providers: [PageService]
 })
 export class PageModule {}

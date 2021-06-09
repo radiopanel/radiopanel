@@ -20,6 +20,36 @@ export class PermissionService {
 		private readonly redisService: RedisService,
 	) { }
 
+	public async getPermissions(userUuid: string): Promise<string[]> {
+		const [roles, userPermissions] = await Promise.all([
+			this.userService.getRoles(userUuid),
+			this.userService.getPermissions(userUuid)
+		])
+		const uniquePermissions = roles.reduce((acc, role) => ([...acc, ...role.permissions]), []);
+
+		const permissionsWithDenies = uniquePermissions.reduce((acc, permission) => {
+			// Check if we can find a deny in the user permissions
+			const userPermission = userPermissions.find((perm) => perm.permission === permission.permission);
+
+			if (!userPermission || userPermission?.permissionType !== "deny") {
+				return [...acc, permission.permission];
+			}
+
+			return acc;
+		}, []);
+
+		// Apply the grant permissions
+		const availablePermissions = userPermissions.reduce((acc, permission) => {
+			if (permission.permissionType === "grant") {
+				return [...acc, permission.permission];
+			}
+
+			return acc;
+		}, permissionsWithDenies);
+
+		return availablePermissions;
+	}
+
 	public async getApiKeyData(key: string): Promise<ApiKey> {
 		const redisClient = this.redisService.getClient();
 
@@ -61,31 +91,8 @@ export class PermissionService {
 	}
 
 	public async userHasPermission(userUuid: string, permissions: string[]): Promise<boolean> {
-		const [roles, userPermissions] = await Promise.all([
-			this.userService.getRoles(userUuid),
-			this.userService.getPermissions(userUuid)
-		])
-		const uniquePermissions = roles.reduce((acc, role) => ([...acc, ...role.permissions]), []);
+		const availablePermissions = await this.getPermissions(userUuid);
 
-		const permissionsWithDenies = uniquePermissions.reduce((acc, permission) => {
-			// Check if we can find a deny in the user permissions
-			const userPermission = userPermissions.find((perm) => perm.permission === permission.permission);
-
-			if (!userPermission || userPermission?.permissionType !== "deny") {
-				return [...acc, permission.permission];
-			}
-
-			return acc;
-		}, []);
-
-		// Apply the grant permissions
-		const availablePermissions = userPermissions.reduce((acc, permission) => {
-			if (permission.permissionType === "grant") {
-				return [...acc, permission.permission];
-			}
-
-			return acc;
-		}, permissionsWithDenies);
 		return !!permissions.every(permission => availablePermissions.indexOf(permission) > -1);
 	}
 

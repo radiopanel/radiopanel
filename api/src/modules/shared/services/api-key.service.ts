@@ -5,8 +5,6 @@ import * as uuid from 'uuid';
 import moment from "moment";
 import { LessThan, Repository } from "typeorm";
 import { RedisService } from "nestjs-redis";
-import { Gauge } from "prom-client";
-import { InjectMetric } from "@willsoto/nestjs-prometheus";
 
 import { ApiKeyPermission, ApiKey, Tenant, ApiKeyUsage } from "~entities";
 import { Paginated } from "~shared/types";
@@ -21,8 +19,6 @@ export class ApiKeyService {
 		@InjectRepository(ApiKey) private apiKeyRepository: Repository<ApiKey>,
 		@InjectRepository(ApiKeyPermission) private apiKeyPermissionRepository: Repository<ApiKeyPermission>,
 		@InjectRepository(ApiKeyUsage) private apiKeyUsageRepository: Repository<ApiKeyUsage>,
-		@InjectMetric("radiopanel_tenant_usage") public tenantUsageGauge: Gauge<string>,
-		@InjectMetric("radiopanel_api_key_usage") public apiKeyUsageGauge: Gauge<string>,
 		private readonly redisService: RedisService,
 		private readonly tenantService: TenantService,
 	) { }
@@ -46,14 +42,12 @@ export class ApiKeyService {
 		const redisClient = this.redisService.getClient();
 
 		const tenantUsage = await redisClient.get(`TENANT:${tenant.uuid}:${moment().subtract(1, 'm').minutes()}`) || 0;
-		this.tenantUsageGauge.set({ tenant_uuid: tenant.uuid, tenant_slug: tenant.slug }, Number(tenantUsage));
 
 		const apiKeys = await this.apiKeyRepository.createQueryBuilder('ApiKey')
 			.getMany();
 
 		apiKeys.forEach(async (key) => {
 			const value = (await redisClient.get(`API_KEY_USAGE:${key.uuid}:${moment().subtract(1, 'm').minutes()}`)) || 0;
-			this.apiKeyUsageGauge.set({ tenant_uuid: tenant.uuid, tenant_slug: tenant.slug, key: key.uuid }, Number(value));
 
 			this.apiKeyUsageRepository.save({
 				value: Number(value),

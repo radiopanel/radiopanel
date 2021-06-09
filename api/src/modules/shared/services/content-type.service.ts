@@ -5,9 +5,12 @@ import { Repository, Brackets } from "typeorm";
 
 import { ContentType, ContentTypeField } from "~entities";
 import { Paginated } from "~shared/types";
+import { WebSocketGateway, WebSocketServer } from "@nestjs/websockets";
 
 @Injectable()
+@WebSocketGateway({ port: process.env.PORT, transports: ['polling', 'websocket'] })
 export class ContentTypeService {
+	@WebSocketServer() private server: any
 
 	constructor(
 		@InjectRepository(ContentType) private contentTypeRepository: Repository<ContentType>,
@@ -16,6 +19,37 @@ export class ContentTypeService {
 
 	public async find(page = 1, pagesize = 20): Promise<Paginated<ContentType>> {
 		const query = this.contentTypeRepository.createQueryBuilder('ContentType')
+			.leftJoinAndSelect('ContentType.fields', 'Fields')
+			.leftJoinAndSelect('ContentType.content', 'Content')
+			.orderBy('Fields.order', 'ASC');
+
+		return {
+			_embedded: await query
+				.skip((page - 1) * pagesize)
+				.take(pagesize)
+				.getMany(),
+			_page: {
+				totalEntities: await query.getCount(),
+				currentPage: page,
+				itemsPerPage: pagesize,
+			},
+		};
+	}
+
+	public async findByUuids(page = 1, pagesize = 20, allowedUuids: string[] = []): Promise<Paginated<ContentType>> {
+		if (allowedUuids.length === 0) {
+			return {
+				_embedded: [],
+				_page: {
+					totalEntities: 0,
+					currentPage: page,
+					itemsPerPage: pagesize,
+				},
+			};
+		}
+		
+		const query = this.contentTypeRepository.createQueryBuilder('ContentType')
+			.where("ContentType.uuid IN (:...allowedUuids)", { allowedUuids })
 			.leftJoinAndSelect('ContentType.fields', 'Fields')
 			.leftJoinAndSelect('ContentType.content', 'Content')
 			.orderBy('Fields.order', 'ASC');
@@ -51,10 +85,13 @@ export class ContentTypeService {
 		contentType.updatedAt = new Date();
 		contentType.fields = this.mapFieldsWithOrder(contentType.uuid, contentType.fields || []);
 
-		return await this.contentTypeRepository.save(contentType);
+		const createdContentType = await this.contentTypeRepository.save(contentType);
+		this.server.emit('content-types_updated');
+
+		return createdContentType;
 	}
 
-	public async update(id: string, contentType: ContentType): Promise<any> {
+	public async update(id: string, contentType: ContentType): Promise<ContentType> {
 		// First we find the current fields and kill em off
 		await this.contentTypeFieldRepository.delete({
 			contentTypeUuid: id,
@@ -64,11 +101,15 @@ export class ContentTypeService {
 		contentType.updatedAt = new Date();
 		contentType.fields = this.mapFieldsWithOrder(contentType.uuid, contentType.fields || []);
 
-		return this.contentTypeRepository.save(contentType);
+		const updatedContentType = await this.contentTypeRepository.save(contentType);
+		this.server.emit('content-types_updated');
+
+		return updatedContentType;
 	}
 
 	public async delete(id: string): Promise<void> {
 		await this.contentTypeRepository.delete(id);
+		this.server.emit('content-types_updated');
 		return;
 	}
 

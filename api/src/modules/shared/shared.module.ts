@@ -3,9 +3,31 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
 import { APP_INTERCEPTOR } from '@nestjs/core';
-import { makeGaugeProvider } from '@willsoto/nestjs-prometheus';
 
-import { Tenant, User, UserRole, Role, RolePermission, Webhook, AuditLog, ApiKey, ApiKeyPermission, Slot, UserMeta, UserPermission, Ban, SlotOverwrite, ApiKeyUsage, AuthenticationMethod } from '~entities';
+import {
+	Tenant,
+	User,
+	UserRole,
+	Role,
+	RolePermission,
+	Webhook,
+	AuditLog,
+	ApiKey,
+	ApiKeyPermission,
+	Slot,
+	UserMeta,
+	UserPermission,
+	Ban,
+	SlotOverwrite,
+	ApiKeyUsage,
+	AuthenticationMethod,
+	ContentType,
+	PageType,
+	ContentTypeField,
+	PageTypeField,
+	Content,
+	Page
+} from '~entities';
 
 import { WebhookInterceptor } from '../core/interceptors/webhook.interceptor';
 import { AuditLogInterceptor } from '../core/interceptors/audit-log.interceptor';
@@ -22,6 +44,8 @@ import { SlotService } from './services/slot.service';
 import { PermissionService } from './services/permission.service';
 import { BanService } from './services/ban.service';
 import { AuthMethodService } from './services/auth-method.service';
+import { ContentTypeService } from './services/content-type.service';
+import { PageTypeService } from './services/page-type.service';
 
 @Module({
 	imports: [
@@ -42,6 +66,12 @@ import { AuthMethodService } from './services/auth-method.service';
 			Ban,
 			UserPermission,
 			AuthenticationMethod,
+			ContentType,
+			PageType,
+			ContentTypeField,
+			PageTypeField,
+			Content,
+			Page
 		]),
 		ConfigModule
 	],
@@ -60,6 +90,8 @@ import { AuthMethodService } from './services/auth-method.service';
 		PermissionService,
 		BanService,
 		AuthMethodService,
+		ContentTypeService,
+		PageTypeService,
 
 		// Interceptors
 		{
@@ -70,17 +102,6 @@ import { AuthMethodService } from './services/auth-method.service';
 			provide: APP_INTERCEPTOR,
 			useClass: AuditLogInterceptor,
 		},
-
-		makeGaugeProvider({
-			name: "radiopanel_tenant_usage",
-			help: "TODO",
-			labelNames: ['tenant_uuid', 'tenant_slug']
-		}),
-		makeGaugeProvider({
-			name: "radiopanel_api_key_usage",
-			help: "TODO",
-			labelNames: ['tenant_uuid', 'tenant_slug', 'key']
-		}),
 	],
 	exports: [
 		...Helpers,
@@ -97,9 +118,11 @@ import { AuthMethodService } from './services/auth-method.service';
 		PermissionService,
 		BanService,
 		AuthMethodService,
+		ContentTypeService,
+		PageTypeService,
 
 		// Modules
-		ConfigModule
+		ConfigModule,
 	]
 })
 export class SharedModule {}
