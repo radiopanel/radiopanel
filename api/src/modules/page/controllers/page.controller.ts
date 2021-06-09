@@ -1,10 +1,11 @@
-import { Controller, Get, Body, Put, Param, Headers, UseGuards, UnauthorizedException } from '@nestjs/common';
+import { Controller, Get, Body, Put, Param, Headers, UseGuards, UnauthorizedException, Request, ForbiddenException } from '@nestjs/common';
 import { ApiBasicAuth, ApiTags } from '@nestjs/swagger';
 
 import { AuthGuard } from '~shared/guards/auth.guard';
 import { Permissions, AuditLog } from '~shared/decorators';
 
 import { PageService } from '../services/page.service';
+import { PermissionService } from '~shared/services/permission.service';
 
 
 @Controller('/page-types/:pageTypeUuid/page')
@@ -15,25 +16,34 @@ export class PageController {
 
 	constructor(
 		private pageService: PageService,
+		private permissionService: PermissionService,
 	) { }
 
 	@Get()
-	@Permissions('pages/read')
 	public async one(
 		@Param('pageTypeUuid') pageTypeUuid: string,
+		@Request() req,
 	): Promise<any | undefined> {
+		if (!await this.permissionService.hasPermission(req.user?.uuid || req.headers.authorization, [`pages/${pageTypeUuid}/update`])) {
+			throw new ForbiddenException(`Missing permissions: content/${pageTypeUuid}/read`)
+		}
+
 		return this.pageService.findOne(pageTypeUuid);
 	}
 
 	@Put()
-	@Permissions('pages/update')
 	@AuditLog('page/update')
 	public async update(
 		@Param('pageTypeUuid') pageTypeUuid: string,
 		@Body() page: any,
+		@Request() req,
 	): Promise<any> {
 		if (!await this.pageService.findOne(pageTypeUuid)) {
 			throw new UnauthorizedException()
+		}
+		
+		if (!await this.permissionService.hasPermission(req.user?.uuid || req.headers.authorization, [`pages/${pageTypeUuid}/update`])) {
+			throw new ForbiddenException(`Missing permissions: content/${pageTypeUuid}/read`)
 		}
 
 		return this.pageService.update(pageTypeUuid, {

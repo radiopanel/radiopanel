@@ -5,9 +5,12 @@ import { Repository, Brackets } from "typeorm";
 
 import { PageType, Page, PageTypeField } from "~entities";
 import { Paginated } from "~shared/types";
+import { WebSocketGateway, WebSocketServer } from "@nestjs/websockets";
 
 @Injectable()
+@WebSocketGateway({ port: process.env.PORT, transports: ['polling', 'websocket'] })
 export class PageTypeService {
+	@WebSocketServer() private server: any
 
 	constructor(
 		@InjectRepository(PageType) private pageTypeRepository: Repository<PageType>,
@@ -17,6 +20,37 @@ export class PageTypeService {
 
 	public async find(page = 1, pagesize = 20): Promise<Paginated<PageType>> {
 		const query = this.pageTypeRepository.createQueryBuilder('PageType')
+			.leftJoinAndSelect('PageType.fields', 'Fields')
+			.leftJoinAndSelect('PageType.page', 'Page')
+			.orderBy('Fields.order', 'ASC');
+
+		return {
+			_embedded: await query
+				.skip((page - 1) * pagesize)
+				.take(pagesize)
+				.getMany(),
+			_page: {
+				totalEntities: await query.getCount(),
+				currentPage: page,
+				itemsPerPage: pagesize,
+			},
+		};
+	}
+
+	public async findByUuids(page = 1, pagesize = 20, allowedUuids: string[] = []): Promise<Paginated<PageType>> {
+		if (allowedUuids.length === 0) {
+			return {
+				_embedded: [],
+				_page: {
+					totalEntities: 0,
+					currentPage: page,
+					itemsPerPage: pagesize,
+				},
+			};
+		}
+
+		const query = this.pageTypeRepository.createQueryBuilder('PageType')
+			.where("PageType.uuid IN (:...allowedUuids)", { allowedUuids })
 			.leftJoinAndSelect('PageType.fields', 'Fields')
 			.leftJoinAndSelect('PageType.page', 'Page')
 			.orderBy('Fields.order', 'ASC');
@@ -62,10 +96,13 @@ export class PageTypeService {
 			updatedAt: new Date(),
 		});
 
-		return await this.pageTypeRepository.save(pageType);
+		const createdPageType = await this.pageTypeRepository.save(pageType);
+		this.server.emit('page-types_updated');
+
+		return createdPageType;
 	}
 
-	public async update(id: string, pageType: PageType): Promise<any> {
+	public async update(id: string, pageType: PageType): Promise<PageType> {
 		// First we find the current fields and kill em off
 		await this.pageTypeFieldRepository.delete({
 			pageTypeUuid: id,
@@ -75,11 +112,15 @@ export class PageTypeService {
 		pageType.updatedAt = new Date();
 		pageType.fields = this.mapFieldsWithOrder(pageType.uuid, pageType.fields || []);
 
-		return this.pageTypeRepository.save(pageType);
+		const updatedPageType = await this.pageTypeRepository.save(pageType);
+		this.server.emit('page-types_updated');
+
+		return updatedPageType;
 	}
 
 	public async delete(id: string): Promise<void> {
 		await this.pageTypeRepository.delete(id);
+		this.server.emit('page-types_updated');
 		return;
 	}
 

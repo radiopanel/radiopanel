@@ -24,9 +24,12 @@ export class AuthGateway {
 		@MessageBody() data: any,
 		@ConnectedSocket() client: Socket,
 	): Promise<void> {
+		if (!(client.handshake as any)?.session?.passport?.user?.uuid) {
+			return;
+		}
+		
 		try {
-			const jwtData = jwt.verify(data, this.configService.get<string>('jwt.privateKey')) as any;
-			const userData = await this.userService.findOne({ uuid: jwtData.user.uuid });
+			const userData = await this.userService.findOne({ uuid: (client.handshake as any)?.session?.passport?.user?.uuid });
 			(userData.tenants || []).forEach(async (tenant: Tenant) => {
 				try {
 					this.server.of('/').adapter.remoteJoin(client.id, tenant.uuid);

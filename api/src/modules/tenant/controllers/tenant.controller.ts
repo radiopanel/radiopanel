@@ -38,14 +38,10 @@ export class TenantController {
 		tenant.updatedAt = new Date();
 		await this.tenantService.create(tenant);
 
-		const permissionsList = permissions.reduce((acc, permissionGroup) => {
+		const permissionsList = permissions([], []).reduce((acc, permissionGroup) => {
 			return {
 				...acc,
 				...permissionGroup.groups.reduce((groupAcc, group) => {
-					if (group.requiresFeature) {
-						return groupAcc;
-					}
-
 					return {
 						...groupAcc,
 						...group.permissions.reduce((permissionAcc, permission) => ({ ...permissionAcc, [permission.value]: true }), {})

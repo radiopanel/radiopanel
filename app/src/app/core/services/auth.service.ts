@@ -1,37 +1,34 @@
 import { ToastrService } from 'ngx-toastr';
-import { prop, path, propOr, pathOr } from 'ramda';
 import { throwError, merge, of, forkJoin } from 'rxjs';
 import { catchError, tap, first, switchMap } from 'rxjs/operators';
-import * as ioClient from 'socket.io-client';
 
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { SessionService, SessionQuery } from '~lib/store';
 import { SocketService } from './socket.service';
-import { Tenant } from '~lib/store/session/session.store';
 import { Router, ActivatedRoute } from '@angular/router';
 
-const setCookie = (name,value,days) => {
-    var expires = "";
+const setCookie = (name, value, days) => {
+    let expires = '';
     if (days) {
-        var date = new Date();
-        date.setTime(date.getTime() + (days*24*60*60*1000));
-        expires = "; expires=" + date.toUTCString();
+        const date = new Date();
+        date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+        expires = '; expires=' + date.toUTCString();
     }
-    document.cookie = name + "=" + (value || "")  + expires + "; path=/";
-}
+    document.cookie = name + '=' + (value || '')  + expires + '; path=/';
+};
 
 const getCookie = (name) => {
-    var nameEQ = name + "=";
-    var ca = document.cookie.split(';');
-    for(var i=0;i < ca.length;i++) {
-        var c = ca[i];
-        while (c.charAt(0)==' ') c = c.substring(1,c.length);
-        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+    const nameEQ = name + '=';
+    const ca = document.cookie.split(';');
+    for (let i = 0; i < ca.length; i++) {
+        let c = ca[i];
+        while (c.charAt(0) == ' ') { c = c.substring(1, c.length); }
+        if (c.indexOf(nameEQ) == 0) { return c.substring(nameEQ.length, c.length); }
     }
     return null;
-}
+};
 
 @Injectable()
 export class AuthService {
@@ -65,18 +62,13 @@ export class AuthService {
 					this.sessionService.updateTenantMessages(result.tenantMessages);
 					this.sessionService.updateTenant(result.tenant);
 
-					if (result.permissions.includes('content-types/read') || result.permissions.includes('page-types/read')) {
-						return forkJoin([
-							...(result.permissions.includes('content-types/read') ? [this.sessionService.fetchContentTypes()] : []),
-							...(result.permissions.includes('page-types/read') ? [this.sessionService.fetchPageTypes()] : []),
-						]);
-					}
-
 					const style = document.createElement('style');
 					style.id = 'customCss';
 					document.head.append(style);
 					style.textContent = result.tenant?.settings?.customCSS;
 					document.documentElement.style.setProperty('--color-primary', result.tenant?.settings?.primaryColor || '#FF926B');
+
+					this.fetchMisc();
 
 					return of({});
 				}),
@@ -86,6 +78,14 @@ export class AuthService {
 		return;
 	}
 
+	public fetchMisc(): void {
+		this.sessionService.fetchPageTypes()
+			.pipe(first()).subscribe();
+
+		this.sessionService.fetchContentTypes()
+			.pipe(first()).subscribe();
+	}
+
 	public bootstrapListeners() {
 		this.socketService.socket.on('tenant-updated', async () => {
 			this.fetchSessionData();
@@ -93,6 +93,16 @@ export class AuthService {
 
 		this.socketService.socket.on('role-updated', () => {
 			this.fetchSessionData();
+		});
+
+		this.socketService.socket.on('page-types_updated', () => {
+			this.sessionService.fetchPageTypes()
+				.pipe(first()).subscribe();
+		});
+
+		this.socketService.socket.on('content-types_updated', () => {
+			this.sessionService.fetchContentTypes()
+				.pipe(first()).subscribe();
 		});
 
 		this.socketService.socket.on('user-role-updated', () => {

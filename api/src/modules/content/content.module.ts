@@ -7,7 +7,6 @@ import { SharedModule } from '~shared/shared.module';
 import { ContentController } from './controllers/content.controller';
 import { ContentTypeController } from './controllers/content-type.controller';
 import { ContentTypeFieldController } from './controllers/content-type-field.controller';
-import { ContentTypeService } from './services/content-type.service';
 import { ContentService } from './services/content.service';
 
 @Module({
@@ -16,6 +15,6 @@ import { ContentService } from './services/content.service';
 		SharedModule
 	],
 	controllers: [ContentController, ContentTypeController, ContentTypeFieldController],
-	providers: [ContentTypeService, ContentService]
+	providers: [ContentService]
 })
 export class ContentModule {}

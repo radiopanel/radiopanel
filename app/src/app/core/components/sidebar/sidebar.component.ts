@@ -7,7 +7,7 @@ import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild, A
 
 import { SessionQuery, StatusQuery, StatusService } from '~lib/store';
 import { coreLinks, adminLinks, myStationLinks } from './sidebar.const';
-import { AuthService } from '../../services';
+import { AuthService, SocketService } from '../../services';
 import { TenantSelectorComponent } from '../../modals';
 import { Router } from '@angular/router';
 import { NgScrollbar } from 'ngx-scrollbar';
@@ -33,8 +33,6 @@ export class SidebarComponent implements OnInit, OnDestroy, AfterViewInit {
 	public contentTypeLinks: any = [];
 	public pageTypeLinks: any = [];
 	public tenant$: Observable<any>;
-	public contentTypes$: Observable<any[]>;
-	public pageTypes$: Observable<any[]>;
 	public user$: Observable<any>;
 	public permissions$: Observable<string[]>;
 	public features$: Observable<string[]>;
@@ -49,7 +47,7 @@ export class SidebarComponent implements OnInit, OnDestroy, AfterViewInit {
 		public statusQuery: StatusQuery,
 		private dialog: MatDialog,
 		private router: Router,
-		private authService: AuthService,
+		private socketService: SocketService,
 	) { }
 
 	public ngOnInit(): void {
@@ -62,34 +60,34 @@ export class SidebarComponent implements OnInit, OnDestroy, AfterViewInit {
 		this.user$ = this.sessionQuery.user$;
 		this.permissions$ = this.sessionQuery.permissions$;
 		this.features$ = this.sessionQuery.features$;
-		this.contentTypes$ = this.sessionQuery.contentTypes$;
-		this.pageTypes$ = this.sessionQuery.pageTypes$;
 		this.status$ = this.statusQuery.status$;
 		this.tenant$ = this.sessionQuery.tenant$;
 
-		combineLatest(this.permissions$, this.features$, this.contentTypes$, this.pageTypes$)
-			.subscribe(([permissions, features, contentTypes, pageTypes]) => {
+		this.sessionQuery.contentTypes$
+			.subscribe((contentTypes) => {
+				this.contentTypeLinks = (contentTypes || []).map((contentType) => ({
+					icon: 'subject',
+					name: contentType.name,
+					link: `/content/${contentType.uuid}/entries`,
+					show: true
+				}));
+			});
+
+		this.sessionQuery.pageTypes$
+			.subscribe((pageTypes) => {
+				this.pageTypeLinks = (pageTypes || []).map((pageType) => ({
+					icon: 'file',
+					name: pageType.name,
+					link: `/pages/${pageType.uuid}`,
+					show: true
+				}));
+			});
+
+		combineLatest(this.permissions$, this.features$)
+			.subscribe(([permissions, features]) => {
 				this.adminLinks = adminLinks(permissions, features).filter((x) => x.show);
 				this.coreLinks = coreLinks(permissions, features).filter((x) => x.show);
 				this.myStationLinks = myStationLinks(permissions, features).filter((x) => x.show);
-
-				if (permissions.includes('content-types/read')) {
-					this.contentTypeLinks = (contentTypes || []).map((contentType) => ({
-						icon: 'subject',
-						name: contentType.name,
-						link: `/content/${contentType.uuid}/entries`,
-						show: true
-					}));
-				}
-
-				if (permissions.includes('page-types/read')) {
-					this.pageTypeLinks = (pageTypes || []).map((pageType) => ({
-						icon: 'file',
-						name: pageType.name,
-						link: `/pages/${pageType.uuid}`,
-						show: true
-					}));
-				}
 			});
 	}
 
@@ -119,17 +117,6 @@ export class SidebarComponent implements OnInit, OnDestroy, AfterViewInit {
 
 	public toggleOpen(e: Event) {
 		this.open = !this.open;
-	}
-
-	public chooseTenant(e: Event, tenant: any) {
-		e.preventDefault();
-		this.tenantSelectorOpen = false;
-		this.tenantSelected.emit(tenant);
-	}
-
-	public toggleTenantSelector(e: Event) {
-		e.preventDefault();
-		this.tenantSelectorOpen = !this.tenantSelectorOpen;
 	}
 
 	public handleLogout(e: Event) {
