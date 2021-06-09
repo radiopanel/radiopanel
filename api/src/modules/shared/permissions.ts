@@ -446,51 +446,52 @@ export const permissions = (pageTypes: PageType[], contentTypes: ContentType[]) 
 	},
 	{
 		name: 'Content permissions',
-		groups: [
-			...contentTypes.map((contentType) => ({
-				name: contentType.name,
-				icon: 'align-left-justify',
-				permissions: [
-					{
-						label: `Create ${contentType.name}`,
-						value: `content/${contentType.uuid}/create`,
-					},
-					{
-						label: `Read ${contentType.name}`,
-						value: `content/${contentType.uuid}/read`,
-					},
-					{
-						label: `Update ${contentType.name}`,
-						value: `content/${contentType.uuid}/update`,
-					},
-					{
-						label: `Delete ${contentType.name}`,
-						value: `content/${contentType.uuid}/delete`,
-					},
-				],
-			})),
-			...pageTypes.map((pageType) => ({
-				name: pageType.name,
-				icon: 'file',
-				permissions: [
-					{
-						label: `Create ${pageType.name}`,
-						value: `pages/${pageType.uuid}/create`,
-					},
-					{
-						label: `Read ${pageType.name}`,
-						value: `pages/${pageType.uuid}/read`,
-					},
-					{
-						label: `Update ${pageType.name}`,
-						value: `pages/${pageType.uuid}/update`,
-					},
-					{
-						label: `Delete ${pageType.name}`,
-						value: `pages/${pageType.uuid}/delete`,
-					},
-				],
-			})),
-		]
+		groups: contentTypes.map((contentType) => ({
+			name: contentType.name,
+			icon: 'align-left-justify',
+			permissions: [
+				{
+					label: `Create ${contentType.name}`,
+					value: `content/${contentType.uuid}/create`,
+				},
+				{
+					label: `Read ${contentType.name}`,
+					value: `content/${contentType.uuid}/read`,
+				},
+				{
+					label: `Update ${contentType.name}`,
+					value: `content/${contentType.uuid}/update`,
+				},
+				{
+					label: `Delete ${contentType.name}`,
+					value: `content/${contentType.uuid}/delete`,
+				},
+			],
+		})),
+	},
+	{
+		name: 'Page permissions',
+		groups: pageTypes.map((pageType) => ({
+			name: pageType.name,
+			icon: 'file',
+			permissions: [
+				{
+					label: `Create ${pageType.name}`,
+					value: `pages/${pageType.uuid}/create`,
+				},
+				{
+					label: `Read ${pageType.name}`,
+					value: `pages/${pageType.uuid}/read`,
+				},
+				{
+					label: `Update ${pageType.name}`,
+					value: `pages/${pageType.uuid}/update`,
+				},
+				{
+					label: `Delete ${pageType.name}`,
+					value: `pages/${pageType.uuid}/delete`,
+				},
+			],
+		})),
 	}
 ])
