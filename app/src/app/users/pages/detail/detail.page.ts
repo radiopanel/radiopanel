@@ -61,8 +61,17 @@ export class DetailPageComponent implements OnInit, OnDestroy {
 				this.form = this.formBuilder.group({
 					username: ['', Validators.required],
 					email: ['', Validators.required],
-					password: ['', Validators.required],
+					avatar: ['', Validators.required],
+					bio: ['', Validators.required],
 					roles: [[], Validators.required],
+					socials: this.formBuilder.group({
+						facebook: [''],
+						twitter: [''],
+						discord: [''],
+						instagram: [''],
+						youtube: [''],
+						twitch: [''],
+					}),
 					permissions: [],
 				});
 

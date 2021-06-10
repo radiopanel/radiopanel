@@ -4,20 +4,58 @@
         <div class="o-page__section">
             <app-text-input
                 [formControl]="form.get('username')"
-                label="First name"
-                [disabled]="true"
+                label="Username"
             ></app-text-input>
             <app-text-input
                 [formControl]="form.get('email')"
                 label="Email"
                 type="email"
-                [disabled]="true"
             ></app-text-input>
+            <app-textarea-input
+                [formControl]="form.get('bio')"
+                label="Bio"
+                type="bio"
+            ></app-textarea-input>
+            <app-dynamic-file-input
+                [formControl]="form.get('avatar')"
+                label="Avatar"
+            ></app-dynamic-file-input>
             <app-role-input
                 [formControl]="form.get('roles')"
                 label="Roles"
                 [multiple]="true"
             ></app-role-input>
+        </div>
+        <div class="o-page__section">
+            <div class="o-page__section-info">
+                <h3 class="o-page__section-title">
+                    Socials
+                </h3>
+            </div>
+            <app-text-input
+                [formControl]="form.get('socials').get('facebook')"
+                label="Facebook"
+            ></app-text-input>
+            <app-text-input
+                [formControl]="form.get('socials').get('twitter')"
+                label="Twitter"
+            ></app-text-input>
+            <app-text-input
+                [formControl]="form.get('socials').get('instagram')"
+                label="Instagram"
+            ></app-text-input>
+            <app-text-input
+                [formControl]="form.get('socials').get('discord')"
+                label="Discord"
+            ></app-text-input>
+            <app-text-input
+                [formControl]="form.get('socials').get('youtube')"
+                label="YouTube"
+            ></app-text-input>
+            <app-text-input
+                [formControl]="form.get('socials').get('twitch')"
+                label="Twitch"
+            ></app-text-input>
         </div>
         <div class="o-page__section" *ngIf="tenant$ && (tenant$ | async)?.profileFields">
             <div class="o-page__section-info">
