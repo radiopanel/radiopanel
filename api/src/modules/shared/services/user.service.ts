@@ -116,7 +116,7 @@ export class UserService {
 		return newUser;
 	}
 
-	public async update(id: string, user: User): Promise<User> {
+	public async update(id: string, user: Partial<User>): Promise<User> {
 		user.uuid = id;
 		return this.userRepository.save(user);
 	}

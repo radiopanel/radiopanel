@@ -7,6 +7,7 @@ import { UserService } from '~shared/services/user.service';
 import { AuditLog, Permissions } from '~shared/decorators';
 import { TenantService } from '~shared/services/tenant.service';
 import { AuthGuard } from '~shared/guards/auth.guard';
+import { pick } from 'ramda';
 
 @Controller('users')
 @ApiTags('Users')
@@ -42,9 +43,12 @@ export class UserController {
 	@Permissions('users/update')
 	@AuditLog('users/update')
 	public async updateUser(@Param('userUuid') userUuid: string, @Body() user: any): Promise<User> {
-		await this.userService.assignRoles(userUuid, user.roles);
-		await this.userService.assignMeta('customData', userUuid, user.customData || {});
-		await this.userService.updatePermissions(userUuid, user.permissions);
+		await Promise.all([
+			this.userService.update(userUuid, pick(['username', 'email', 'avatar', 'bio', 'socials'])(user)),
+			this.userService.assignRoles(userUuid, user.roles),
+			this.userService.assignMeta('customData', userUuid, user.customData || {}),
+			this.userService.updatePermissions(userUuid, user.permissions),
+		])
 
 		return this.userService.findOne({ uuid: userUuid });
 	}
