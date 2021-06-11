@@ -1,0 +1,24 @@
+<div class="o-modal">
+    <div class="o-modal__header">
+        <h3>Choose a field</h3>
+        <a href="#" (click)="close()"><span class="uil uil-times"></span></a>
+    </div>
+    <div class="o-modal__body">
+        <app-text-input [formControl]="search" label="Search"></app-text-input>
+        <div class="m-icon-selector">
+            <button *ngFor="let icon of icons" (click)="selectIcon(icon)" class="m-icon-selector__icon a-button">
+                <span [class]="'uil uil-' + icon"></span>
+            </button>
+            <p class="m-icon-selector__empty" *ngIf="search.value.length < 2">
+                Please type more then 2 character.
+            </p>
+            <p class="m-icon-selector__empty" *ngIf="icons.length === 0 && search.value.length >= 2">
+                No icon found for this search query.
+            </p>
+        </div>
+    </div>
+    <!-- <div class="o-modal__footer">
+        <button class="a-button a-button--success" (click)="save()">Choose</button>
+        <button class="a-button a-button--warning a-button--outline" (click)="close()">Close</button>
+    </div> -->
+</div>
