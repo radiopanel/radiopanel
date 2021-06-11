@@ -51,7 +51,7 @@ export class PageTypeController {
 	public async one(@Param('id') id: string, @Request() req): Promise<any | undefined> {
 		if (!(
 			await this.permissionService.hasPermission(req.user?.uuid || req.headers.authorization, [`pages/${id}/read`]) || 
-			await this.permissionService.hasPermission(req.user?.uuid || req.headers.authorization, [`pages-types/read`])
+			await this.permissionService.hasPermission(req.user?.uuid || req.headers.authorization, [`page-types/read`])
 		)) {
 			throw new ForbiddenException(`Missing permissions: pages/${id}/read`)
 		}
