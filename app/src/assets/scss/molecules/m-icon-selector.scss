@@ -4,7 +4,13 @@
     display: flex;
     flex-wrap: wrap;
 
-    .m-icon-selector__icon {
+    &__icon {
         margin-bottom: $spacer-small;
+    }
+
+    &__empty {
+        margin: $spacer 0;
+        text-align: center;
+        width: 100%;
     }
 }

@@ -66,7 +66,7 @@ export class SidebarComponent implements OnInit, OnDestroy, AfterViewInit {
 		this.sessionQuery.contentTypes$
 			.subscribe((contentTypes) => {
 				this.contentTypeLinks = (contentTypes || []).map((contentType) => ({
-					icon: 'subject',
+					icon: contentType.icon || 'subject',
 					name: contentType.name,
 					link: `/content/${contentType.uuid}/entries`,
 					show: true
@@ -76,7 +76,7 @@ export class SidebarComponent implements OnInit, OnDestroy, AfterViewInit {
 		this.sessionQuery.pageTypes$
 			.subscribe((pageTypes) => {
 				this.pageTypeLinks = (pageTypes || []).map((pageType) => ({
-					icon: 'file',
+					icon: pageType.icon || 'file',
 					name: pageType.name,
 					link: `/pages/${pageType.uuid}`,
 					show: true

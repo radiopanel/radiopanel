@@ -30,6 +30,9 @@ export class ContentType {
 	public content: Content[];
 
 	@Column()
+	public icon: string;
+
+	@Column()
 	public updatedAt: Date;
 
 	@Column()

@@ -1,0 +1,10 @@
+<div class="a-input">
+    <div class="a-input__label">{{ label }}</div>
+    <div *ngIf="control.value">
+        <button class="a-button a-button--outline"><span [class]="'uil uil-' + control.value"></span></button>
+        <button class="a-button" (click)="openModal($event)">Change icon</button>
+    </div>
+    <div *ngIf="!control.value">
+        <button class="a-button" (click)="openModal($event)">Select icon</button>
+    </div>
+</div>

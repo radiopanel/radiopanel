@@ -30,6 +30,9 @@ export class PageType {
 	public page: Page[];
 
 	@Column()
+	public icon: string;
+
+	@Column()
 	public updatedAt: Date;
 
 	@Column()

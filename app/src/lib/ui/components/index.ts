@@ -32,6 +32,7 @@ import { CodeInputComponent } from './code-input/code-input.component';
 import { PermissionSelectorComponent } from './permission-selector/permission-selector.component';
 import { PermissionOverwriterComponent } from './permission-overwriter/permission-overwriter.component';
 import { PermissionInputComponent } from './permission-input/permission-input.component';
+import { IconInputComponent } from './icon-input/icon-input.component';
 
 export const Components = [
 	HeaderComponent,
@@ -68,4 +69,5 @@ export const Components = [
 	PermissionSelectorComponent,
 	PermissionOverwriterComponent,
 	PermissionInputComponent,
+	IconInputComponent
 ];
