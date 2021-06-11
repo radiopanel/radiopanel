@@ -1,6 +1,7 @@
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 import { PageType } from './page-type.entity';
+import { User } from './user.entity';
 
 @Entity()
 export class Page {
@@ -21,6 +22,22 @@ export class Page {
 
 	@ManyToOne(() => PageType, pageType => pageType.uuid)
 	public pageType: PageType;
+
+	@ManyToOne(() => User, user => user.uuid, {
+		eager: true,
+	})
+	public createdBy: User;
+
+	@Column()
+	public createdByUuid: string;
+
+	@ManyToOne(() => User, user => user.uuid, {
+		eager: true,
+	})
+	public updatedBy: User;
+
+	@Column()
+	public updatedByUuid: string;
 
 	@Column()
 	public updatedAt: Date;

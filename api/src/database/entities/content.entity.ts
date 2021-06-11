@@ -1,6 +1,7 @@
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 import { ContentType } from './content-type.entity';
+import { User } from './user.entity';
 
 @Entity()
 export class Content {
@@ -21,6 +22,22 @@ export class Content {
 
 	@ManyToOne(() => ContentType, contentType => contentType.uuid)
 	public contentType: ContentType;
+
+	@ManyToOne(() => User, user => user.uuid, {
+		eager: true,
+	})
+	public createdBy: User;
+
+	@Column()
+	public createdByUuid: string;
+
+	@ManyToOne(() => User, user => user.uuid, {
+		eager: true,
+	})
+	public updatedBy: User;
+
+	@Column()
+	public updatedByUuid: string;
 
 	@Column()
 	public updatedAt: Date;

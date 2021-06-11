@@ -62,8 +62,8 @@ export class PageTypeController {
 	@Post()
 	@Permissions('page-types/create')
 	@AuditLog('page-types/create')
-	public create(@Body() pageType: any): Promise<any> {
-		return this.pageTypeService.create(pageType);
+	public create(@Body() pageType: any, @Request() req): Promise<any> {
+		return this.pageTypeService.create(pageType, req.user?.uuid);
 	}
 
 	@Put('/:id')

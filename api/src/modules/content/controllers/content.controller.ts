@@ -58,7 +58,11 @@ export class ContentController {
 			throw new ForbiddenException(`Missing permissions: content/${contentTypeUuid}/read`)
 		}
 
-		return this.contentService.create(contentTypeUuid, content);
+		return this.contentService.create(contentTypeUuid, {
+			...content,
+			updatedByUuid: req.user?.uuid,
+			createdByUuid: req.user?.uuid
+		});
 	}
 
 	@Put('/:entryUuid')
@@ -73,7 +77,10 @@ export class ContentController {
 			throw new ForbiddenException(`Missing permissions: content/${contentTypeUuid}/read`)
 		}
 
-		return this.contentService.update(contentTypeUuid, uuid, content);
+		return this.contentService.update(contentTypeUuid, uuid, {
+			...content,
+			updatedByUuid: req.user?.uuid
+		});
 	}
 
 	@Delete('/:entryUuid')

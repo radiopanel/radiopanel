@@ -80,7 +80,7 @@ export class PageTypeService {
 		return this.pageTypeRepository.findOne(params);
 	}
 
-	public async create(pageType: PageType): Promise<PageType> {
+	public async create(pageType: PageType, userUuid: string): Promise<PageType> {
 		pageType.uuid = uuid.v4();
 		pageType.createdAt = new Date();
 		pageType.updatedAt = new Date();
@@ -91,6 +91,8 @@ export class PageTypeService {
 			pageType,
 			name: pageType.name,
 			slug: pageType.slug,
+			createdByUuid: userUuid,
+			updatedByUuid: userUuid,
 			fields: {},
 			createdAt: new Date(),
 			updatedAt: new Date(),
