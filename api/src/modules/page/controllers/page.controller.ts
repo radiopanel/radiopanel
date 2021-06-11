@@ -48,6 +48,7 @@ export class PageController {
 
 		return this.pageService.update(pageTypeUuid, {
 			...page,
+			updatedByUuid: req.user?.uuid
 		});
 	}
 }
