@@ -20,7 +20,7 @@ import { Forms } from './forms';
 		Components,
 		Modals,
 		Pages,
-		Forms,
+		// Forms,
 	],
 	imports: [
 		DragulaModule,

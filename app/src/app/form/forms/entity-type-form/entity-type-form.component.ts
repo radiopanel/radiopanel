@@ -11,7 +11,7 @@ import { DragulaService } from 'ng2-dragula';
 import { ContentFieldSelectorModalComponent } from '~lib/ui/modals';
 
 @Component({
-	selector: 'app-entity-type-form',
+	selector: 'app-entity-type-form-forms',
 	templateUrl: 'entity-type-form.component.html',
 })
 export class EntityTypeFormComponent implements OnInit, OnChanges, OnDestroy {

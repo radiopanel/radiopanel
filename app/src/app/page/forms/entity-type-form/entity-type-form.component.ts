@@ -12,7 +12,7 @@ import { DragulaService } from 'ng2-dragula';
 import slugify from 'slugify';
 
 @Component({
-	selector: 'app-entity-type-form',
+	selector: 'app-entity-type-form-pages',
 	templateUrl: 'entity-type-form.component.html',
 })
 export class EntityTypeFormComponent implements OnInit, OnChanges, OnDestroy {
