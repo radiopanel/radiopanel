@@ -1,13 +1,15 @@
 import { Component, Input, Output, EventEmitter, OnInit, OnDestroy, OnChanges } from '@angular/core';
 import { pathOr } from 'ramda';
 import { MatDialog } from '@angular/material/dialog';
-import { FormBuilder, Validators, FormArray, FormGroup } from '@angular/forms';
+import { FormBuilder, Validators, FormArray, FormGroup } from '@angular/forms';
 import { ContentFieldSelectorModalComponent } from '../../modals';
 import { first, takeUntil } from 'rxjs/operators';
+import * as uuid from 'uuid';
 import { Subject } from 'rxjs';
 import propOr from 'ramda/es/propOr';
 import camelCase from 'camelcase';
 import { DragulaService } from 'ng2-dragula';
+import slugify from 'slugify';
 
 @Component({
 	selector: 'app-entity-type-form',
@@ -24,6 +26,7 @@ export class EntityTypeFormComponent implements OnInit, OnChanges, OnDestroy {
 
 	public form: FormGroup;
 	public openFields = {};
+	public fieldsIdentifier = uuid.v4();
 
 	constructor(
 		private dialog: MatDialog,
@@ -38,10 +41,17 @@ export class EntityTypeFormComponent implements OnInit, OnChanges, OnDestroy {
 			workflow: ['', Validators.required],
 			fields: this.formBuilder.array([])
 		});
+
+		this.form.get('name').valueChanges
+			.pipe(
+				takeUntil(this.componentDestroyed$)
+			).subscribe((value) => this.form.patchValue({
+				slug: slugify(value).toLowerCase()
+			}));
 	}
 
 	public ngOnInit(): void {
-		this.dragulaService.createGroup('fields', {
+		this.dragulaService.createGroup(this.fieldsIdentifier, {
 			moves: (el, container, handle) => {
 				return el.querySelector(':scope > * > div > div > div > .m-field__handle-bar') === handle;
 			}
@@ -112,12 +122,14 @@ export class EntityTypeFormComponent implements OnInit, OnChanges, OnDestroy {
 				subfields: this.formBuilder.array(this.buildFieldsArray(field.subfields || []))
 			});
 
-			fieldForm.get('name').valueChanges
-				.pipe(
-					takeUntil(this.componentDestroyed$)
-				).subscribe((value) => fieldForm.patchValue({
-					slug: camelCase(value)
-				}));
+			if (!field.slug) {
+				fieldForm.get('name').valueChanges
+					.pipe(
+						takeUntil(this.componentDestroyed$)
+					).subscribe((value) => fieldForm.patchValue({
+						slug: camelCase(value)
+					}));
+			}
 
 			return fieldForm;
 		});
