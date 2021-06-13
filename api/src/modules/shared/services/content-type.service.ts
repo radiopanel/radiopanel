@@ -21,6 +21,7 @@ export class ContentTypeService {
 		const query = this.contentTypeRepository.createQueryBuilder('ContentType')
 			.leftJoinAndSelect('ContentType.fields', 'Fields')
 			.leftJoinAndSelect('ContentType.content', 'Content')
+			.leftJoinAndSelect('Fields.subfields', 'Subfields')
 			.orderBy('Fields.order', 'ASC');
 
 		return {
@@ -52,6 +53,7 @@ export class ContentTypeService {
 			.where("ContentType.uuid IN (:...allowedUuids)", { allowedUuids })
 			.leftJoinAndSelect('ContentType.fields', 'Fields')
 			.leftJoinAndSelect('ContentType.content', 'Content')
+			.leftJoinAndSelect('Fields.subfields', 'Subfields')
 			.orderBy('Fields.order', 'ASC');
 
 		return {
@@ -71,6 +73,7 @@ export class ContentTypeService {
 		return this.contentTypeRepository.createQueryBuilder('Content')
 			.where(new Brackets(qb => qb.where('Content.uuid = :id', { id }).orWhere('Content.slug = :id', { id })))
 			.leftJoinAndSelect('Content.fields', 'Fields')
+			.leftJoinAndSelect('Fields.subfields', 'Subfields')
 			.orderBy('Fields.order', 'ASC')
 			.getOne();
 	}
@@ -123,6 +126,7 @@ export class ContentTypeService {
 			uuid: uuid.v4(),
 			updatedAt: new Date(),
 			order: order++,
+			subfields: this.mapFieldsWithOrder(contentTypeUuid, field.subfields || [], true),
 		}));
 	}
 }

@@ -81,6 +81,34 @@
         ></app-tag-input>
     </ng-container>
 
+    <ng-container *ngSwitchCase="'repeater'">
+        <app-repeater
+            [formControl]="control"
+            [label]="label"
+            [subfields]="subfields"
+        ></app-repeater>
+    </ng-container>
+
+    <ng-container *ngSwitchCase="'content-input'">
+        <app-data-input
+            [formControl]="control"
+            [label]="label"
+            [endpoint]="'content-types/' + config?.contentTypeUuid + '/content'"
+            [itemLabel]="['name']"
+            [itemValue]="['uuid']"
+        ></app-data-input>
+    </ng-container>
+
+    <ng-container *ngSwitchCase="'content-type-input'">
+        <app-data-input
+            [formControl]="control"
+            [label]="label"
+            endpoint="content-types"
+            [itemLabel]="['name']"
+            [itemValue]="['uuid']"
+        ></app-data-input>
+    </ng-container>
+
     <ng-container *ngSwitchDefault>
         <app-text-input
             [formControl]="control"

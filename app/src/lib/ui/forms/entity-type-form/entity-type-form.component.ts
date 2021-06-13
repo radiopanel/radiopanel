@@ -38,7 +38,6 @@ export class EntityTypeFormComponent implements OnInit, OnChanges, OnDestroy {
 			description: ['', Validators.required],
 			icon: ['', Validators.required],
 			slug: ['', Validators.required],
-			workflow: ['', Validators.required],
 			fields: this.formBuilder.array([])
 		});
 

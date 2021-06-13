@@ -7,7 +7,7 @@
         <div class="m-repeater__group">
             <div *ngFor="let field of subfields">
                 <app-dynamic-input
-                    [label]="field.name || '' + field.multiLanguage && '(int)'"
+                    [label]="field.name"
                     [config]="field.config"
                     [component]="field.fieldType"
                     [subfields]="field.subfields"

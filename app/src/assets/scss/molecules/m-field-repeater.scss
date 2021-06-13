@@ -1,13 +1,7 @@
 .m-field-repeater {
     margin-bottom: $spacer;
-    background-color: $grey-lightest;
+    color: $grey-light;
     transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
-
-    .m-field__handle-bar {
-        padding-right: $spacer;
-        cursor: grab;
-        color: $grey;
-    }
 
     &--open {
         .m-field-repeater__config {
@@ -16,11 +10,19 @@
         }
     }
 
-    &__title {
+    .m-field__handle-bar {
+        padding-right: $spacer;
+        cursor: grab;
+        color: $grey-light;
+    }
+
+    .m-field-repeater__action-bar {
+        margin-bottom: $spacer-x-small;
         display: flex;
+        border-radius: $border-radius;
         justify-content: space-between;
         align-items: center;
-        background-color: $grey-lighter;
+        background-color: $grey-dark;
         padding: $spacer-small $spacer;
 
         h4 {
@@ -29,17 +31,18 @@
         }
     }
 
-    &__config {
+    .m-field-repeater__config {
+        border-radius: $border-radius;
+        background-color: $grey-darker;
         padding: $spacer;
         height: 0;
         display: none;
     }
 
-    &__fields {
+    &__sub-fields {
         border: 2px dashed $grey;
         border-radius: $border-radius;
         margin-bottom: $spacer;
         padding: $spacer;
-        background-color: $white;
     }
 }

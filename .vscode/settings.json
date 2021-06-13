@@ -1,4 +1,5 @@
 {
 	"git.ignoreLimitWarning": true,
-	"vsicons.presets.nestjs": true
+	"vsicons.presets.nestjs": true,
+	"angular.enable-strict-mode-prompt": false
 }

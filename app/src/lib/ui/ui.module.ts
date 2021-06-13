@@ -19,7 +19,7 @@ import { Pipes } from './pipes';
 import { Services } from './services';
 import { Directives } from './directives';
 import { MonacoEditorModule } from 'ngx-monaco-editor';
-import { Forms } from 'src/app/form/forms';
+import { Forms } from './forms';
 
 @NgModule({
 	declarations: [

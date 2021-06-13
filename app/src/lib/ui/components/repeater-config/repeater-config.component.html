@@ -2,12 +2,12 @@
     'm-field-repeater': true,
     'm-field-repeater--open': open
 }">
-    <div class="m-field-repeater__title">
+    <div class="m-field-repeater__action-bar">
         <div>
             <span class="m-field__handle-bar uil uil-ellipsis-v"></span>
             <h4>
                 {{ item.get('name').value }}
-                <small class="u-text-light">{{ findFieldConfiguration(item.get('fieldType')?.value)?.name }}</small>
+                <small class="a-badge">{{ findFieldConfiguration(item.get('fieldType')?.value)?.name }}</small>
             </h4>
         </div>
         <div>
@@ -38,7 +38,7 @@
                 ></app-text-input>
             </div>
         </div>
-        <div class="m-field-repeater__fields">
+        <div class="m-field-repeater__sub-fields">
             <div dragula="subfields" [dragulaModel]="item.get('subfields').value" (dragulaModelChange)="handleDrop($event)">
                 <div *ngFor="let subItem of item['controls'].subfields['controls']; let i = index">
                     <app-field-config

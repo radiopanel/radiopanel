@@ -84,7 +84,13 @@ export class ContentTypeFieldController {
 				name: 'Content',
 				description: 'Link content with each other',
 				icon: 'align-left',
-				config: [],
+				config: [
+					{
+						identifier: 'contentTypeUuid',
+						name: 'Content type',
+						component: 'content-type-input',
+					},
+				],
 			},
 		];
 	}
