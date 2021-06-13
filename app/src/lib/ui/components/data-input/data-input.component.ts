@@ -76,8 +76,8 @@ export class DataInputComponent implements OnInit, OnDestroy, ControlValueAccess
 		this.dynamicInputService.fetchData(this.endpoint, { name: searchString })
 			.pipe(
 				first(),
-				map((role) => {
-					return role.map((item) => ({
+				map((item) => {
+					return item.map((item) => ({
 						value: path(this.itemValue)(item),
 						label: path(this.itemLabel)(item)
 					}));

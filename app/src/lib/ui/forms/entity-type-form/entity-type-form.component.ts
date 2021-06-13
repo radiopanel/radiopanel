@@ -2,16 +2,17 @@ import { Component, Input, Output, EventEmitter, OnInit, OnDestroy, OnChanges } 
 import { pathOr } from 'ramda';
 import { MatDialog } from '@angular/material/dialog';
 import { FormBuilder, Validators, FormArray, FormGroup } from '@angular/forms';
+import { ContentFieldSelectorModalComponent } from '../../modals';
 import { first, takeUntil } from 'rxjs/operators';
+import * as uuid from 'uuid';
 import { Subject } from 'rxjs';
 import propOr from 'ramda/es/propOr';
-import * as uuid from 'uuid';
 import camelCase from 'camelcase';
 import { DragulaService } from 'ng2-dragula';
-import { ContentFieldSelectorModalComponent } from '~lib/ui/modals';
+import slugify from 'slugify';
 
 @Component({
-	selector: 'app-entity-type-form-forms',
+	selector: 'app-entity-type-form',
 	templateUrl: 'entity-type-form.component.html',
 })
 export class EntityTypeFormComponent implements OnInit, OnChanges, OnDestroy {
@@ -34,13 +35,18 @@ export class EntityTypeFormComponent implements OnInit, OnChanges, OnDestroy {
 	) {
 		this.form = this.formBuilder.group({
 			name: ['', Validators.required],
-			timeout: [null, Validators.required],
 			description: ['', Validators.required],
 			icon: ['', Validators.required],
 			slug: ['', Validators.required],
-			workflow: ['', Validators.required],
 			fields: this.formBuilder.array([])
 		});
+
+		this.form.get('name').valueChanges
+			.pipe(
+				takeUntil(this.componentDestroyed$)
+			).subscribe((value) => this.form.patchValue({
+				slug: slugify(value).toLowerCase()
+			}));
 	}
 
 	public ngOnInit(): void {

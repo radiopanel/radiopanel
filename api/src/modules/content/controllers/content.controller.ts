@@ -39,13 +39,14 @@ export class ContentController {
 	public async one(
 		@Param('contentTypeUuid') contentTypeUuid: string,
 		@Param('entryUuid') entryUuid: string,
+		@Query('populate') populate: string,
 		@Request() req,
 	): Promise<any | undefined> {
 		if (!await this.permissionService.hasPermission(req.user?.uuid || req.headers.authorization, [`content/${contentTypeUuid}/read`])) {
 			throw new ForbiddenException(`Missing permissions: content/${contentTypeUuid}/read`)
 		}
 
-		return this.contentService.findOne(contentTypeUuid, entryUuid);
+		return this.contentService.findOne(contentTypeUuid, entryUuid, populate === "true");
 	}
 
 	@Post()

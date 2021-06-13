@@ -12,7 +12,7 @@ import slugify from 'slugify';
 import { ContentFieldSelectorModalComponent } from '~lib/ui/modals';
 
 @Component({
-	selector: 'app-entity-type-form',
+	selector: 'app-entity-type-form-content',
 	templateUrl: 'entity-type-form.component.html',
 })
 export class EntityTypeFormComponent implements OnInit, OnChanges, OnDestroy {

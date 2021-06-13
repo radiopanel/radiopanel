@@ -19,6 +19,7 @@ import { Pipes } from './pipes';
 import { Services } from './services';
 import { Directives } from './directives';
 import { MonacoEditorModule } from 'ngx-monaco-editor';
+import { Forms } from './forms';
 
 @NgModule({
 	declarations: [
@@ -26,6 +27,7 @@ import { MonacoEditorModule } from 'ngx-monaco-editor';
 		Pipes,
 		Modals,
 		Directives,
+		Forms,
 	],
 	imports: [
 		DragDropModule,
@@ -49,6 +51,7 @@ import { MonacoEditorModule } from 'ngx-monaco-editor';
 		Pipes,
 		Modals,
 		Directives,
+		Forms,
 	],
 	entryComponents: [
 		Modals

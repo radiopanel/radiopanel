@@ -1,0 +1,25 @@
+<div class="m-repeater">
+    <div class="m-repeater__info">
+        <div class="m-repeater__label">{{ label }}</div>
+        <a href="#" (click)="addField($event)" class="a-button a-button--xs"><span class="uil uil-plus"></span> Add {{ label | singular }}</a>
+    </div>
+    <div *ngFor="let item of control['controls']; let i = index">
+        <div class="m-repeater__group">
+            <div *ngFor="let field of subfields">
+                <app-dynamic-input
+                    [label]="field.name"
+                    [config]="field.config"
+                    [component]="field.fieldType"
+                    [subfields]="field.subfields"
+                    [formControl]="item.get(field.slug)"
+                    [multiLanguage]="field.multiLanguage"
+                    [language]="language"
+                ></app-dynamic-input>
+            </div>
+            <a href="#" (click)="removeField($event, i)" class="a-button a-button--danger a-button--xs"><span class="uil uil-trash"></span> Remove field</a>
+        </div>
+    </div>
+    <div class="m-repeater__empty" *ngIf="!control['controls']?.length">
+        <p>There is no item available in this repeater.</p>
+    </div>
+</div>

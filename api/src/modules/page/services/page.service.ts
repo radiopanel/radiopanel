@@ -4,7 +4,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import * as uuid from 'uuid';
 
 import { PageType, Page } from '~entities';
-import { Paginated } from '~shared/types';
+import { PopulationService } from '~shared/services/population.service';
+import { PageTypeService } from '~shared/services/page-type.service';
 
 
 @Injectable()
@@ -13,26 +14,29 @@ export class PageService {
 	constructor(
     	@InjectRepository(Page) private pageRepository: Repository<Page>,
 		@InjectRepository(PageType) private pageTypeRepository: Repository<PageType>,
+		private pageTypeService: PageTypeService,
+		private populationService: PopulationService,
 	) { }
 
-	public async findOne(pageTypeUuid: string): Promise<any> {
-		const pageType = await this.pageTypeRepository.findOne({
-			where: [
-			  { uuid: pageTypeUuid },
-			  { slug: pageTypeUuid }
-			]
-		});
+	public async findOne(pageTypeUuid: string, populate: boolean = false): Promise<any> {
+		const pageType = await this.pageTypeService.findOne(pageTypeUuid);
 
 		if (!pageType) {
 			throw new NotFoundException()
 		}
 
-		return this.pageRepository.findOne({
+		const pageItem = await this.pageRepository.findOne({
 			where: [
 			  { pageTypeUuid: pageType.uuid },
 			  { pageTypeUuid: pageType.uuid }
 			]
 		});
+
+		if (!populate) {
+			return pageItem;
+		}
+
+		return this.populationService.populateContent(pageItem, pageType);
 	}
 
 	public async update(pageTypeUuid: string, updatedPage: Page): Promise<any> {

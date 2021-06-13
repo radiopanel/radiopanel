@@ -22,6 +22,7 @@ export class PageTypeService {
 		const query = this.pageTypeRepository.createQueryBuilder('PageType')
 			.leftJoinAndSelect('PageType.fields', 'Fields')
 			.leftJoinAndSelect('PageType.page', 'Page')
+			.leftJoinAndSelect('Fields.subfields', 'Subfields')
 			.orderBy('Fields.order', 'ASC');
 
 		return {
@@ -53,6 +54,7 @@ export class PageTypeService {
 			.where("PageType.uuid IN (:...allowedUuids)", { allowedUuids })
 			.leftJoinAndSelect('PageType.fields', 'Fields')
 			.leftJoinAndSelect('PageType.page', 'Page')
+			.leftJoinAndSelect('Fields.subfields', 'Subfields')
 			.orderBy('Fields.order', 'ASC');
 
 		return {
@@ -72,6 +74,7 @@ export class PageTypeService {
 		return this.pageTypeRepository.createQueryBuilder('Page')
 			.where(new Brackets(qb => qb.where('Page.uuid = :id', { id }).orWhere('Page.slug = :id', { id })))
 			.leftJoinAndSelect('Page.fields', 'Fields')
+			.leftJoinAndSelect('Fields.subfields', 'Subfields')
 			.orderBy('Fields.order', 'ASC')
 			.getOne();
 	}
@@ -135,6 +138,7 @@ export class PageTypeService {
 			uuid: uuid.v4(),
 			updatedAt: new Date(),
 			order: order++,
+			subfields: this.mapFieldsWithOrder(pageTypeUuid, field.subfields || [], true),
 		}));
 	}
 }

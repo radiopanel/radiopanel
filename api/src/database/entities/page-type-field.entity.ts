@@ -1,4 +1,4 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 import { PageType } from './page-type.entity';
 
@@ -24,6 +24,17 @@ export class PageTypeField {
 
 	@Column()
 	public pageTypeUuid: string;
+
+	@OneToMany(() => PageTypeField, pageTypeField => pageTypeField.parent, {
+		cascade: true,
+	})
+	public subfields: PageTypeField[];
+
+	@ManyToOne(() => PageTypeField, pageTypeField => pageTypeField.parentUuid)
+	public parent: PageTypeField;
+
+	@Column()
+	public parentUuid: string;
 
 	@Column({ type: 'jsonb', nullable: true })
 	public config: any;

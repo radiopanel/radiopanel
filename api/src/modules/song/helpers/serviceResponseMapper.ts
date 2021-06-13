@@ -68,9 +68,9 @@ export const serviceResponseMapper = (originalTitle: string, service: "deezer" |
 			artist: pathOr(path<string>([0])(originalTitle.split('-')), ['artistName'])(track),
 			album: pathOr('Unknown Album', ['collectionName'])(track),
 			graphic: {
-				large: pathOr(null, ['artworkUrl100'])(track).replace('100x100bb', '640x640bb'),
-				medium: pathOr(null, ['artworkUrl60'])(track).replace('60x60bb', '300x300bb'),
-				small: pathOr(null, ['artworkUrl30'])(track).replace('30x30bb', '64x64bb'),
+				large: pathOr(null, ['artworkUrl100'])(track)?.replace('100x100bb', '640x640bb'),
+				medium: pathOr(null, ['artworkUrl60'])(track)?.replace('60x60bb', '300x300bb'),
+				small: pathOr(null, ['artworkUrl30'])(track)?.replace('30x30bb', '64x64bb'),
 			},
 			extraInfo: {
 				albumUrl: pathOr(null, ['collectionViewUrl'])(track),
@@ -142,9 +142,9 @@ export const manualSearchMapper = (service: "deezer" | "spotify", response: any)
 			artist: path<string>(['artistName'])(track),
 			album: pathOr('Unknown Album', ['collectionName'])(track),
 			graphic: {
-				large: pathOr(null, ['artworkUrl100'])(track).replace('100x100bb', '640x640bb'),
-				medium: pathOr(null, ['artworkUrl60'])(track).replace('60x60bb', '300x300bb'),
-				small: pathOr(null, ['artworkUrl30'])(track).replace('30x30bb', '64x64bb'),
+				large: pathOr(null, ['artworkUrl100'])(track)?.replace('100x100bb', '640x640bb'),
+				medium: pathOr(null, ['artworkUrl60'])(track)?.replace('60x60bb', '300x300bb'),
+				small: pathOr(null, ['artworkUrl30'])(track)?.replace('30x30bb', '64x64bb'),
 			},
 			extraInfo: {
 				albumUrl: pathOr(null, ['collectionViewUrl'])(track),

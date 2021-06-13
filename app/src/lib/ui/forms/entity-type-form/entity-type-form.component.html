@@ -1,0 +1,57 @@
+<div class="o-page__section">
+	<div class="o-page__section-info">
+		<h3 class="o-page__section-title">
+			General info
+		</h3>
+	</div>
+	<app-text-input
+		[formControl]="form.get('name')"
+		label="Name"
+		placeholder="A clever name here"
+	></app-text-input>
+	<app-text-input
+		[formControl]="form.get('slug')"
+		label="Slug"
+		placeholder="blog-posts"
+	></app-text-input>
+	<app-text-input
+		[formControl]="form.get('description')"
+		label="Description"
+		placeholder="Some info about this"
+	></app-text-input>
+	<app-icon-input
+		[formControl]="form.get('icon')"
+		label="Icon"
+	></app-icon-input>
+</div>
+<div class="o-page__section">
+	<div class="o-page__section-info">
+		<h3 class="o-page__section-title">
+			Fields
+		</h3>
+		<button (click)="selectContentField()" class="a-button a-button--success a-button--small">Add field</button>
+	</div>
+	<div class="m-field-config" dragula="fields" [dragulaModel]="form.get('fields').value" (dragulaModelChange)="handleFieldsUpdate($event)">
+		<div *ngFor="let item of form['controls'].fields['controls']; let i = index">
+			<app-field-config
+				*ngIf="item.get('fieldType').value !== 'repeater'"
+				[open]="openFields[i]"
+				[item]="item"
+				[contentFields]="contentFields"
+				(toggleOpen)="toggleFieldExpansion(i)"
+				(remove)="removeField(i)"
+			></app-field-config>
+			<app-repeater-config
+				*ngIf="item.get('fieldType').value === 'repeater'"
+				[open]="openFields[i]"
+				[item]="item"
+				[contentFields]="contentFields"
+				(remove)="removeField(i)"
+				(toggleOpen)="toggleFieldExpansion(i)"
+				(subFieldsChange)="handleFieldsUpdate($event, i)"
+				(subfieldAdd)="pushFieldToArray($event, i)"
+				(subfieldRemove)="removeField($event, i)"
+			></app-repeater-config>
+		</div>
+	</div>
+</div>

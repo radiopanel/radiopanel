@@ -1,4 +1,4 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 import { ContentType } from './content-type.entity';
 
@@ -24,6 +24,17 @@ export class ContentTypeField {
 
 	@Column()
 	public contentTypeUuid: string;
+
+	@OneToMany(() => ContentTypeField, contentTypeField => contentTypeField.parent, {
+		cascade: true,
+	})
+	public subfields: ContentTypeField[];
+
+	@ManyToOne(() => ContentTypeField, contentTypeField => contentTypeField.parentUuid)
+	public parent: ContentTypeField;
+
+	@Column()
+	public parentUuid: string;
 
 	@Column({ type: 'jsonb', nullable: true })
 	public config: any;

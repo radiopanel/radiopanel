@@ -72,6 +72,33 @@ export class ContentTypeFieldController {
 				icon: 'pricetag-alt',
 				config: [],
 			},
+			{
+				identifier: 'repeater',
+				name: 'Repeater',
+				description: 'Repeat one or more fields in a content item',
+				icon: 'repeat',
+				config: [],
+			},
+			{
+				identifier: 'content-input',
+				name: 'Content',
+				description: 'Link content with each other',
+				icon: 'align-left',
+				config: [
+					{
+						identifier: 'contentTypeUuid',
+						name: 'Content type',
+						component: 'content-type-input',
+					},
+				],
+			},
+			{
+				identifier: 'page-input',
+				name: 'Page',
+				description: 'Link pages with each other',
+				icon: 'file',
+				config: [],
+			},
 		];
 	}
 }

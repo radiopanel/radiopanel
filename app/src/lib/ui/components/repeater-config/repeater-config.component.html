@@ -1,0 +1,56 @@
+<div [class]="{
+    'm-field-repeater': true,
+    'm-field-repeater--open': open
+}">
+    <div class="m-field-repeater__action-bar">
+        <div>
+            <span class="m-field__handle-bar uil uil-ellipsis-v"></span>
+            <h4>
+                {{ item.get('name').value }}
+                <small class="a-badge">{{ findFieldConfiguration(item.get('fieldType')?.value)?.name }}</small>
+            </h4>
+        </div>
+        <div>
+            <a href="#" class="a-button a-button--small a-button--transparant" (click)="toggleFieldExpansion($event)">
+                <span [class]="{
+                    'uil': true,
+                    'uil-angle-down': !open,
+                    'uil-angle-up': open
+                }"></span>
+            </a>
+            <a href="#" class="a-button a-button--small a-button--transparant a-button--danger" (click)="removeSelf($event)">
+                <span class="uil uil-trash"></span>
+            </a>
+        </div>
+    </div>
+    <div class="m-field-repeater__config">
+        <div class="u-row">
+            <div class="u-col-6">
+                <app-text-input
+                    label="Name"
+                    [formControl]="item.get('name')"
+                ></app-text-input>
+            </div>
+            <div class="u-col-6">
+                <app-text-input
+                    label="Slug"
+                    [formControl]="item.get('slug')"
+                ></app-text-input>
+            </div>
+        </div>
+        <div class="m-field-repeater__sub-fields">
+            <div dragula="subfields" [dragulaModel]="item.get('subfields').value" (dragulaModelChange)="handleDrop($event)">
+                <div *ngFor="let subItem of item['controls'].subfields['controls']; let i = index">
+                    <app-field-config
+                        [open]="openFields[i]"
+                        [item]="subItem"
+                        [contentFields]="contentFields"
+                        (toggleOpen)="toggleSubfieldExpansion(i)"
+                        (remove)="removeSubfield(i)"
+                    ></app-field-config>
+                </div>
+            </div>
+            <button (click)="selectContentField()" class="a-button a-button--success a-button--xs"><span class="uil uil-plus"></span> Add subfield</button>
+        </div>
+    </div>
+</div>

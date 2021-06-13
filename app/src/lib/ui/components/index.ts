@@ -33,6 +33,8 @@ import { PermissionSelectorComponent } from './permission-selector/permission-se
 import { PermissionOverwriterComponent } from './permission-overwriter/permission-overwriter.component';
 import { PermissionInputComponent } from './permission-input/permission-input.component';
 import { IconInputComponent } from './icon-input/icon-input.component';
+import { RepeaterConfigComponent } from './repeater-config/repeater-config.component';
+import { RepeaterComponent } from './repeater/repeater.component';
 
 export const Components = [
 	HeaderComponent,
@@ -69,5 +71,7 @@ export const Components = [
 	PermissionSelectorComponent,
 	PermissionOverwriterComponent,
 	PermissionInputComponent,
-	IconInputComponent
+	IconInputComponent,
+	RepeaterConfigComponent,
+	RepeaterComponent,
 ];
