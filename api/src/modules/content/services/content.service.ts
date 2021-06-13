@@ -3,11 +3,10 @@ import { Brackets, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import * as uuid from 'uuid';
 
-import { ContentType, Content, ContentTypeField } from '~entities';
+import { ContentType, Content } from '~entities';
 import { Paginated } from '~shared/types';
-import { lensPath, set, path } from 'ramda';
-import { ContentTypeService } from '~shared/services/content-type.service';
 import { PopulationService } from '~shared/services/population.service';
+import { ContentTypeService } from '~shared/services/content-type.service';
 
 
 @Injectable()
@@ -20,7 +19,7 @@ export class ContentService {
 		private populationService: PopulationService,
 	) { }
 
-	public async findByContentType(contentTypeUuid: string, page = 1, pagesize = 20, search?: string): Promise<Paginated<Content>> {
+	public async findByContentType(contentTypeUuid: string, page = 1, pagesize = 20, filters: Record<string, string>, sortField?: string, sortDirection?: 'ASC' | 'DESC'): Promise<Paginated<Content>> {
 		const contentType = await this.contentTypeRepository.findOne({
 			where: [
 			  { uuid: contentTypeUuid },
@@ -33,13 +32,21 @@ export class ContentService {
 		}
 
 		const query = this.contentRepository.createQueryBuilder('Content')
-			.orderBy('CAST(Content.name as bytea)')
-			.where('Content.contentTypeUuid = :contentTypeUuid', { contentTypeUuid: contentType.uuid });
+			.where('Content.contentTypeUuid = :contentTypeUuid', { contentTypeUuid: contentType.uuid })
 
-
-		if (search) {
-			query.andWhere('LOWER(Content.name) LIKE :search', { search: `%${search.toLowerCase()}%` });
+		if (sortField) {
+			query.orderBy(`"Content".fields->>'${sortField.replace(/[^a-zA-Z0-9]+/g, "-")}'`, sortDirection)
 		}
+
+		Object.keys(filters).forEach((filterKey) => {
+			if (!filterKey.startsWith('fields.')) {
+				return;
+			}
+			const filterField = filterKey.replace('fields.', '').replace(/[^a-zA-Z0-9]+/g, "-");
+			const filterValue = filters[filterKey];
+
+			query.andWhere(`LOWER("Content".fields->>'${filterField}') LIKE LOWER(:${filterField})`, { [filterField]: `%${filterValue}%` })
+		});
 
 		return {
 			_embedded: await query

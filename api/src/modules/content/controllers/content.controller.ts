@@ -24,7 +24,8 @@ export class ContentController {
 	public async findContentTypeEntries(
 		@Query('page') page = 1,
 		@Query('pagesize') pagesize = 20,
-		@Query('search') search: string,
+		@Query('sort') sort: string,
+		@Query() allParams: Record<string, string>,
 		@Param('contentTypeUuid') contentTypeUuid: string,
 		@Request() req,
 	): Promise<Paginated<any>> {
@@ -32,7 +33,7 @@ export class ContentController {
 			throw new ForbiddenException(`Missing permissions: content/${contentTypeUuid}/read`)
 		}
 
-		return this.contentService.findByContentType(contentTypeUuid, page, pagesize, search);
+		return this.contentService.findByContentType(contentTypeUuid, page, pagesize, allParams, sort?.replace('-', ''), sort?.startsWith('-') ? 'DESC' : 'ASC');
 	}
 
 	@Get('/:entryUuid')
