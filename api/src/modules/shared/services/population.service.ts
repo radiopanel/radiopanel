@@ -65,17 +65,20 @@ export class PopulationService {
 			return contentItem;
 		}
 
+		const contentItemUuids = populationMap
+			.filter(x => x.type === 'content')
+			.map(x => x.contentUuid);
+		const pageItemUuids = populationMap
+			.filter(x => x.type === 'page')
+			.map(x => x.contentUuid);
+
 		const [contentItems, pageItems] = await Promise.all([
-			this.contentRepository.createQueryBuilder('Content')
-				.where("Content.uuid IN (:...uuids)", { uuids: [...new Set(populationMap
-					.filter(x => x.type === 'content')
-					.map(x => x.contentUuid))]})
-				.getMany(),
-			this.pageRepository.createQueryBuilder('Page')
-				.where("Page.pageTypeUuid IN (:...uuids)", { uuids: [...new Set(populationMap
-					.filter(x => x.type === 'page')
-					.map(x => x.contentUuid))]})
-				.getMany()
+			contentItemUuids.length ? this.contentRepository.createQueryBuilder('Content')
+				.where("Content.uuid IN (:...uuids)", { uuids: [...new Set(contentItemUuids)]})
+				.getMany() : Promise.resolve([]),
+			pageItemUuids.length ? this.pageRepository.createQueryBuilder('Page')
+				.where("Page.pageTypeUuid IN (:...uuids)", { uuids: [...new Set(pageItemUuids)]})
+				.getMany() : Promise.resolve([])
 		])
 			
 		populationMap.forEach((population) => {
