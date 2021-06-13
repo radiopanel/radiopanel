@@ -92,6 +92,13 @@ export class ContentTypeFieldController {
 					},
 				],
 			},
+			{
+				identifier: 'page-input',
+				name: 'Page',
+				description: 'Link pages with each other',
+				icon: 'file',
+				config: [],
+			},
 		];
 	}
 }

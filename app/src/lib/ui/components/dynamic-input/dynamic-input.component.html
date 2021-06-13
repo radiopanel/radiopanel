@@ -99,6 +99,16 @@
         ></app-data-input>
     </ng-container>
 
+    <ng-container *ngSwitchCase="'page-input'">
+        <app-data-input
+            [formControl]="control"
+            [label]="label"
+            [endpoint]="'page-types/overview'"
+            [itemLabel]="['name']"
+            [itemValue]="['uuid']"
+        ></app-data-input>
+    </ng-container>
+
     <ng-container *ngSwitchCase="'content-type-input'">
         <app-data-input
             [formControl]="control"

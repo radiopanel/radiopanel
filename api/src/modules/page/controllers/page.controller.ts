@@ -1,4 +1,4 @@
-import { Controller, Get, Body, Put, Param, Headers, UseGuards, UnauthorizedException, Request, ForbiddenException } from '@nestjs/common';
+import { Controller, Get, Body, Put, Param, Headers, UseGuards, UnauthorizedException, Request, ForbiddenException, Query } from '@nestjs/common';
 import { ApiBasicAuth, ApiTags } from '@nestjs/swagger';
 
 import { AuthGuard } from '~shared/guards/auth.guard';
@@ -22,13 +22,14 @@ export class PageController {
 	@Get()
 	public async one(
 		@Param('pageTypeUuid') pageTypeUuid: string,
+		@Query('populate') populate: string,
 		@Request() req,
 	): Promise<any | undefined> {
 		if (!await this.permissionService.hasPermission(req.user?.uuid || req.headers.authorization, [`pages/${pageTypeUuid}/update`])) {
 			throw new ForbiddenException(`Missing permissions: content/${pageTypeUuid}/read`)
 		}
 
-		return this.pageService.findOne(pageTypeUuid);
+		return this.pageService.findOne(pageTypeUuid, populate === "true");
 	}
 
 	@Put()

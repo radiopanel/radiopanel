@@ -46,6 +46,7 @@ import { BanService } from './services/ban.service';
 import { AuthMethodService } from './services/auth-method.service';
 import { ContentTypeService } from './services/content-type.service';
 import { PageTypeService } from './services/page-type.service';
+import { PopulationService } from './services/population.service';
 
 @Module({
 	imports: [
@@ -92,6 +93,7 @@ import { PageTypeService } from './services/page-type.service';
 		AuthMethodService,
 		ContentTypeService,
 		PageTypeService,
+		PopulationService,
 
 		// Interceptors
 		{
@@ -120,6 +122,7 @@ import { PageTypeService } from './services/page-type.service';
 		AuthMethodService,
 		ContentTypeService,
 		PageTypeService,
+		PopulationService,
 
 		// Modules
 		ConfigModule,

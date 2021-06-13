@@ -7,6 +7,7 @@ import { ContentType, Content, ContentTypeField } from '~entities';
 import { Paginated } from '~shared/types';
 import { lensPath, set, path } from 'ramda';
 import { ContentTypeService } from '~shared/services/content-type.service';
+import { PopulationService } from '~shared/services/population.service';
 
 
 @Injectable()
@@ -16,6 +17,7 @@ export class ContentService {
     	@InjectRepository(Content) private contentRepository: Repository<Content>,
 		@InjectRepository(ContentType) private contentTypeRepository: Repository<ContentType>,
 		private contentTypeService: ContentTypeService,
+		private populationService: PopulationService,
 	) { }
 
 	public async findByContentType(contentTypeUuid: string, page = 1, pagesize = 20, search?: string): Promise<Paginated<Content>> {
@@ -51,54 +53,6 @@ export class ContentService {
 			},
 		};
 	}
-	
-	private createPopulateMap(fields: ContentTypeField[], contentItem: Content, parentFields: string[] = []): { fieldPath: string; contentUuid: string }[] {
-		return fields.reduce((acc, field: ContentTypeField) => {
-			const fieldPath = [...parentFields, field.slug]
-
-			if (field.fieldType === 'content-input' && path(['fields', ...fieldPath])(contentItem)) {
-				return [
-					...acc,
-					{
-						contentUuid: path(['fields', ...fieldPath])(contentItem),
-						fieldPath,
-					}
-				]
-			}
-
-			if (field.fieldType === 'repeater') {
-				return [
-					...acc,
-					...path<ContentTypeField[]>(['fields', ...fieldPath])(contentItem).reduce((subFieldAcc, subfield: ContentTypeField, i: number) => ([
-						...subFieldAcc,
-						...this.createPopulateMap(field.subfields, contentItem, [...fieldPath, i.toString()])
-					]), [])
-				]
-			}
-
-			return acc;
-		}, [])
-	}
-
-	private async populateContent(contentItem: Content, contentType: ContentType): Promise<Content> {
-		let content = contentItem;
-		const populationMap = this.createPopulateMap(contentType.fields, contentItem);
-
-		if (populationMap.length === 0) {
-			return contentItem;
-		}
-
-		const contentItems = await this.contentRepository.createQueryBuilder('Content')
-			.where("Content.uuid IN (:...uuids)", { uuids: [...new Set(populationMap.map(x => x.contentUuid))]})
-			.getMany()
-			
-		populationMap.forEach((population) => {
-			const contentItem = contentItems.find(x => x.uuid === population.contentUuid);
-			content = set(lensPath(['fields', ...population.fieldPath]), contentItem)(content)
-		})
-		
-		return content;
-	}
 
 	public async findOne(contentTypeUuid: string, contentUuid: string, populate: boolean = false): Promise<any> {
 		const contentType = await this.contentTypeService.findOne(contentTypeUuid);
@@ -126,7 +80,7 @@ export class ContentService {
 			return contentItem;
 		}
 
-		return this.populateContent(contentItem, contentType);
+		return this.populationService.populateContent(contentItem, contentType);
 	}
 
 	public async create(contentTypeUuid: string, content: Content): Promise<Content> {
