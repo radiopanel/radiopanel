@@ -1,5 +1,5 @@
 import { Injectable, ForbiddenException } from "@nestjs/common";
-import { path, set, lensPath } from "ramda";
+import { path, set, lensPath, pathOr } from "ramda";
 
 import { Content, ContentType, ContentTypeField, Page, PageType, PageTypeField } from "~entities";
 
@@ -18,7 +18,7 @@ export class PopulationService {
 		contentItem: Content | Page,
 		parentFields: string[] = []
 	): { fieldPath: string; contentUuid: string, type: 'content' | 'page' }[] {
-		return (fields as any[]).reduce((acc, field: ContentTypeField | PageTypeField) => {
+		return (fields as any[] || []).reduce((acc, field: ContentTypeField | PageTypeField) => {
 			const fieldPath = [...parentFields, field.slug]
 
 			if (field.fieldType === 'content-input' && path(['fields', ...fieldPath])(contentItem)) {
@@ -46,7 +46,7 @@ export class PopulationService {
 			if (field.fieldType === 'repeater') {
 				return [
 					...acc,
-					...path<any[]>(['fields', ...fieldPath])(contentItem).reduce((subFieldAcc, _, i: number) => ([
+					...(pathOr<any[]>([], ['fields', ...fieldPath])(contentItem) || []).reduce((subFieldAcc, _, i: number) => ([
 						...subFieldAcc,
 						...this.createPopulateMap(field.subfields, contentItem, [...fieldPath, i.toString()])
 					]), [])
