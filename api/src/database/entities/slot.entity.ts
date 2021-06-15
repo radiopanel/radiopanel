@@ -34,6 +34,9 @@ export class Slot {
 	@Column()
 	public recurring: boolean;
 
+	@Column({ type: 'jsonb', nullable: true })
+	public customData: any;
+
 	@Column()
 	public updatedAt: Date;
 

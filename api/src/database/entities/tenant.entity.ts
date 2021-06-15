@@ -29,6 +29,9 @@ export class Tenant {
 	@Column({ type: 'jsonb', nullable: true })
 	public profileFields: any;
 
+	@Column({ type: 'jsonb', nullable: true })
+	public slotFields: any;
+
 	@Column()
 	public updatedAt: Date;
 

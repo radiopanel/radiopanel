@@ -1,0 +1,41 @@
+<app-header description="My Station" [emptyTitle]="'Editing custom slot fields'"></app-header>
+<div class="o-page" *ngIf="form">
+    <form [formGroup]="form">
+        <div class="o-page__section">
+            <div class="o-page__section-info">
+                <h3 class="o-page__section-title">
+                    Fields
+                </h3>
+                <button (click)="selectContentField()" class="a-button a-button--success a-button--small">Add field</button>
+            </div>
+            <div class="m-field-config" [dragula]="fieldsIdentifier" [dragulaModel]="form.value" (dragulaModelChange)="handleFieldsUpdate($event)">
+                <div *ngFor="let item of form['controls']; let i = index">
+                    <app-field-config
+                        *ngIf="item.get('fieldType').value !== 'repeater'"
+                        [open]="openFields[i]"
+                        [item]="item"
+                        [contentFields]="contentFields"
+                        (toggleOpen)="toggleFieldExpansion(i)"
+                        (remove)="removeField(i)"
+                    ></app-field-config>
+                    <app-repeater-config
+                        *ngIf="item.get('fieldType').value === 'repeater'"
+                        [open]="openFields[i]"
+                        [item]="item"
+                        [contentFields]="contentFields"
+                        (remove)="removeField(i)"
+                        (toggleOpen)="toggleFieldExpansion(i)"
+                        (subFieldsChange)="handleFieldsUpdate($event, i)"
+                        (subfieldAdd)="pushFieldToArray($event, i)"
+                        (subfieldRemove)="removeField($event, i)"
+                    ></app-repeater-config>
+                </div>
+            </div>
+        </div>
+        <div class="o-page__section">
+            <div class="u-display--flex u-display--space-between">
+                <button type="submit" class="a-button a-button--success" (click)="submit($event)">Save</button>
+            </div>
+        </div>
+    </form>
+</div>
