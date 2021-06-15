@@ -55,6 +55,10 @@ const routes: Routes = [
 				component: Pages.ProfileFieldsPageComponent
 			},
 			{
+				path: 'slot-fields',
+				component: Pages.SlotFieldsPageComponent
+			},
+			{
 				path: 'customisation',
 				component: Pages.CustomisationPageComponent
 			},

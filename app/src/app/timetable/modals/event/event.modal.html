@@ -13,6 +13,10 @@
                 'm-tab__item': true,
                 'm-tab__item--active': activeTab === 'timing'
             }" href="#" (click)="setActiveTab($event, 'timing')">Timing</a>
+            <a [class]="{
+                'm-tab__item': true,
+                'm-tab__item--active': activeTab === 'customData'
+            }" href="#" (click)="setActiveTab($event, 'customData')">Custom Data</a>
         </div>
         <div class="m-alert m-alert--danger" *ngIf="conflictingSlots?.length !== 0">
             <h4 class="m-alert__title">The following slot conflicts have been found:</h4>
@@ -62,6 +66,18 @@
                 <p>Start: {{ form.get('start')?.value | amDateFormat:'HH:mm D MMMM' }}</p>
                 <p>End: {{ form.get('end')?.value | amDateFormat:'HH:mm D MMMM' }}</p>
             </ng-container>
+        </ng-container>
+        <ng-container *ngIf="activeTab === 'customData'">
+            <div *ngFor="let field of tenant?.slotFields; let i = index">
+                <app-dynamic-input
+                    [label]="field.name"
+                    [config]="field.config"
+                    [component]="field.fieldType"
+                    [subfields]="field.subfields"
+                    [formControl]="form.get('customData')?.get(field.slug)"
+                    [multiLanguage]="false"
+                ></app-dynamic-input>
+            </div>
         </ng-container>
     </div>
     <div class="o-modal__footer">

@@ -152,6 +152,12 @@ export const myStationLinks = (permissions: string[], features: string[]) => [
 		show: permissions.includes('settings/read')
 	},
 	{
+		icon: 'calender',
+		name: 'Custom Slot Fields',
+		link: '/tenants/slot-fields',
+		show: permissions.includes('settings/read')
+	},
+	{
 		icon: 'pen',
 		name: 'Customisation',
 		link: '/tenants/customisation',

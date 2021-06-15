@@ -18,6 +18,7 @@ export interface Tenant {
 	features: any[];
 	settings: any;
 	profileFields: any[];
+	slotFields: any[];
 	url: string;
 }
 

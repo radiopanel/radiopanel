@@ -5,8 +5,8 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { SlotTypeQuery } from '~lib/store';
-import { map, first, debounceTime } from 'rxjs/operators';
+import { SessionQuery, SlotTypeQuery } from '~lib/store';
+import { map, first, debounceTime, tap } from 'rxjs/operators';
 import { SlotService } from '../../store';
 import { Slot } from '../../store/slots/slot.store';
 import { markFormGroupTouched } from '../../helpers/form-helper';
@@ -18,6 +18,7 @@ import { propOr, pathOr } from 'ramda';
 export class EventModalComponent implements OnInit {
 	public form: FormGroup;
 	public slotTypes$: Observable<any[]>;
+	public tenant: any;
 	public conflictingSlots: Slot[];
 	public activeTab = 'general';
 
@@ -26,6 +27,7 @@ export class EventModalComponent implements OnInit {
 		private formBuilder: FormBuilder,
 		private slotService: SlotService,
 		private slotTypeQuery: SlotTypeQuery,
+		private sessionQuery: SessionQuery,
 		@Inject(MAT_DIALOG_DATA) public data: {
 			user: any;
 			permissions: string[];
@@ -53,13 +55,24 @@ export class EventModalComponent implements OnInit {
 			recurring: [false, Validators.required],
 		});
 
-		if (this.data.event) {
-			this.form.patchValue({
-				...this.data.event,
-				...this.data.event.meta.originalTimings
-			});
-			this.ensureNoConflicts();
-		}
+		this.sessionQuery.tenant$
+			.pipe(
+				first(),
+				tap((tenant) => {
+					this.form.addControl('customData', this.formBuilder.group((tenant.slotFields || []).reduce((acc, field) => ({
+						...acc,
+						[field.slug]: ['']
+					}), {})));
+
+					if (this.data.event) {
+						this.form.patchValue({
+							...this.data.event,
+							...this.data.event.meta.originalTimings
+						});
+						this.ensureNoConflicts();
+					}
+				})
+			).subscribe(tenant => this.tenant = tenant);
 
 		// TODO: add takeuntil
 		this.form.valueChanges
