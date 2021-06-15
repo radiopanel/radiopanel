@@ -34,14 +34,19 @@ export class ContentService {
 		const query = this.contentRepository.createQueryBuilder('Content')
 			.where('Content.contentTypeUuid = :contentTypeUuid', { contentTypeUuid: contentType.uuid })
 
-		if (sortField) {
-			query.orderBy(`"Content".fields->>'${sortField.replace(/[^a-zA-Z0-9]+/g, "-")}'`, sortDirection)
+		if (sortField.startsWith('fields.')) {
+			query.orderBy(`"Content".fields->>'${sortField.replace('fields.', '').replace(/[^a-zA-Z0-9]+/g, "-")}'`, sortDirection)
+		}
+
+		if (!sortField.startsWith('fields.')) {
+			query.orderBy(`Content.${sortField.replace(/[^a-zA-Z0-9]+/g, "-")}`, sortDirection)
 		}
 
 		Object.keys(filters).forEach((filterKey) => {
 			if (!filterKey.startsWith('fields.')) {
 				return;
 			}
+
 			const filterField = filterKey.replace('fields.', '').replace(/[^a-zA-Z0-9]+/g, "-");
 			const filterValue = filters[filterKey];
 

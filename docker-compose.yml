@@ -4,6 +4,8 @@ services:
         build:
             context: api
             dockerfile: Dockerfile.dev
+        extra_hosts:
+            - "host.docker.internal:host-gateway"
         container_name: radiopanel-api
         volumes:
             - ./api:/app:delegated
@@ -16,11 +18,15 @@ services:
         ports:
             - 3050:3050
             - 9229:9229
+        networks:
+            - radiopanel
 
     app:
         build:
             context: app
             dockerfile: Dockerfile.dev
+        extra_hosts:
+            - "host.docker.internal:host-gateway"
         container_name: radiopanel-app
         volumes:
             - ./app:/app:delegated
@@ -28,6 +34,8 @@ services:
             - /app/dist
         ports:
             - 3051:3051
+        networks:
+            - radiopanel
 
     postgres:
         image: "postgres:12.3-alpine"
@@ -41,6 +49,8 @@ services:
             - 5432:5432
         volumes:
             - ./data:/data/db
+        networks:
+            - radiopanel
 
     redis:
         image: redis:6.0.6-alpine
@@ -50,14 +60,13 @@ services:
         command: ["redis-server", "--appendonly", "yes"]
         volumes:
             - redis-data:/data
-
-    # cron:
-    #     image: xordiv/docker-alpine-cron
-    #     container_name: cron
-    #     volumes:
-    #         - ./crontab:/etc/cron.d/crontab
+        networks:
+            - radiopanel
 
 volumes:
     postgres-data:
     redis-data:
     elastic-data:
+
+networks:
+    radiopanel:
