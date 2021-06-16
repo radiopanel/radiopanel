@@ -81,7 +81,8 @@ Radiopanel provides a fast and easy way to manage your radio, 100% free of charg
 
 ### Installation
 
-Build your docker container with `docker-compose build`.
+1. Copy `.env.sample` to `.env` and if needed change variables.
+2. Build your docker container with `docker-compose build`.
 
 ## Usage
 
