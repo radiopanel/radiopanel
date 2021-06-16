@@ -77,7 +77,7 @@ Radiopanel provides a fast and easy way to manage your radio, 100% free of charg
 
 ### Prerequisites
 
-- (Docker)[https://www.docker.com/]
+- [Docker](https://www.docker.com/)
 
 ### Installation
 
@@ -86,7 +86,7 @@ Build your docker container with `docker-compose build`.
 ## Usage
 
 Start the application with `docker-compose up`, the postgres and redis services will be automatically started.
-You can find the application running on (http://localhost:3051)[http://localhost:3051]
+You can find the application running on [http://localhost:3051](http://localhost:3051)
 
 ## Roadmap
 
