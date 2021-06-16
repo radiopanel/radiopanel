@@ -8,13 +8,14 @@
 <div align="center">
   Radiopanel
   <br />
-  <a href="#about"><strong>Explore the screenshots »</strong></a>
+  <!-- <a href="#about"><strong>Explore the screenshots »</strong></a> -->
   <br />
   <br />
   <a href="https://github.com/radiopanel/radiopanel/issues/new?assignees=&labels=bug&template=01_BUG_REPORT.md&title=bug%3A+">Report a Bug</a>
   ·
   <a href="https://github.com/radiopanel/radiopanel/issues/new?assignees=&labels=enhancement&template=02_FEATURE_REQUEST.md&title=feat%3A+">Request a Feature</a>
-  .<a href="https://github.com/radiopanel/radiopanel/discussions">Ask a Question</a>
+  ·
+  <a href="https://github.com/radiopanel/radiopanel/discussions">Ask a Question</a>
 </div>
 
 <div align="center">
@@ -51,14 +52,9 @@
 
 ## About
 
-> **[?]**
-> Provide general information about your project here.
-> What problem does it (intend to) solve?
-> What is the purpose of your project?
-> Why did you undertake it?
-> You don't have to answer all the questions - just the ones relevant to your project.
+Radiopanel provides a fast and easy way to manage your radio, 100% free of charge.
 
-<details>
+<!-- <details>
 <summary>Screenshots</summary>
 <br>
 
@@ -69,30 +65,28 @@
 | :-------------------------------------------------------------------: | :--------------------------------------------------------------------: |
 | <img src="docs/images/screenshot.png" title="Home Page" width="100%"> | <img src="docs/images/screenshot.png" title="Login Page" width="100%"> |
 
-</details>
+</details> -->
 
 ### Built With
 
-> **[?]**
-> Please provide the technologies that are used in the project.
+- NodeJS
+- NestJS
+- Angular
 
 ## Getting Started
 
 ### Prerequisites
 
-> **[?]**
-> What are the project requirements/dependencies?
+- (Docker)[https://www.docker.com/]
 
 ### Installation
 
-> **[?]**
-> Proceed to describe how to install and get started with the project.
+Build your docker container with `docker-compose build`.
 
 ## Usage
 
-> **[?]**
-> How does one go about using it?
-> Provide various use cases and code examples here.
+Start the application with `docker-compose up`, the postgres and redis services will be automatically started.
+You can find the application running on (http://localhost:3051)[http://localhost:3051]
 
 ## Roadmap
 
@@ -104,13 +98,10 @@ See the [open issues](https://github.com/radiopanel/radiopanel/issues) for a lis
 
 ## Support
 
-> **[?]**
-> Provide additional ways to contact the project maintainer/maintainers.
-
 Reach out to the maintainer at one of the following places:
 
 - [GitHub discussions](https://github.com/radiopanel/radiopanel/discussions)
-- The email which is located [in GitHub profile](https://github.com/radiopanel)
+- [Discord](https://discord.gg/Be4QrEv)
 
 ## Project assistance
 
@@ -148,9 +139,3 @@ _For more info, please refer to the [security](docs/SECURITY.md)._
 This project is licensed under the **GNU General Public License v3**.
 
 See [LICENSE](LICENSE) for more information.
-
-## Acknowledgements
-
-> **[?]**
-> If your work was funded by any organization or institution, acknowledge their support here.
-> In addition, if your work relies on other software libraries, or was inspired by looking at other work, it is appropriate to acknowledge this intellectual debt too.
