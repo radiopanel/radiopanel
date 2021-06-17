@@ -6,6 +6,10 @@
         padding: $spacer;
         color: $white;
 
+        // &:not(:last-of-type) {
+        //     border-right: 1px solid $grey-darker;
+        // }
+
         &--active {
             margin-bottom: -1px;
             border-bottom: 2px solid var(--color-primary);

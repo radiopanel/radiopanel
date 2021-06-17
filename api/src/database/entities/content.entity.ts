@@ -40,6 +40,18 @@ export class Content {
 	public updatedByUuid: string;
 
 	@Column()
+	public published: boolean;
+
+	@Column()
+	public publishScheduledAt?: Date | null;
+
+	@Column()
+	public unPublishScheduledAt?: Date | null;
+
+	@Column()
+	public publishedAt: Date;
+
+	@Column()
 	public updatedAt: Date;
 
 	@Column()

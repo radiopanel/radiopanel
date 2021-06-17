@@ -1,12 +1,12 @@
 .a-input {
     margin-bottom: $spacer;
+    position: relative;
 
     &.a-input--has-errors {
         .a-input__field {
             border-color: $state-danger;
         }
     }
-
 
     .a-input__permission-wrapper {
         display: inline-block;
@@ -45,6 +45,13 @@
         color: $white;
         padding-bottom: $spacer-small;
         white-space: pre-wrap;
+    }
+
+    &__icon {
+        position: absolute;
+        right: $spacer;
+        bottom: 0.8rem;
+        cursor: pointer;
     }
 
     .a-input__label {

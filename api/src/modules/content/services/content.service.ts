@@ -1,5 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { Brackets, Repository } from 'typeorm';
+import { Brackets, LessThan, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import * as uuid from 'uuid';
 
@@ -7,6 +7,8 @@ import { ContentType, Content } from '~entities';
 import { Paginated } from '~shared/types';
 import { PopulationService } from '~shared/services/population.service';
 import { ContentTypeService } from '~shared/services/content-type.service';
+import moment from 'moment';
+import { Cron } from '@nestjs/schedule';
 
 
 @Injectable()
@@ -103,13 +105,17 @@ export class ContentService {
 		content.createdAt = new Date();
 		content.updatedAt = new Date();
 		content.uuid = uuid.v4();
+		content.publishedAt = content.published ? new Date() : null
 		return await this.contentRepository.save(content);
 	}
 
 	public async update(contentTypeUuid: string, entryUuid: string, content: Content): Promise<any> {
+		const { published } = await this.contentRepository.findOne(entryUuid);
+
 		content.updatedAt = new Date();
 		content.uuid = entryUuid;
 		content.updatedAt = new Date();
+		content.publishedAt = published === false && content.published === true ? new Date() : content.publishedAt
 		return this.contentRepository.update({ uuid: entryUuid }, content);
 	}
 
@@ -118,5 +124,39 @@ export class ContentService {
 			uuid: entryUuid
 		});
 		return;
+	}
+	
+	@Cron('* * * * *')
+	public async sync(): Promise<void> {
+		const contentToPublish = await this.contentRepository.find({
+			where: {
+				publishScheduledAt: LessThan(moment().endOf('minute').toDate()),
+				published: false,
+			},
+		});
+		
+		contentToPublish.forEach((content) => {
+			this.contentRepository.save({
+				...content,
+				published: true,
+				publishedAt: new Date(),
+				publishScheduledAt: null,
+			});
+		});
+
+		const contentToUnPublish = await this.contentRepository.find({
+			where: {
+				unPublishScheduledAt: LessThan(moment().endOf('minute').toDate()),
+				published: true,
+			},
+		});
+		
+		contentToUnPublish.forEach((content) => {
+			this.contentRepository.save({
+				...content,
+				published: false,
+				unPublishScheduledAt: null,
+			});
+		});
 	}
 }

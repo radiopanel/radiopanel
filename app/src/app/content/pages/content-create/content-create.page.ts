@@ -21,6 +21,7 @@ export class ContentCreatePageComponent implements OnInit, OnDestroy {
 	public form: FormGroup;
 	public contentType$: any;
 	public languages$: Observable<any[]>;
+	public activeTab = 'meta';
 
 	constructor(
 		private contentTypeQuery: ContentTypeQuery,
@@ -31,6 +32,13 @@ export class ContentCreatePageComponent implements OnInit, OnDestroy {
 		private router: Router,
 		private toastr: ToastrService,
 	) { }
+
+	public setActiveTab(e: Event, tab: string) {
+		e.preventDefault();
+
+		this.activeTab = tab;
+	}
+
 
 	public ngOnInit(): void {
 		this.contentTypeService.fetchOne(this.activatedRoute.snapshot.params.contentTypeUuid)
@@ -53,6 +61,9 @@ export class ContentCreatePageComponent implements OnInit, OnDestroy {
 					this.form = this.formBuilder.group({
 						name: ['', Validators.required],
 						slug: ['', Validators.required],
+						publishScheduledAt: [null],
+						unPublishScheduledAt: [null],
+						published: [false],
 						fields: this.formBuilder.group(fields)
 					});
 

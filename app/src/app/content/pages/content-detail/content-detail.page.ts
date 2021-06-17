@@ -21,6 +21,7 @@ export class ContentDetailPageComponent implements OnInit, OnDestroy {
 	public form: FormGroup;
 	public contentType: any;
 	public content: any;
+	public activeTab = 'meta';
 
 	constructor(
 		private formQuery: ContentTypeQuery,
@@ -34,6 +35,12 @@ export class ContentDetailPageComponent implements OnInit, OnDestroy {
 
 	public ngOnInit(): void {
 		this.fetch();
+	}
+
+	public setActiveTab(e: Event, tab: string) {
+		e.preventDefault();
+
+		this.activeTab = tab;
 	}
 
 	public fetch() {
@@ -63,6 +70,9 @@ export class ContentDetailPageComponent implements OnInit, OnDestroy {
 				this.form = this.formBuilder.group({
 					name: ['', Validators.required],
 					slug: ['', Validators.required],
+					publishScheduledAt: [null],
+					unPublishScheduledAt: [null],
+					published: [false],
 					fields: this.formBuilder.group(fields)
 				});
 
