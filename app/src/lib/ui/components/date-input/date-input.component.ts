@@ -60,10 +60,6 @@ export class DateInputComponent implements OnInit, OnDestroy, ControlValueAccess
 	}
 
 	public ngOnInit() {
-		if (this.disabled) {
-			this.control.disable();
-		}
-
 		this.control.valueChanges.pipe(
 			takeUntil(this.componentDestroyed$),
 		).subscribe((value) => {

@@ -20,10 +20,6 @@ export const webhooks = [
 		label: "Start of a slot"
 	},
 	{
-		value: 'twitch-channels/live',
-		label: "Twitch channel live"
-	},
-	{
 		value: 'podcast-entries/create',
 		label: "Podcast entry created"
 	},

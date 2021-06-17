@@ -1,15 +1,52 @@
 <app-header backLink="../" description="Content" [emptyTitle]="'New ' + (contentType$ | async)?.name | singular"></app-header>
 <div class="o-page">
-    <div class="o-page__section" *ngIf="form">
-        <app-text-input
-            label="Administration name"
-            [formControl]="form.get('name')"
-        ></app-text-input>
-        <app-text-input
-            label="Slug"
-            [formControl]="form.get('slug')"
-        ></app-text-input>
+    <div class="m-tab u-margin-bottom-xl">
+        <a [class]="{
+            'm-tab__item': true,
+            'm-tab__item--active': activeTab === 'meta'
+        }" href="#" (click)="setActiveTab($event, 'meta')">Meta</a>
+        <a [class]="{
+            'm-tab__item': true,
+            'm-tab__item--active': activeTab === 'status'
+        }" href="#" (click)="setActiveTab($event, 'status')">
+            Status
+            <div class="a-badge u-margin-left-xs">
+                <div [ngClass]="{
+                    'a-dot': true,
+                    'a-dot--success': form.get('published')?.value,
+                    'a-dot--danger': !form.get('published')?.value
+                }"></div>
+                {{ form.get('published')?.value ? 'Published' : 'Unpublished'}}
+            </div>
+        </a>
     </div>
+    <ng-container *ngIf="form">
+        <div class="o-page__section o-page__section--borderless" *ngIf="activeTab === 'meta'">
+            <app-text-input
+                label="Administration name"
+                [formControl]="form.get('name')"
+            ></app-text-input>
+            <app-text-input
+                label="Slug"
+                [formControl]="form.get('slug')"
+            ></app-text-input>
+        </div>
+        <div class="o-page__section o-page__section--borderless" *ngIf="activeTab === 'status'">
+            <app-date-input
+                [formControl]="form.get('publishScheduledAt')"
+                label="Publish time"
+                [disabled]="form?.get('published')?.value"
+            ></app-date-input>
+            <app-date-input
+                [formControl]="form.get('unPublishScheduledAt')"
+                label="Unpublish time"
+            ></app-date-input>
+            <app-boolean-input
+                [formControl]="form.get('published')"
+                label="Published"
+            ></app-boolean-input>
+        </div>
+    </ng-container>
     <div class="o-page__section">
         <div *ngFor="let field of (contentType$ | async)?.fields; let i = index">
             <app-dynamic-input

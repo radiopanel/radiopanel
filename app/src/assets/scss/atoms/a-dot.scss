@@ -1,0 +1,15 @@
+.a-dot {
+    border-radius: 50%;
+    height: 10px;
+    width: 10px;
+    background-color: $grey-medium;
+    display: inline-block;
+
+    &--success {
+        background-color: $state-success;
+    }
+
+    &--danger {
+        background-color: $state-danger;
+    }
+}
