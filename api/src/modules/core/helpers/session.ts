@@ -13,9 +13,10 @@ export const sessionMiddleware = session({
 	secret: process.env.JWT_PRIVATE,
 	resave: false,
 	saveUninitialized: false,
+	name: 'radiopanel.session.sid',
 	rolling: true, // <-- Set `rolling` to `true`
 	cookie: {
 		httpOnly: true,
-		maxAge: 7 * 24 * 60 * 60 * 1000
+		maxAge: 7 * 24 * 60 * 60 * 1000,
 	}
 })
