@@ -47,6 +47,7 @@
                 [label]="config.name"
                 [component]="config.component"
                 [formControl]="item.get('config')?.get(config.identifier)"
+                [config]="config?.config"
             ></app-dynamic-input>
         </ng-container>
     </div>

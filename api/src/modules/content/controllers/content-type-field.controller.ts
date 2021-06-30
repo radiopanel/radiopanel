@@ -22,6 +22,14 @@ export class ContentTypeFieldController {
 						name: 'Placeholder',
 						component: 'text-input',
 					},
+					{
+						identifier: 'type',
+						name: 'Type',
+						component: 'text-input',
+						config: {
+							placeholder: 'text'
+						}
+					},
 				],
 			},
 			{
