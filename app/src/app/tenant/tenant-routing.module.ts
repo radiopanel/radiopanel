@@ -47,6 +47,10 @@ const routes: Routes = [
 				component: Pages.MatchingServicePageComponent,
 			},
 			{
+				path: 'settings/email',
+				component: Pages.EmailPageComponent,
+			},
+			{
 				path: 'socials',
 				component: Pages.SocialsPageComponent
 			},
