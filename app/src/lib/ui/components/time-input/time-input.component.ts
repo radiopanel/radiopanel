@@ -37,6 +37,7 @@ export class TimeInputComponent implements OnInit, OnDestroy, ControlValueAccess
 	@Input() type = 'text';
 	@Input() disabled = false;
 	@Input() icon?: string;
+	@Input() max?: string;
 	@Input() mode: InputMode = InputMode.EDIT;
 
 	private componentDestroyed$: Subject<boolean> = new Subject<boolean>();

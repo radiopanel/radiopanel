@@ -50,6 +50,7 @@ export class TimetablePageComponent implements OnInit {
 	public slots: CalendarEvent[];
 	public permissions: string[];
 	public user: any;
+	public tenant: any;
 	public activeDayIsOpen = true;
 	private componentDestroyed$: Subject<boolean> = new Subject<boolean>();
 
@@ -76,6 +77,8 @@ export class TimetablePageComponent implements OnInit {
 			})
 			.pipe(first())
 			.subscribe();
+
+		this.sessionQuery.tenant$.pipe(first()).subscribe(tenant => this.tenant = tenant);
 	}
 
 	public ngOnInit(): void {
@@ -133,7 +136,7 @@ export class TimetablePageComponent implements OnInit {
 		}
 
 		const dialogRef = this.dialog.open(EventModalComponent, {
-			data: { event, user: this.user, permissions: this.permissions }
+			data: { event, user: this.user, permissions: this.permissions, tenant: this.tenant }
 		});
 
 		dialogRef
@@ -263,7 +266,7 @@ export class TimetablePageComponent implements OnInit {
 
 	public handleSlotCreate(event): void {
 		const dialogRef = this.dialog.open(EventModalComponent, {
-			data: { event, user: this.user, permissions: this.permissions }
+			data: { event, user: this.user, permissions: this.permissions, tenant: this.tenant }
 		});
 
 		dialogRef

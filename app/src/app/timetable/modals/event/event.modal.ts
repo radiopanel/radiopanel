@@ -1,12 +1,12 @@
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import * as moment from 'moment';
 
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SessionQuery, SlotTypeQuery } from '~lib/store';
-import { map, first, debounceTime, tap } from 'rxjs/operators';
+import { map, first, debounceTime, tap, takeUntil } from 'rxjs/operators';
 import { SlotService } from '../../store';
 import { Slot } from '../../store/slots/slot.store';
 import { markFormGroupTouched } from '../../helpers/form-helper';
@@ -15,13 +15,7 @@ import { propOr, pathOr } from 'ramda';
 @Component({
 	templateUrl: 'event.modal.html',
 })
-export class EventModalComponent implements OnInit {
-	public form: FormGroup;
-	public slotTypes$: Observable<any[]>;
-	public tenant: any;
-	public conflictingSlots: Slot[];
-	public activeTab = 'general';
-
+export class EventModalComponent implements OnInit, OnDestroy {
 	constructor(
 		public dialogRef: MatDialogRef<EventModalComponent>,
 		private formBuilder: FormBuilder,
@@ -32,8 +26,18 @@ export class EventModalComponent implements OnInit {
 			user: any;
 			permissions: string[];
 			event: any;
+			tenant: any;
 		}
 	) { }
+
+	private componentDestroyed$: Subject<boolean> = new Subject<boolean>();
+
+	public form: FormGroup;
+	public slotTypes$: Observable<any[]>;
+	public tenant: any;
+	public conflictingSlots: Slot[];
+	public activeTab = 'general';
+	public maxSlotTime: Date;
 
 	ngOnInit(): void {
 		this.slotTypes$ = this.slotTypeQuery.selectAll()
@@ -74,12 +78,26 @@ export class EventModalComponent implements OnInit {
 				})
 			).subscribe(tenant => this.tenant = tenant);
 
-		// TODO: add takeuntil
 		this.form.valueChanges
 			.pipe(
+				takeUntil(this.componentDestroyed$),
 				debounceTime(100)
 			)
-			.subscribe(() => setTimeout(() => this.ensureNoConflicts()));
+			.subscribe(() => setTimeout(() => {
+				this.ensureNoConflicts();
+			}));
+
+		// TODO: add takeuntil
+		this.form.get('start').valueChanges
+			.pipe(
+				takeUntil(this.componentDestroyed$),
+				debounceTime(100)
+			)
+			.subscribe(() => setTimeout(() => {
+				this.maxSlotTime = moment(this.form.get('start').value).add(this.data.tenant?.settings?.maximumSlotDuration || 1440, 'm').toDate();
+			}));
+
+		this.maxSlotTime = moment(this.form.get('start').value).add(this.data.tenant?.settings?.maximumSlotDuration || 1440, 'm').toDate();
 	}
 
 	private ensureNoConflicts(): void {
@@ -143,5 +161,10 @@ export class EventModalComponent implements OnInit {
 	public close(e: Event): void {
 		e.preventDefault();
 		this.dialogRef.close();
+	}
+
+	public ngOnDestroy(): void {
+		this.componentDestroyed$.next(true);
+		this.componentDestroyed$.complete();
 	}
 }
