@@ -51,7 +51,7 @@ export class InviteService {
 			subject: `You have been invited to collaborate on ${tenant.name}`,
 			context: { tenant, env: {}, invite },
 			template: 'registrationInvite',
-			tenant: tenant.uuid,
+			tenant,
 		});
 	}
 
@@ -61,7 +61,7 @@ export class InviteService {
 			subject: `You have been invited to collaborate on ${tenant.name}`,
 			context: { tenant, env: {}, invite, user },
 			template: 'tenantInvite',
-			tenant: tenant.uuid,
+			tenant,
 		});
 	}
 

@@ -9,6 +9,7 @@ import { TimetablePageComponent } from './settings/sections/timetable/timetable.
 import { RequestsPageComponent } from './settings/sections/requests/requests.page';
 import { PatreonPageComponent } from './settings/sections/patreon/patreon.page';
 import { DashboardPageComponent } from './settings/sections/dashboard/dashboard.page';
+import { EmailPageComponent } from './settings/sections/email/email.page';
 import { SlotFieldsPageComponent } from './slot-fields/slot-fields.page';
 
 export { SettingsPageComponent } from './settings/settings.page';
@@ -22,6 +23,7 @@ export { TimetablePageComponent } from './settings/sections/timetable/timetable.
 export { RequestsPageComponent } from './settings/sections/requests/requests.page';
 export { PatreonPageComponent } from './settings/sections/patreon/patreon.page';
 export { DashboardPageComponent } from './settings/sections/dashboard/dashboard.page';
+export { EmailPageComponent } from './settings/sections/email/email.page';
 export { SlotFieldsPageComponent } from './slot-fields/slot-fields.page';
 
 export const Pages = [
@@ -36,5 +38,6 @@ export const Pages = [
 	RequestsPageComponent,
 	PatreonPageComponent,
 	DashboardPageComponent,
-	SlotFieldsPageComponent
+	SlotFieldsPageComponent,
+	EmailPageComponent
 ];

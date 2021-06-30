@@ -1,0 +1,46 @@
+.o-email-preview {
+    &__header {
+        padding: 20px;
+        text-align: center;
+
+        img {
+            width: 150px;
+        }
+    }
+
+    &__box {
+        width: 800px;
+        margin: 20px auto;
+        padding: 0 20px;
+    }
+
+    &__box-top {
+        height: 50px;
+        border-radius: 20px 20px 0 0;
+    }
+
+    &__box-bottom {
+        padding: 20px;
+        border-radius: 0 0 20px 20px;
+        text-align: center;
+
+        h3, p {
+            text-align: left;
+        }
+
+        button {
+            border: none;
+            text-align: center;
+            align-self: center;
+            padding: 5px 10px;
+            border-radius: 20px;
+            margin: 0 auto;
+        }
+    }
+
+    &__footer {
+        text-align: center;
+        font-size: .8rem;
+        margin-bottom: 20px;
+    }
+}
