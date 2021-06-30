@@ -2,7 +2,7 @@
 <div [ngClass]="{'a-input--has-errors': ngControl.errors && ngControl.touched, 'a-input': true}">
     <div class="a-input__label"><span [class]="'uil uil-' + icon" *ngIf="icon"></span> {{ label }}</div>
     <ng-container *ngIf="mode === inputMode.EDIT">
-        <input [owlDateTimeTrigger]="dt" [owlDateTime]="dt" [formControl]="control" class="a-input__field" [placeholder]="placeholder">
+        <input [owlDateTimeTrigger]="dt" [max]="max" [owlDateTime]="dt" [formControl]="control" class="a-input__field" [placeholder]="placeholder">
         <owl-date-time #dt [stepMinute]="5"></owl-date-time>
     </ng-container>
     <ng-container *ngIf="ngControl.invalid && ngControl.touched">

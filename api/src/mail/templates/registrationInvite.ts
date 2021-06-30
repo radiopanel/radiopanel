@@ -30,7 +30,7 @@ export const registrationInvite = `
           <mj-text color="{{ config.emailTextColor }}" font-size="16px">
             If you want to accept the invite, simply press the "Join now" button down below. If you think you have been invited by accident you can safely ignore this email.
           </mj-text>
-          <mj-button border-radius="50px" background-color="{{ config.emailPrimaryColor }}" align="center" color="{{ config.emailButtonTextColor }}" font-size="17px" font-weight="bold" href="{{ config.frontendBaseUrl }}/onboarding/tenant-invite/{{ invite.uuid }}" width="300px">
+          <mj-button border-radius="50px" background-color="{{ config.emailPrimaryColor }}" align="center" color="{{ config.emailButtonTextColor }}" font-size="17px" font-weight="bold" href="{{ config.frontendBaseUrl }}/onboarding/register/{{ invite.uuid }}" width="300px">
             Join {{ tenant.name }} now
           </mj-button>
         </mj-column>

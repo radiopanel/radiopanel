@@ -52,6 +52,7 @@
             ></app-time-input>
             <app-time-input
                 [formControl]="form.get('end')"
+                [max]="maxSlotTime"
                 label="Show end"
             ></app-time-input>
             <app-boolean-input
