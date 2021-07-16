@@ -73,7 +73,7 @@ export class DataInputComponent implements OnInit, OnDestroy, ControlValueAccess
 	}
 
 	public doSearch(searchString = '') {
-		this.dynamicInputService.fetchData(this.endpoint, { name: searchString })
+		this.dynamicInputService.fetchData(this.endpoint, { name: searchString, pagesize: 500 })
 			.pipe(
 				first(),
 				map((item) => {
