@@ -57,6 +57,7 @@ export class SlotService {
 			this.slotRepository.createQueryBuilder('Slot')
 				.leftJoinAndSelect('Slot.slotType', 'SlotType')
 				.leftJoinAndSelect('Slot.user', 'User')
+				.leftJoinAndSelect('User._userMeta', 'UserMeta')
 				.andWhere('Slot.start < :beforeDate', { beforeDate: Number(beforeDate) + 7200 })
 				.andWhere('Slot.start > :afterDate', { afterDate: Number(afterDate) - 7200 })
 				.andWhere('Slot.recurring = false')
@@ -64,6 +65,7 @@ export class SlotService {
 			this.slotRepository.createQueryBuilder('Slot')
 				.leftJoinAndSelect('Slot.slotType', 'SlotType')
 				.leftJoinAndSelect('Slot.user', 'User')
+				.leftJoinAndSelect('User._userMeta', 'UserMeta')
 				.andWhere('Slot.recurring = true')
 				.getMany()
 		]);

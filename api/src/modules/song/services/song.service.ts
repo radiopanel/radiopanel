@@ -240,6 +240,7 @@ export class SongService {
 			.leftJoinAndSelect('SongPlay.song', 'Song')
 			.leftJoinAndSelect('SongPlay.slot', 'Slot')
 			.leftJoinAndSelect('Slot.user', 'User')
+			.leftJoinAndSelect('User._userMeta', 'UserMeta')
 			.orderBy('SongPlay.createdAt', 'DESC');
 
 		return {

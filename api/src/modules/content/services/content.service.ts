@@ -87,6 +87,8 @@ export class ContentService {
 			.andWhere('Content.contentTypeUuid = :contentTypeUuid', { contentTypeUuid })
 			.leftJoinAndSelect('Content.createdBy', 'CreatedBy')
 			.leftJoinAndSelect('Content.updatedBy', 'UpdatedBy')
+			.leftJoinAndSelect('CreatedBy._userMeta', 'CreatedByMeta')
+			.leftJoinAndSelect('UpdatedBy._userMeta', 'UpdatedByMeta');
 
 		const contentItem = await contentItemQuery.getOne();
 
