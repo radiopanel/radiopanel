@@ -1,6 +1,6 @@
 {
   "name": "radiopanel-app",
-  "version": "0.0.286",
+  "version": "1.0.0-rc.2",
   "scripts": {
     "ng": "ng",
     "start": "ng serve --hmr --port 3051 --host 0.0.0.0",
