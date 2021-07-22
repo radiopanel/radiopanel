@@ -31,7 +31,7 @@ export class ContentService {
 				...(search && { search }),
 				page: page || 1,
 				pagesize: pagesize || 20,
-				showUnpublished: true,
+				showUnpublished: 'true',
 			}
 		})
 			.pipe(
