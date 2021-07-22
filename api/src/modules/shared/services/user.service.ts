@@ -24,7 +24,7 @@ export class UserService {
 	public async find(page = 1, pagesize = 200): Promise<Paginated<any>> {
 		const query = this.userRepository.createQueryBuilder('User')
 			.leftJoinAndSelect('User.roles', 'Roles')
-			.leftJoinAndSelect('User.userMeta', 'UserMeta')
+			.leftJoinAndSelect('User._userMeta', 'UserMeta')
 			.leftJoinAndSelect('User.authenticationMethod', 'AuthenticationMethod');
 
 		const embedded = await query
@@ -35,8 +35,8 @@ export class UserService {
 		return {
 			_embedded: embedded
 				.map((user) => ({
-					...omit(['userMeta'])(user),
-					...(user.userMeta.find((x) => x.key === 'customData') && { customData: propOr(null, 'value')(user.userMeta.find((x) => x.key === 'customData')) } )
+					...omit(['_userMeta'])(user),
+					...(user._userMeta.find((x) => x.key === 'customData') && { customData: propOr(null, 'value')(user._userMeta.find((x) => x.key === 'customData')) } )
 				}))
 				.sort((a, b) => {
 					return Math.max(...b.roles.map((r) => r.weight)) - Math.max(...a.roles.map((r) => r.weight));

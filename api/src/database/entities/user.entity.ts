@@ -70,8 +70,10 @@ export class User {
 	})
 	public roles: Role[];
 
-	@OneToMany(() => UserMeta, userMeta => userMeta.user)
-	public userMeta: UserMeta[];
+	@OneToMany(() => UserMeta, userMeta => userMeta.user, {
+		eager: true,
+	})
+	public _userMeta: UserMeta[];
 
 	@Column()
 	public createdAt: Date;

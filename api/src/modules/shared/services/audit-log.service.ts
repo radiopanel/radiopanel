@@ -15,6 +15,7 @@ export class AuditLogService {
 	public async find(page = 1, pagesize = 20): Promise<Paginated<AuditLog>> {
 		const query = this.auditLogRepository.createQueryBuilder('AuditLog')
 			.leftJoinAndSelect('AuditLog.user', 'User')
+			.leftJoinAndSelect('User._userMeta', 'UserMeta')
 			.orderBy('AuditLog.createdAt', 'DESC')
 
 		return {
