@@ -21,7 +21,7 @@ export class ContentService {
 		private populationService: PopulationService,
 	) { }
 
-	public async findByContentType(contentTypeUuid: string, page = 1, pagesize = 20, filters: Record<string, string>, sortField?: string, sortDirection?: 'ASC' | 'DESC'): Promise<Paginated<Content>> {
+	public async findByContentType(contentTypeUuid: string, page = 1, pagesize = 20, filters: Record<string, string>, showUnpublished = false, sortField?: string, sortDirection?: 'ASC' | 'DESC'): Promise<Paginated<Content>> {
 		const contentType = await this.contentTypeRepository.findOne({
 			where: [
 			  { uuid: contentTypeUuid },
@@ -42,6 +42,10 @@ export class ContentService {
 
 		if (sortField && !sortField?.startsWith('fields.')) {
 			query.orderBy(`Content.${sortField.replace(/[^a-zA-Z0-9]+/g, "-")}`, sortDirection)
+		}
+
+		if (!showUnpublished) {
+			query.andWhere('Content.published = TRUE');
 		}
 
 		Object.keys(filters).forEach((filterKey) => {
@@ -110,12 +114,12 @@ export class ContentService {
 	}
 
 	public async update(contentTypeUuid: string, entryUuid: string, content: Content): Promise<any> {
-		const { published } = await this.contentRepository.findOne(entryUuid);
+		const { published, publishedAt } = await this.contentRepository.findOne(entryUuid);
 
 		content.updatedAt = new Date();
 		content.uuid = entryUuid;
 		content.updatedAt = new Date();
-		content.publishedAt = published === false && content.published === true ? new Date() : content.publishedAt
+		content.publishedAt = published === false && content.published === true ? new Date() : publishedAt
 		return this.contentRepository.update({ uuid: entryUuid }, content);
 	}
 

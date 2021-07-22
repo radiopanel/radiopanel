@@ -25,6 +25,7 @@ export class ContentController {
 		@Query('page') page = 1,
 		@Query('pagesize') pagesize = 20,
 		@Query('sort') sort: string,
+		@Query('showUnpublished') showUnpublished: string,
 		@Query() allParams: Record<string, string>,
 		@Param('contentTypeUuid') contentTypeUuid: string,
 		@Request() req,
@@ -33,7 +34,7 @@ export class ContentController {
 			throw new ForbiddenException(`Missing permissions: content/${contentTypeUuid}/read`)
 		}
 
-		return this.contentService.findByContentType(contentTypeUuid, page, pagesize, allParams, sort?.replace('-', ''), sort?.startsWith('-') ? 'DESC' : 'ASC');
+		return this.contentService.findByContentType(contentTypeUuid, page, pagesize, allParams, showUnpublished === 'true', sort?.replace('-', ''), sort?.startsWith('-') ? 'DESC' : 'ASC');
 	}
 
 	@Get('/:entryUuid')

@@ -30,7 +30,8 @@ export class ContentService {
 			params: {
 				...(search && { search }),
 				page: page || 1,
-				pagesize: pagesize || 20
+				pagesize: pagesize || 20,
+				showUnpublished: true,
 			}
 		})
 			.pipe(
