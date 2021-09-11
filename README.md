@@ -75,6 +75,8 @@ Radiopanel provides a fast and easy way to manage your radio, 100% free of charg
 
 ## Getting Started
 
+If you are just trying to run radiopanel, and not develop for it. You can find a guide to just get radiopanel running from prebuild images here: https://docs.radiopanel.co/self-hosting/setup
+
 ### Prerequisites
 
 - [Docker](https://www.docker.com/)
