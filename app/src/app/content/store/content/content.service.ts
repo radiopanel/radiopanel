@@ -24,11 +24,12 @@ export class ContentService {
 			);
 	}
 
-	fetch(formUuid: string, { page, pagesize }: { page?: any, pagesize?: any } = {}, search?: string) {
+	fetch(formUuid: string, { page, pagesize }: { page?: any, pagesize?: any } = {}, search?: string, sort?: string) {
 		this.contentStore.setLoading(true);
 		return this.http.get<any>(`/api/v1/content-types/${formUuid}/content`, {
 			params: {
 				...(search && { search }),
+				...(sort && { sort }),
 				page: page || 1,
 				pagesize: pagesize || 20,
 				showUnpublished: 'true',

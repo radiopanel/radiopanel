@@ -27,7 +27,7 @@
                             <ng-container *ngFor="let field of (contentType$ | async)?.fields">
                                 <td *ngIf="field.showOnOverview">
                                     <app-table-preview
-                                        [content]="content.fields[field.slug]"
+                                        [value]="content.fields[field.slug]"
                                         [fieldType]="field.fieldType"
                                     ></app-table-preview>
                                 </td>

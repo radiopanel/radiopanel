@@ -1,0 +1,35 @@
+<table class="m-table">
+    <thead>
+        <tr>
+            <th [ngStyle]='{ width: column.width }' *ngFor="let column of columns" [ngClass]="{ 'm-table__cell--sticky-left': column.sticky }" title="{{ column.description || '' }}">
+                <ng-container *ngIf="activeSorting && !column.disableSorting">
+                    <button *ngIf="column.value !== activeSorting?.key && column.sort !== activeSorting?.key" class="a-button-transparent has-icon-right m-table__sorting-button" (click)="sort(column, 'asc')">
+                        {{ column.label }} <span class="uil uil-sort"></span>
+                    </button>
+                    <button *ngIf="(column.value === activeSorting?.key || column.sort === activeSorting?.key) && activeSorting?.order === 'desc'" class="a-button-transparent has-icon-right m-table__sorting-button" (click)="sort(column, 'asc')">
+                        {{ column.label }} <span class="uil uil-angle-down"></span>
+                    </button>
+                    <button *ngIf="(column.value === activeSorting?.key || column.sort === activeSorting?.key) && activeSorting?.order === 'asc'" class="a-button-transparent has-icon-right m-table__sorting-button" (click)="sort(column, 'desc')">
+                        {{ column.label }} <span class="uil uil-angle-up"></span>
+                    </button>
+                </ng-container>
+                <ng-container *ngIf="!activeSorting || column.disableSorting">
+                    {{ column.label }}
+                </ng-container>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let row of rows; let rowIndex = index">
+            <td *ngFor="let column of columns">
+                <app-table-cell
+                    [index]="rowIndex"
+                    [item]="row"
+                    [column]="column"
+                    [component]="column?.component"
+                    [extraComponentProps]="column.extraComponentProps"
+                ></app-table-cell>
+            </td>
+        </tr>
+    </tbody>
+</table>

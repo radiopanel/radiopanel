@@ -5,6 +5,8 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ContentTypeQuery, ContentQuery, ContentService, ContentTypeService } from '../../store';
 import { FormControl } from '@angular/forms';
+import { getColumns } from './content-list.const';
+import { convertTableSortingToShorthand } from '~lib/ui/utils';
 
 @Component({
 	templateUrl: './content-list.page.html'
@@ -18,6 +20,11 @@ export class ContentListPageComponent implements OnInit, OnDestroy {
 	public contentType$: Observable<any>;
 	public pagination$: Observable<any>;
 	public search = new FormControl('');
+	public columns = getColumns();
+	public sorting = {
+		key: 'name',
+		order: 'asc',
+	};
 
 	constructor(
 		private contentService: ContentService,
@@ -40,19 +47,30 @@ export class ContentListPageComponent implements OnInit, OnDestroy {
 				debounceTime(300),
 				takeUntil(this.componentDestroyed$)
 			).subscribe((value) => {
-				this.contentService.fetch(this.activatedRoute.snapshot.params.contentTypeUuid, this.pagination, value)
-					.pipe(
-						first()
-					).subscribe();
+				this.fetchContent();
 			});
 
+		this.contentTypeService.fetchOne(this.activatedRoute.snapshot.params.contentTypeUuid)
+			.pipe(first())
+			.subscribe((contentType) => {
+				this.columns = getColumns(contentType.fields);
+			});
+		this.fetchContent();
+	}
+
+	public onOrderBy(order) {
+		this.sorting = order;
 		this.fetchContent();
 	}
 
 	public fetchContent() {
 		this.contentType$ = this.contentTypeQuery.selectEntity(this.activatedRoute.snapshot.params.contentTypeUuid);
-		this.contentTypeService.fetchOne(this.activatedRoute.snapshot.params.contentTypeUuid).pipe(first()).subscribe();
-		this.contentService.fetch(this.activatedRoute.snapshot.params.contentTypeUuid)
+		this.contentService.fetch(
+			this.activatedRoute.snapshot.params.contentTypeUuid,
+			this.pagination,
+			this.search.value,
+			convertTableSortingToShorthand(this.sorting)
+		)
 			.pipe(
 				takeUntil(this.componentDestroyed$)
 			).subscribe();
@@ -60,10 +78,7 @@ export class ContentListPageComponent implements OnInit, OnDestroy {
 
 	public onPageUpdate(pagination) {
 		this.pagination = pagination;
-		this.contentService.fetch(this.activatedRoute.snapshot.params.contentTypeUuid, pagination, this.search.value)
-			.pipe(
-				takeUntil(this.componentDestroyed$)
-			).subscribe();
+		this.fetchContent();
 	}
 
 	public ngOnDestroy(): void {

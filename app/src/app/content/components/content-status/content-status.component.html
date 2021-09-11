@@ -1,0 +1,8 @@
+<div class="a-badge">
+    <div [ngClass]="{
+        'a-dot': true,
+        'a-dot--success': value,
+        'a-dot--danger': !value
+    }"></div>
+    {{ value ? 'Published' : 'Unpublished'}}
+</div>

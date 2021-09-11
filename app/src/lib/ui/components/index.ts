@@ -35,6 +35,9 @@ import { PermissionInputComponent } from './permission-input/permission-input.co
 import { IconInputComponent } from './icon-input/icon-input.component';
 import { RepeaterConfigComponent } from './repeater-config/repeater-config.component';
 import { RepeaterComponent } from './repeater/repeater.component';
+import { TableComponent } from './table/table.component';
+import { TableCellComponent } from './table-cell/table-cell.component';
+import { ActionViewComponent } from './action-view/action-view.component';
 
 export const Components = [
 	HeaderComponent,
@@ -74,4 +77,7 @@ export const Components = [
 	IconInputComponent,
 	RepeaterConfigComponent,
 	RepeaterComponent,
+	TableComponent,
+	TableCellComponent,
+	ActionViewComponent,
 ];

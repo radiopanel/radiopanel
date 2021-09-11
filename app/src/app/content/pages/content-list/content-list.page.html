@@ -19,48 +19,12 @@
                 emptyTitle="This content type has no entries"
                 description="Start creating entries by using the button on tyope."
             >
-                <table class="m-table">
-                    <thead>
-                        <tr>
-                            <th>Administration name</th>
-                            <ng-container *ngFor="let field of (contentType$ | async)?.fields">
-                                <th *ngIf="field.showOnOverview">{{ field.name }}</th>
-                            </ng-container>
-                            <th style="width: 150px;">Status</th>
-                            <th style="width: 150px;">Last updated</th>
-                            <th style="width: 50px;"></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr *ngFor="let content of (content$ | async)">
-                            <td>{{ content.name }}</td>
-                            <ng-container *ngFor="let field of (contentType$ | async)?.fields">
-                                <td *ngIf="field.showOnOverview">
-                                    <app-table-preview
-                                        [content]="content.fields[field.slug]"
-                                        [fieldType]="field.fieldType"
-                                    ></app-table-preview>
-                                </td>
-                            </ng-container>
-                            <td>
-                                <div class="a-badge">
-                                    <div [ngClass]="{
-                                        'a-dot': true,
-                                        'a-dot--success': content?.published,
-                                        'a-dot--danger': !content?.published
-                                    }"></div>
-                                    {{ content?.published ? 'Published' : 'Unpublished'}}
-                                </div>
-                            </td>
-                            <td>{{ content.updatedAt | amTimeAgo }}</td>
-                            <td>
-                                <a [routerLink]="content.uuid" class="a-button a-button--small">
-                                    <span class="uil uil-eye"></span>
-                                </a>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+                <app-table
+                    [rows]="content$ | async"
+                    [columns]="columns"
+                    [activeSorting]="sorting"
+                    (orderBy)="onOrderBy($event)"
+                ></app-table>
                 <app-pagination
                     [currentPage]="(pagination$ | async)?.currentPage"
                     [totalValues]="(pagination$ | async)?.totalEntities"

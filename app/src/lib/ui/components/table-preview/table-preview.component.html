@@ -1,33 +1,33 @@
 <ng-container [ngSwitch]="fieldType">
     <ng-container *ngSwitchCase="'text-input'">
-        <p class="u-text-overflow u-padding-right">{{ content }}</p>
+        <p class="u-text-overflow u-padding-right">{{ value }}</p>
     </ng-container>
 
     <ng-container *ngSwitchCase="'boolean-input'">
         <p class="u-text-overflow u-padding-right">
-            <span *ngIf="content" class="uil uil-check"></span>
-            <span *ngIf="!content" class="uil uil-times"></span>
+            <span *ngIf="value" class="uil uil-check"></span>
+            <span *ngIf="!value" class="uil uil-times"></span>
         </p>
     </ng-container>
 
     <ng-container *ngSwitchCase="'textarea-input'">
-        <p class="u-text-overflow u-padding-right">{{ content }}</p>
+        <p class="u-text-overflow u-padding-right">{{ value }}</p>
     </ng-container>
 
     <ng-container *ngSwitchCase="'icon-input'">
-        <span [class]="'uil uil-' + content"></span>
+        <span [class]="'uil uil-' + value"></span>
     </ng-container>
 
     <ng-container *ngSwitchCase="'image-input'">
-        <ng-container *ngIf="isArray(content)">
-            <div class="m-image-input__preview" *ngFor="let image of content | slice:0:3">
+        <ng-container *ngIf="isArray(value)">
+            <div class="m-image-input__preview" *ngFor="let image of value | slice:0:3">
                 <img [src]="'/api/v1/resources?w=100&h=100&path=' + image" >
             </div>
             ...
         </ng-container>
-        <ng-container *ngIf="!isArray(content)">
+        <ng-container *ngIf="!isArray(value)">
             <div class="m-image-input__preview">
-                <img [src]="'/api/v1/resources?w=100&h=100&path=' + content" >
+                <img [src]="'/api/v1/resources?w=100&h=100&path=' + value" >
             </div>
         </ng-container>
     </ng-container>
