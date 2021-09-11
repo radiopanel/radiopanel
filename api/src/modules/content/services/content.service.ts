@@ -2,13 +2,13 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { Brackets, LessThan, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import * as uuid from 'uuid';
+import moment from 'moment';
+import { Cron } from '@nestjs/schedule';
 
 import { ContentType, Content } from '~entities';
 import { Paginated } from '~shared/types';
 import { PopulationService } from '~shared/services/population.service';
 import { ContentTypeService } from '~shared/services/content-type.service';
-import moment from 'moment';
-import { Cron } from '@nestjs/schedule';
 
 
 @Injectable()
@@ -59,6 +59,10 @@ export class ContentService {
 			query.andWhere(`LOWER("Content".fields->>'${filterField}') LIKE LOWER(:${filterField})`, { [filterField]: `%${filterValue}%` })
 		});
 
+		if (filters.search) {
+			query.andWhere(`LOWER(Content.name) LIKE LOWER(:search)`, { search: `%${filters.search.replace(/[^a-zA-Z0-9]+/g, "-")}%` })
+		}
+
 		return {
 			_embedded: await query
 				.skip((page - 1) * pagesize)
@@ -72,7 +76,7 @@ export class ContentService {
 		};
 	}
 
-	public async findOne(contentTypeUuid: string, contentUuid: string, populate: boolean = false): Promise<any> {
+	public async findOne(contentTypeUuid: string, contentUuid: string, populate = false): Promise<any> {
 		const contentType = await this.contentTypeService.findOne(contentTypeUuid);
 
 		if (!contentType) {

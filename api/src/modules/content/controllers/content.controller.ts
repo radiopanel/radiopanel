@@ -1,12 +1,12 @@
-import { Controller, Get, Body, Post, Put, Delete, Param, Headers, Query, UseGuards, UnauthorizedException, Request, ForbiddenException } from '@nestjs/common';
+import { Controller, Get, Body, Post, Put, Delete, Param, Query, UseGuards, Request, ForbiddenException } from '@nestjs/common';
 import { ApiBasicAuth, ApiTags } from '@nestjs/swagger';
 
 import { Paginated } from '~shared/types';
 import { AuthGuard } from '~shared/guards/auth.guard';
-import { Permissions, AuditLog } from '~shared/decorators';
+import { AuditLog } from '~shared/decorators';
+import { PermissionService } from '~shared/services/permission.service';
 
 import { ContentService } from '../services/content.service';
-import { PermissionService } from '~shared/services/permission.service';
 
 
 @Controller('/content-types/:contentTypeUuid/content')

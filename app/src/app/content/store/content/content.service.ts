@@ -25,8 +25,8 @@ export class ContentService {
 	}
 
 	fetch(formUuid: string, { page, pagesize }: { page?: any, pagesize?: any } = {}, search?: string) {
-	   this.contentStore.setLoading(true);
-	   return this.http.get<any>(`/api/v1/content-types/${formUuid}/content`, {
+		this.contentStore.setLoading(true);
+		return this.http.get<any>(`/api/v1/content-types/${formUuid}/content`, {
 			params: {
 				...(search && { search }),
 				page: page || 1,
