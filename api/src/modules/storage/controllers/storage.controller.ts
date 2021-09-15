@@ -1,16 +1,16 @@
 import { extname, join } from 'path';
+import fs from 'fs';
 
 import { Controller, Post, UseGuards, Request, BadRequestException, UseInterceptors, UploadedFile } from '@nestjs/common';
 import { ApiBasicAuth, ApiTags } from '@nestjs/swagger';
 import * as express from 'express';
 import * as uuid from 'uuid';
-import fs from 'fs';
 import { ConfigService } from '@nestjs/config';
+import { FileInterceptor } from '@nestjs/platform-express';
+import multer from 'multer';
 
 import { User } from '~shared/decorators';
 import { AuthGuard } from '~shared/guards/auth.guard';
-import { FileInterceptor } from '@nestjs/platform-express';
-import multer from 'multer';
 
 @Controller('storage')
 @ApiTags('Storage')

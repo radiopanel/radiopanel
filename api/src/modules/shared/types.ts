@@ -17,7 +17,7 @@ export function Paginate<T>(classRef: Type<T>): Type<Paginated<T>> {
 }
 
 export interface StorageItem {
-	type: 'file' | 'directory';
+	type: string;
 	name: string;
 	size: number;
 	lastModified: Date;

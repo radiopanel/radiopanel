@@ -1,7 +1,6 @@
 import { Controller, Get, UseGuards } from "@nestjs/common";
 import { ApiBasicAuth, ApiTags } from "@nestjs/swagger";
 
-import { Permissions } from "~shared/decorators";
 import { AuthGuard } from "~shared/guards/auth.guard";
 
 @Controller('/form-fields')

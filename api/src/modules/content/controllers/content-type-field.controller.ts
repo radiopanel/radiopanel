@@ -57,7 +57,13 @@ export class ContentTypeFieldController {
 				name: 'File',
 				description: 'Server files / images / ... easily',
 				icon: 'file',
-				config: [],
+				config: [
+					{
+						identifier: 'multiple',
+						name: 'Multiple',
+						component: 'boolean-input',
+					},
+				],
 			},
 			{
 				identifier: 'richtext-input',

@@ -56,6 +56,32 @@ export const permissions = (pageTypes: PageType[], contentTypes: ContentType[]) 
 				],
 			},
 			{
+				name: 'Storage',
+				icon: 'server-alt',
+				permissions: [
+					{
+						label: 'List directory',
+						value: 'storage/list',
+					},
+					{
+						label: 'Upload file',
+						value: 'storage/upload',
+					},
+					{
+						label: 'Delete file',
+						value: 'storage/delete',
+					},
+					{
+						label: 'Create directory',
+						value: 'storage/create-directory',
+					},
+					{
+						label: 'Delete directory',
+						value: 'storage/delete-directory',
+					},
+				],
+			},
+			{
 				name: 'Requests',
 				icon: 'comment-lines',
 				permissions: [
