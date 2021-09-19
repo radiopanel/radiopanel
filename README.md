@@ -22,6 +22,7 @@
 <br />
 
 [![license](https://img.shields.io/github/license/radiopanel/radiopanel.svg?style=flat-square)](LICENSE)
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fradiopanel%2Fradiopanel.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Fradiopanel%2Fradiopanel?ref=badge_shield)
 
 [![PRs welcome](https://img.shields.io/badge/PRs-welcome-ff69b4.svg?style=flat-square)](https://github.com/radiopanel/radiopanel/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22)
 [![code with hearth by radiopanel](https://img.shields.io/badge/%3C%2F%3E%20with%20%E2%99%A5%20by-radiopanel-ff1414.svg?style=flat-square)](https://github.com/radiopanel)
@@ -142,3 +143,6 @@ _For more info, please refer to the [security](docs/SECURITY.md)._
 This project is licensed under the **GNU General Public License v3**.
 
 See [LICENSE](LICENSE) for more information.
+
+
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fradiopanel%2Fradiopanel.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Fradiopanel%2Fradiopanel?ref=badge_large)
