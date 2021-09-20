@@ -72,6 +72,10 @@ export const permissions = (pageTypes: PageType[], contentTypes: ContentType[]) 
 						value: 'storage/delete',
 					},
 					{
+						label: 'Edit file',
+						value: 'storage/edit',
+					},
+					{
 						label: 'Create directory',
 						value: 'storage/create-directory',
 					},

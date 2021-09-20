@@ -53,7 +53,7 @@ export class FileInputComponent implements OnInit, OnDestroy, ControlValueAccess
 		const dialogRef = this.dialog.open(ResourceSelectorComponent, {
 			data: {
 				allowedExtensions: '',
-				multiple: false,
+				multiple: this.multiple,
 			}
 		});
 

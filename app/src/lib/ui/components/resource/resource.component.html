@@ -1,54 +1,76 @@
-<table class="m-table m-table--selectable" *ngIf="!(loading$ | async)">
-    <thead>
-        <tr>
-            <th *ngIf="multiple">
-                <input type="checkbox" (change)="toggleSelectAll($event)">
-            </th>
-            <th style="width: 50px;"></th>
-            <th>Name</th>
-            <th style="width: 150px;">Last updated</th>
-            <th class="m-table__action"></th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr (click)="goToParentFolder()">
-            <td *ngIf="multiple" style="width: 40px;"></td>
-            <td>
-                <span class="uil uil-folder"></span>
-            </td>
-            <td colspan="3">...</td>
-        </tr>
-        <ng-container *ngFor="let resource of (resources$ | async)">
-            <tr
-                (click)="resource.type === 'directory' ? goToChildFolder(resource.name) : handleResourceSelect(resource.name)"
-                [ngClass]="{
-                    'm-table__row--not-selectable': !isSelectable(resource)
-                }"
-            >
-                <td *ngIf="multiple">
-                    <input *ngIf="resource.type !== 'directory'" type="checkbox" [id]="resource.name" [checked]="isResourceSelected(resource.name)">
-                </td>
-                <td>
-                    <span *ngIf="resource.type === 'directory'" class="uil uil-folder"></span>
-                    <img
-                        *ngIf="resource.mimeType?.startsWith('image')"
-                        class="m-table__image"
-                        [appImageTooltip]="'/api/v1/resources?tenant=' + tenant + '&h=1000&f=jpg&path=' + getFullPath(resource.name)"
-                        [src]="'/api/v1/resources?tenant=' + tenant + '&h=100&w=100&f=jpg&path=' + getFullPath(resource.name)"
-                    >
-                    <span *ngIf="resource.type !== 'directory' && !resource.mimeType?.startsWith('image')" [class]="'fiv-cla fiv-icon-' + resource.extension"></span>
-                </td>
-                <td>{{ resource.name }}</td>
-                <td>{{ resource.lastModified | amTimeAgo }}</td>
-                <td class="m-table__action">
-                    <ng-container *ngIf="isActionEnabled('delete')">
-                        <a href="#" class="a-button a-button--transparant a-button--danger" (click)="removeResource($event, resource)"><span class="icon icon-trash"></span></a>
-                    </ng-container>
-                </td>
+<div *ngIf="!(loading$ | async)" class="m-resources">
+    <div class="m-resources__actions">
+        <div class="m-resources__folder">
+            /{{ folder | join:'/' }}
+        </div>
+        <div class="m-resources__button">
+            <button class="a-button a-button--outline" (click)="createFolder($event)"><i class="uil uil-folder-medical"></i> Create folder</button>
+            <input type="file" id="file-upload" class="u-hidden" name="file-upload" multiple="multiple" (change)="handleFiles($event)">
+            <label for="file-upload" class="u-margin-left-sm">
+                <button class="a-button a-button--outline"><i class="uil uil-file-upload"></i> Upload file</button>
+            </label>
+        </div>
+    </div>
+    <table class="m-table m-table--selectable">
+        <thead>
+            <tr>
+                <th *ngIf="multiple">
+                    <input type="checkbox" (change)="toggleSelectAll($event)">
+                </th>
+                <th style="width: 50px;"></th>
+                <th>Name</th>
+                <th style="width: 150px;">Last updated</th>
+                <th class="m-table__action" style="width: 150px;"></th>
             </tr>
-        </ng-container>
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            <tr (click)="goToParentFolder()">
+                <td *ngIf="multiple" style="width: 40px;"></td>
+                <td>
+                    <span class="uil uil-folder"></span>
+                </td>
+                <td colspan="3">...</td>
+            </tr>
+            <ng-container *ngFor="let resource of (resources$ | async); let i = index">
+                <tr
+                    (click)="resource.type === 'directory' ? goToChildFolder(resource.name, i) : handleResourceSelect(resource.name, i)"
+                    [ngClass]="{
+                        'm-table__row--not-selectable': !isSelectable(resource)
+                    }"
+                >
+                    <td *ngIf="multiple">
+                        <input *ngIf="resource.type !== 'directory'" type="checkbox" [id]="resource.name" [checked]="isResourceSelected(resource.name)">
+                    </td>
+                    <td>
+                        <span *ngIf="resource.type === 'directory'" class="uil uil-folder"></span>
+                        <img
+                            *ngIf="resource.mimeType?.startsWith('image')"
+                            class="m-table__image"
+                            [appImageTooltip]="'/api/v1/resources?tenant=' + tenant + '&h=1000&f=jpg&path=' + getFullPath(resource.name)"
+                            [src]="'/api/v1/resources?tenant=' + tenant + '&h=100&w=100&f=jpg&path=' + getFullPath(resource.name)"
+                        >
+                        <span *ngIf="resource.type !== 'directory' && !resource.mimeType?.startsWith('image')" [class]="'fiv-cla fiv-icon-' + resource.extension"></span>
+                    </td>
+                    <td>
+                        <form (submit)="rename($event, resource)" *ngIf="renamingIndex === i">
+                            <input type="text" class="m-resources__input" [formControl]="renamingControl">
+                        </form>
+                        <ng-container *ngIf="renamingIndex !== i">{{ resource.name }}</ng-container>
+                    </td>
+                    <td>{{ resource.lastModified | amTimeAgo }}</td>
+                    <td class="m-table__action">
+                        <ng-container *ngIf="isActionEnabled('rename')">
+                            <a href="#" class="a-button a-button--transparant" (click)="renameResource($event, resource, i)"><span class="uil uil-edit-alt"></span></a>
+                        </ng-container>
+                        <ng-container *ngIf="isActionEnabled('delete')">
+                            <a href="#" class="a-button a-button--transparant a-button--danger" (click)="removeResource($event, resource, i)"><span class="uil uil-trash"></span></a>
+                        </ng-container>
+                    </td>
+                </tr>
+            </ng-container>
+        </tbody>
+    </table>
+</div>
 <div *ngIf="(loading$ | async)">
     <div class="m-loading">
         <span class="uil uil-redo animate spin m-loading__icon"></span>

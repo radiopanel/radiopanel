@@ -1,0 +1,10 @@
+<div class="o-page">
+    <div class="o-page__section">
+        <app-resources
+            (resourceSelect)="handleSelection($event)"
+            (directoryChange)="handleDirectoryChange($event)"
+            [multiple]="false"
+            [initialDirectory]="initialDirectory"
+        ></app-resources>
+    </div>
+</div>

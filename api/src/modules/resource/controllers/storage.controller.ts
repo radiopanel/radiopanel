@@ -1,7 +1,8 @@
-import { Controller, Post, Delete, HttpCode, Headers, Query, UploadedFile, Get, Res, UseGuards } from "@nestjs/common";
+import { Controller, Post, Delete, HttpCode, Headers, Query, UploadedFile, Get, Res, UseGuards, Body, UseInterceptors } from "@nestjs/common";
 import { ApiTags } from "@nestjs/swagger";
 import { Response } from "express";
 import * as mimeTypes from 'mime-types';
+import { FileInterceptor } from "@nestjs/platform-express";
 
 import { TenantService } from "~shared/services/tenant.service";
 import { StorageLoader } from "~shared/helpers/StorageLoader";
@@ -55,10 +56,11 @@ export class StorageController {
 
 	@Post()
 	@HttpCode(204)
+	@UseInterceptors(FileInterceptor('file'))
 	@Permissions('storage/upload')
 	public async upload(
 		@Query('dir') dir = '',
-		@UploadedFile('file') file: any
+		@UploadedFile() file: any
 	): Promise<void> {
 		const tenant = await this.tenantService.findOne();
 		const StorageClient = this.storageLoader.load(tenant.settings.storageMedium || 'fs');
@@ -105,6 +107,19 @@ export class StorageController {
 		await client.init();
 
 		await client.rmdir(dir);
+		return;
+	}
+
+	@Post('/move')
+	@HttpCode(204)
+	@Permissions('storage/edit')
+	public async move(@Body() body): Promise<void> {
+		const tenant = await this.tenantService.findOne();
+		const StorageClient = this.storageLoader.load(tenant.settings.storageMedium || 'fs');
+		const client = new StorageClient(tenant.settings.storageConfig);
+		await client.init();
+
+		await client.move(body.oldPath, body.newPath);
 		return;
 	}
 }

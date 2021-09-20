@@ -40,6 +40,10 @@ export default class FtpStorage implements StorageService {
 		return this.client.rmdir(path);
 	}
 
+	public async move(oldPath: string, newPath: string): Promise<void> {
+		return this.client.rename(oldPath, newPath);
+	}
+
 	private mapStorageItems(items: IListingElement[]): StorageItem[] {
 		return items.map((item) => ({
 			type: item.type === 'd' ? 'directory' : 'file',

@@ -1,7 +1,7 @@
 import { Response } from 'express';
 import sharp from 'sharp';
 import slugify from 'slugify';
-import { Query, Res, Get, Controller, UseGuards } from '@nestjs/common';
+import { Query, Res, Get, Controller, UseGuards, BadRequestException } from '@nestjs/common';
 
 
 import { TenantService } from '~shared/services/tenant.service';
@@ -46,35 +46,39 @@ export class ResourceController {
 
 		const stream = await client.get(params.path.replace(/^\//, ''));
 
-		const resizer = sharp()
-			.resize({
-				...(params.w && { width: parseInt(params.w, 10) }),
-				...(params.h && { height: parseInt(params.h, 10) }),
-				fit: params.fit || 'cover',
+		try {
+			const resizer = sharp()
+				.resize({
+					...(params.w && { width: parseInt(params.w, 10) }),
+					...(params.h && { height: parseInt(params.h, 10) }),
+					fit: params.fit || 'cover',
+				});
+
+			if (!params.f || params.f === 'png') {
+				resizer.png();
+			} else if (params.f === 'jpg' || params.f === 'jpeg') {
+				resizer.jpeg({
+					...(params.q && { quality: parseInt(params.q, 10) }),
+				});
+			}
+
+			response.setHeader('X-Cache', 'MISS');
+
+			const resizeStream = stream.pipe(resizer);
+			const chunks = [];
+
+			resizeStream.on('data', (chunk) => {
+				response.write(chunk);
+				chunks.push(chunk);
 			});
 
-		if (!params.f || params.f === 'png') {
-			resizer.png();
-		} else if (params.f === 'jpg' || params.f === 'jpeg') {
-			resizer.jpeg({
-				...(params.q && { quality: parseInt(params.q, 10) }),
+			resizeStream.on('end', () => {
+				response.end();
+				const imageData = Buffer.concat(chunks);
+				this.imageCacheService.create(params.tenant, imageData, cachePath);
 			});
+		} catch {
+			throw new BadRequestException()
 		}
-
-		response.setHeader('X-Cache', 'MISS');
-
-		const resizeStream = stream.pipe(resizer);
-		const chunks = [];
-
-		resizeStream.on('data', (chunk) => {
-			response.write(chunk);
-			chunks.push(chunk);
-		});
-
-		resizeStream.on('end', () => {
-			response.end();
-			const imageData = Buffer.concat(chunks);
-			this.imageCacheService.create(params.tenant, imageData, cachePath);
-		});
 	}
 }

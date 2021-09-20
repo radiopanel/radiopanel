@@ -5,6 +5,7 @@ import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angu
 
 import { ResourceQuery, ResourceService, SessionQuery } from '../../../store/index';
 import { Resource } from '../../../store/resources/resources.store';
+import { FormControl } from '@angular/forms';
 
 @Component({
 	selector: 'app-resources',
@@ -12,7 +13,7 @@ import { Resource } from '../../../store/resources/resources.store';
 })
 export class ResourceComponent implements OnInit, OnDestroy {
 	@Input() public allowedExtensions: string[] = null;
-	@Input() public enabledActions: string[] = [];
+	@Input() public enabledActions: string[] = ['delete', 'rename'];
 	@Input() public multiple = false;
 	@Input() public initialDirectory: string = null;
 
@@ -25,6 +26,8 @@ export class ResourceComponent implements OnInit, OnDestroy {
 	public tenant: string;
 	public resources$;
 	public loading$: Observable<boolean>;
+	public renamingControl = new FormControl('');
+	public renamingIndex: number | null = null;
 	public resources;
 	public folder: string[] = [];
 
@@ -52,12 +55,14 @@ export class ResourceComponent implements OnInit, OnDestroy {
 	}
 
 	public selectResource(fileName: string) {
+		this.renamingIndex = null;
 		this.resourceSelect.emit(this.folder.join('/') + '/' + fileName);
 	}
 
 	public removeResource(e: Event, resource: any) {
 		e.preventDefault();
 		e.stopPropagation();
+		this.renamingIndex = null;
 
 		if (!window.confirm('Are you sure you wish to do this?')) {
 			return;
@@ -74,7 +79,21 @@ export class ResourceComponent implements OnInit, OnDestroy {
 				.subscribe();
 	}
 
+	public renameResource(e: Event, resource: any, index: number) {
+		e.preventDefault();
+		e.stopPropagation();
+
+		this.renamingControl.setValue(resource.name);
+		this.renamingIndex = index;
+		setTimeout(() => {
+			const inputElement = document.querySelector('.m-resources__input') as HTMLInputElement;
+			inputElement?.focus();
+			inputElement?.setSelectionRange(0, inputElement?.value.length);
+		});
+	}
+
 	public goToParentFolder() {
+		this.renamingIndex = null;
 		this.folder.pop();
 		this.directoryChange.emit(this.folder.join('/'));
 		this.fetchResources();
@@ -106,7 +125,13 @@ export class ResourceComponent implements OnInit, OnDestroy {
 		return !!this.enabledActions.includes(action);
 	}
 
-	public handleResourceSelect(fileName: string) {
+	public handleResourceSelect(fileName: string, index: number) {
+		if (this.renamingIndex === index) {
+			return;
+		}
+
+		this.renamingIndex = null;
+
 		if (!this.multiple) {
 			return this.resourceSelect.emit(this.folder.join('/') + '/' + fileName);
 		}
@@ -128,10 +153,23 @@ export class ResourceComponent implements OnInit, OnDestroy {
 		return this.selectedResources.includes(this.folder.join('/') + '/' + fileName);
 	}
 
-	public goToChildFolder(dir: string) {
+	public goToChildFolder(dir: string, index: number) {
+		if (this.renamingIndex === index) {
+			return;
+		}
+
+		this.renamingIndex = null;
 		this.folder.push(dir);
 		this.directoryChange.emit(this.folder.join('/'));
 		this.fetchResources();
+	}
+
+	public handleFiles(event: any): void {
+		[...event.target.files].forEach((file: File) => {
+			console.log(file);
+			this.resourceService.upload(this.folder.join('/'), file)
+				.subscribe();
+		});
 	}
 
 	private fetchResources(): void {
@@ -140,6 +178,26 @@ export class ResourceComponent implements OnInit, OnDestroy {
 				first()
 			).subscribe((resources) => {
 				this.resources = resources;
+			});
+	}
+
+	public createFolder(): void {
+		const otherNewFolders = this.resources.filter((resource) => resource.name.startsWith('New folder'));
+		this.resourceService.createDirectory(this.folder.join('/') + '/' + `New folder${otherNewFolders.length ? ` (${otherNewFolders.length})` : ''}`)
+			.pipe(
+				first()
+			).subscribe(() => this.fetchResources());
+	}
+
+	public rename(e: Event, resource): void {
+		e.preventDefault();
+
+		this.resourceService.move(this.folder.join('/') + '/' + resource.name, this.folder.join('/') + '/' + this.renamingControl.value)
+			.pipe(
+				first()
+			).subscribe(() => {
+				this.fetchResources();
+				this.renamingIndex = null;
 			});
 	}
 

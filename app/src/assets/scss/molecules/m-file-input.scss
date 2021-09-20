@@ -10,18 +10,28 @@
         display: none
     }
 
-    &__preview {
+    &__item {
         height: 47px;
-        background-color: $grey-dark;
-        width: 60px;
-        min-width: 60px;
-        margin-right: -$border-radius-small;
-        border-top-left-radius: $border-radius-small;
-        border-bottom-left-radius: $border-radius-small;
+        width: 100%;
         overflow: hidden;
         display: flex;
         align-items: center;
-        justify-content: center;
+        border-radius: $border-radius-small;
+        background-color: $grey-darker;
+
+        &-icon {
+            height: 47px;
+            width: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: $grey-dark;
+            margin-right: 10px;
+        }
+
+        > span {
+            margin-left: 10px;
+        }
 
         &:hover {
             .m-file-input__delete {
@@ -97,6 +107,11 @@
         padding: $spacer;
         border-radius: 3px;
         margin-top: $spacer-small;
+    }
+    
+    &__delete {
+        margin-left: auto;
+        margin-right: $spacer-x-small;
     }
 }
 

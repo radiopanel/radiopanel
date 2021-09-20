@@ -33,6 +33,7 @@ export interface StorageService {
 	delete(path: string): Promise<void>;
 	mkdir(path: string): Promise<void>;
 	rmdir(path: string): Promise<void>;
+	move(oldPath: string, newPath: string): Promise<void>;
 }
 
 export type StorageServiceFactory = new (config: any) => StorageService;

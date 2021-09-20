@@ -2,7 +2,8 @@
     <div class="a-input__label">{{ label }}</div>
     <ng-container *ngIf="!multiple">
         <div *ngIf="control.value">
-            <div class="m-file-input__preview">
+            <div class="m-file-input__item">
+                <div class="m-file-input__item-icon"><i class="uil uil-file"></i></div>
                 <span>
                     {{ control.value }}
                 </span>
@@ -15,7 +16,8 @@
     </ng-container>
     <ng-container *ngIf="multiple">
         <div *ngIf="control.value" dragula="images" [dragulaModel]="control.value" (dragulaModelChange)="handleDrop($event)" class="m-file-input__file-list">
-            <div class="m-file-input__preview u-margin-right-xs u-margin-bottom-xs" *ngFor="let file of control.value; let i = index">
+            <div class="m-file-input__item u-margin-right-xs u-margin-bottom-xs" *ngFor="let file of control.value; let i = index">
+                <div class="m-file-input__item-icon"><i class="uil uil-file"></i></div>
                 <span>{{ file }} </span>
                 <button class="m-file-input__delete a-button a-button--danger a-button--small" (click)="removeFile(i)">
                     <span class="uil uil-times"></span>

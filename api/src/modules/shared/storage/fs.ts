@@ -1,6 +1,5 @@
-
 import fs from 'fs/promises'
-import { createReadStream } from 'fs';
+import { createReadStream, createWriteStream } from 'fs';
 import { join } from 'path';
 
 import * as mimeTypes from 'mime-types';
@@ -22,11 +21,17 @@ export default class FsStorage implements StorageService {
 	}
 
 	public async put(path: string, input: NodeJS.ReadableStream | Buffer): Promise<void> {
-		return fs.writeFile(join(__dirname, '../../../../../', 'uploads', path), input);
+		if (input instanceof Buffer) {
+			return fs.writeFile(join(__dirname, '../../../../../', 'uploads', path), input)
+		}
+
+		const destination = createWriteStream(join(__dirname, '../../../../../', 'uploads', path));
+		input.pipe(destination);
+		return;
 	}
 
 	public async delete(path: string): Promise<void> {
-		return fs.unlink(join(__dirname, '../../../../../', 'uploads', path));
+		return fs.rm(join(__dirname, '../../../../../', 'uploads', path));
 	}
 
 	public async mkdir(path: string): Promise<void> {
@@ -34,7 +39,13 @@ export default class FsStorage implements StorageService {
 	}
 
 	public async rmdir(path: string): Promise<void> {
-		return fs.rmdir(join(__dirname, '../../../../../', 'uploads', path))
+		return fs.rm(join(__dirname, '../../../../../', 'uploads', path), {
+			recursive: true,
+		})
+	}
+
+	public async move(oldPath: string, newPath: string): Promise<void> {
+		return fs.rename(join(__dirname, '../../../../../', 'uploads', oldPath), join(__dirname, '../../../../../', 'uploads', newPath))
 	}
 
 	private async mapStorageItems(dir: string, items: string[]): Promise<StorageItem[]> {
@@ -42,13 +53,13 @@ export default class FsStorage implements StorageService {
 			const stat = await fs.stat(`${dir}/${item}`);
 
 			return {
-				type: stat.isFile ? 'file' : 'directory',
+				type: stat.isFile() ? 'file' : 'directory',
 				name: item,
 				size: stat.size,
 				lastModified: stat.mtime,
-				...(stat.isFile && {
+				...(stat.isFile() && {
 					extension: item.split('.').pop(),
-					mimeType: mimeTypes.lookup(item) as string,
+					mimeType: mimeTypes.lookup(item).toString() as string,
 				}),
 			};
 		}));
