@@ -33,7 +33,7 @@ export class StorageController {
 		const StorageClient = this.storageLoader.load(tenant.settings.storageMedium || 'fs');
 		const client = new StorageClient(tenant.settings.storageConfig);
 		await client.init();
-		const stream = await client.get(params.path.replace(/^\//, ''));
+		const stream = await client.get(params.path.replace(/^(\/uploads)/, '').replace(/^\//, ''));
 
 		stream.resume();
 		stream.on('readable', () => {
@@ -51,7 +51,7 @@ export class StorageController {
 		const client = new StorageClient(tenant.settings.storageConfig);
 		await client.init();
 
-		return await client.list(dir);
+		return await client.list(dir.replace(/^(\/uploads)/, ''));
 	}
 
 	@Post()
@@ -67,7 +67,7 @@ export class StorageController {
 		const client = new StorageClient(tenant.settings.storageConfig);
 		await client.init();
 
-		return await client.put(`${dir}/${file.originalname}`.replace(/^\//, ''), file.buffer);
+		return await client.put(`${dir}/${file.originalname}`.replace(/^(\/uploads)/, '').replace(/^\//, ''), file.buffer);
 	}
 
 	@Delete()
@@ -81,7 +81,7 @@ export class StorageController {
 		const client = new StorageClient(tenant.settings.storageConfig);
 		await client.init();
 
-		return await client.delete(dir.replace(/^\//, ''));
+		return await client.delete(dir.replace(/^(\/uploads)/, '').replace(/^\//, ''));
 	}
 
 	@Post('/directory')
@@ -93,7 +93,7 @@ export class StorageController {
 		const client = new StorageClient(tenant.settings.storageConfig);
 		await client.init();
 
-		await client.mkdir(dir);
+		await client.mkdir(dir.replace(/^(\/uploads)/, ''));
 		return;
 	}
 
@@ -106,7 +106,7 @@ export class StorageController {
 		const client = new StorageClient(tenant.settings.storageConfig);
 		await client.init();
 
-		await client.rmdir(dir);
+		await client.rmdir(dir.replace(/^(\/uploads)/, ''));
 		return;
 	}
 
@@ -119,7 +119,7 @@ export class StorageController {
 		const client = new StorageClient(tenant.settings.storageConfig);
 		await client.init();
 
-		await client.move(body.oldPath, body.newPath);
+		await client.move(body.oldPath.replace(/^(\/uploads)/, ''), body.newPath.replace(/^(\/uploads)/, ''));
 		return;
 	}
 }

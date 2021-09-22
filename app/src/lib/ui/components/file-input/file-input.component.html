@@ -3,7 +3,13 @@
     <ng-container *ngIf="!multiple">
         <div *ngIf="control.value">
             <div class="m-file-input__item">
-                <div class="m-file-input__item-icon"><i class="uil uil-file"></i></div>
+                <div class="m-file-input__item-image" *ngIf="isImage(control.value)">
+                    <img
+                        [appImageTooltip]="'/api/v1/resources?h=1000&f=jpg&path=' + control.value"
+                        [src]="'/api/v1/resources?&h=100&w=100&f=jpg&path=' + control.value"
+                    >
+                </div>
+                <div class="m-file-input__item-icon" *ngIf="!isImage(control.value)"><i class="uil uil-file"></i></div>
                 <span>
                     {{ control.value }}
                 </span>
@@ -17,7 +23,13 @@
     <ng-container *ngIf="multiple">
         <div *ngIf="control.value" dragula="images" [dragulaModel]="control.value" (dragulaModelChange)="handleDrop($event)" class="m-file-input__file-list">
             <div class="m-file-input__item u-margin-right-xs u-margin-bottom-xs" *ngFor="let file of control.value; let i = index">
-                <div class="m-file-input__item-icon"><i class="uil uil-file"></i></div>
+                <div class="m-file-input__item-image" *ngIf="isImage(file)">
+                    <img
+                        [appImageTooltip]="'/api/v1/resources?h=1000&f=jpg&path=' + file"
+                        [src]="'/api/v1/resources?&h=100&w=100&f=jpg&path=' + file"
+                    >
+                </div>
+                <div class="m-file-input__item-icon" *ngIf="!isImage(file)"><i class="uil uil-file"></i></div>
                 <span>{{ file }} </span>
                 <button class="m-file-input__delete a-button a-button--danger a-button--small" (click)="removeFile(i)">
                     <span class="uil uil-times"></span>

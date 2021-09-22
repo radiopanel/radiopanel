@@ -24,7 +24,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr (click)="goToParentFolder()">
+            <tr (click)="goToParentFolder()" *ngIf="folder.length > 1">
                 <td *ngIf="multiple" style="width: 40px;"></td>
                 <td>
                     <span class="uil uil-folder"></span>
@@ -46,8 +46,8 @@
                         <img
                             *ngIf="resource.mimeType?.startsWith('image')"
                             class="m-table__image"
-                            [appImageTooltip]="'/api/v1/resources?tenant=' + tenant + '&h=1000&f=jpg&path=' + getFullPath(resource.name)"
-                            [src]="'/api/v1/resources?tenant=' + tenant + '&h=100&w=100&f=jpg&path=' + getFullPath(resource.name)"
+                            [appImageTooltip]="'/api/v1/resources?h=1000&f=jpg&path=' + getFullPath(resource.name)"
+                            [src]="'/api/v1/resources?&h=100&w=100&f=jpg&path=' + getFullPath(resource.name)"
                         >
                         <span *ngIf="resource.type !== 'directory' && !resource.mimeType?.startsWith('image')" [class]="'fiv-cla fiv-icon-' + resource.extension"></span>
                     </td>

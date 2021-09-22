@@ -8,9 +8,6 @@ export class ImageCache {
 	@Column()
 	public slug: string;
 
-	@Column()
-	public tenantUuid: string;
-
 	@Column({ type: 'bytea', nullable: true })
 	public data: Buffer;
 

@@ -29,7 +29,7 @@ export class ResourceComponent implements OnInit, OnDestroy {
 	public renamingControl = new FormControl('');
 	public renamingIndex: number | null = null;
 	public resources;
-	public folder: string[] = [];
+	public folder: string[] = ['uploads'];
 
 	constructor(
 		private resourceService: ResourceService,
@@ -39,7 +39,7 @@ export class ResourceComponent implements OnInit, OnDestroy {
 
 	public ngOnInit(): void {
 		if (this.initialDirectory) {
-			this.folder = this.initialDirectory.split('/');
+			this.folder = ['uploads', ...this.initialDirectory.split('/')];
 		}
 
 		this.resources$ = this.resourceQuery.selectAll();
@@ -56,7 +56,7 @@ export class ResourceComponent implements OnInit, OnDestroy {
 
 	public selectResource(fileName: string) {
 		this.renamingIndex = null;
-		this.resourceSelect.emit(this.folder.join('/') + '/' + fileName);
+		this.resourceSelect.emit(`/${this.folder.join('/')}` + '/' + fileName);
 	}
 
 	public removeResource(e: Event, resource: any) {
@@ -69,12 +69,12 @@ export class ResourceComponent implements OnInit, OnDestroy {
 		}
 
 		if (resource.type === 'directory') {
-			return this.resourceService.removeDirectory((this.folder.join('/') + '/' + resource.name).replace(/^\//, ''))
+			return this.resourceService.removeDirectory((`/${this.folder.join('/')}` + '/' + resource.name).replace(/^\//, ''))
 				.pipe(first())
 				.subscribe();
 		}
 
-		this.resourceService.remove((this.folder.join('/') + '/' + resource.name).replace(/^\//, ''))
+		this.resourceService.remove((`/${this.folder.join('/')}` + '/' + resource.name).replace(/^\//, ''))
 				.pipe(first())
 				.subscribe();
 	}
@@ -95,20 +95,20 @@ export class ResourceComponent implements OnInit, OnDestroy {
 	public goToParentFolder() {
 		this.renamingIndex = null;
 		this.folder.pop();
-		this.directoryChange.emit(this.folder.join('/'));
+		this.directoryChange.emit(`/${this.folder.join('/')}`);
 		this.fetchResources();
 	}
 
 	public toggleSelectAll(e: Event) {
 		this.resources
-			.filter((resource) => resource.extension && this.allowedExtensions.includes(resource.extension.toLowerCase()))
+			.filter((resource) => resource.extension && (!this.allowedExtensions.length || this.allowedExtensions.includes(resource.extension.toLowerCase())))
 			.forEach(resource => {
 				if (!(e.target as any).checked) {
 					this.selectedResources.splice(this.selectedResources.indexOf(this.getFullPath(resource.name)));
 					return this.resourceSelect.emit(this.selectedResources);
 				}
 
-				this.selectedResources.push(this.folder.join('/') + '/' + resource.name);
+				this.selectedResources.push(`/${this.folder.join('/')}` + '/' + resource.name);
 				this.resourceSelect.emit(this.selectedResources);
 			});
 	}
@@ -133,7 +133,7 @@ export class ResourceComponent implements OnInit, OnDestroy {
 		this.renamingIndex = null;
 
 		if (!this.multiple) {
-			return this.resourceSelect.emit(this.folder.join('/') + '/' + fileName);
+			return this.resourceSelect.emit(`/${this.folder.join('/')}` + '/' + fileName);
 		}
 
 		if (this.isResourceSelected(fileName)) {
@@ -141,16 +141,16 @@ export class ResourceComponent implements OnInit, OnDestroy {
 			return this.resourceSelect.emit(this.selectedResources);
 		}
 
-		this.selectedResources.push(this.folder.join('/') + '/' + fileName);
+		this.selectedResources.push(`/${this.folder.join('/')}` + '/' + fileName);
 		this.resourceSelect.emit(this.selectedResources);
 	}
 
 	public getFullPath(fileName: string) {
-		return this.folder.join('/') + '/' + fileName;
+		return `/${this.folder.join('/')}` + '/' + fileName;
 	}
 
 	public isResourceSelected(fileName: string) {
-		return this.selectedResources.includes(this.folder.join('/') + '/' + fileName);
+		return this.selectedResources.includes(`/${this.folder.join('/')}` + '/' + fileName);
 	}
 
 	public goToChildFolder(dir: string, index: number) {
@@ -160,20 +160,20 @@ export class ResourceComponent implements OnInit, OnDestroy {
 
 		this.renamingIndex = null;
 		this.folder.push(dir);
-		this.directoryChange.emit(this.folder.join('/'));
+		this.directoryChange.emit(`/${this.folder.join('/')}`);
 		this.fetchResources();
 	}
 
 	public handleFiles(event: any): void {
 		[...event.target.files].forEach((file: File) => {
 			console.log(file);
-			this.resourceService.upload(this.folder.join('/'), file)
+			this.resourceService.upload(`/${this.folder.join('/')}`, file)
 				.subscribe();
 		});
 	}
 
 	private fetchResources(): void {
-		this.resourceService.fetch(this.folder.join('/'))
+		this.resourceService.fetch(`/${this.folder.join('/')}`)
 			.pipe(
 				first()
 			).subscribe((resources) => {
@@ -183,7 +183,7 @@ export class ResourceComponent implements OnInit, OnDestroy {
 
 	public createFolder(): void {
 		const otherNewFolders = this.resources.filter((resource) => resource.name.startsWith('New folder'));
-		this.resourceService.createDirectory(this.folder.join('/') + '/' + `New folder${otherNewFolders.length ? ` (${otherNewFolders.length})` : ''}`)
+		this.resourceService.createDirectory(`/${this.folder.join('/')}` + '/' + `New folder${otherNewFolders.length ? ` (${otherNewFolders.length})` : ''}`)
 			.pipe(
 				first()
 			).subscribe(() => this.fetchResources());
@@ -192,7 +192,7 @@ export class ResourceComponent implements OnInit, OnDestroy {
 	public rename(e: Event, resource): void {
 		e.preventDefault();
 
-		this.resourceService.move(this.folder.join('/') + '/' + resource.name, this.folder.join('/') + '/' + this.renamingControl.value)
+		this.resourceService.move(`/${this.folder.join('/')}` + '/' + resource.name, `/${this.folder.join('/')}` + '/' + this.renamingControl.value)
 			.pipe(
 				first()
 			).subscribe(() => {

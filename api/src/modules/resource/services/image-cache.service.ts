@@ -12,28 +12,25 @@ export class ImageCacheService {
 		@InjectRepository(ImageCache) private imageCacheRepository: Repository<ImageCache>
 	) { }
 
-	public findOne(tenantUuid: string, slug: string): Promise<ImageCache | undefined> {
+	public findOne(slug: string): Promise<ImageCache | undefined> {
 		return this.imageCacheRepository.findOne({
-			tenantUuid, slug,
+			slug,
 		});
 	}
 
-	public async create(tenantUuid: string, imageData: Buffer, slug: string): Promise<ImageCache> {
+	public async create(imageData: Buffer, slug: string): Promise<ImageCache> {
 		const imageCache = new ImageCache();
 		imageCache.uuid = uuid.v4();
 		imageCache.createdAt = new Date();
 		imageCache.updatedAt = new Date();
-		imageCache.tenantUuid = tenantUuid;
 		imageCache.slug = slug;
 		imageCache.data = imageData;
 
 		return await this.imageCacheRepository.save(imageCache);
 	}
 
-	public async delete(tenantUuid: string): Promise<void> {
-		await this.imageCacheRepository.delete({
-			tenantUuid,
-		});
+	public async delete(): Promise<void> {
+		await this.imageCacheRepository.delete({});
 		return;
 	}
 

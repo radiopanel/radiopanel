@@ -24,12 +24,6 @@ export class CreateImageCache1623428655108 implements MigrationInterface {
 					type: 'bytea',
 					isNullable: true,
 				}, {
-					name: 'tenantUuid',
-					type: 'varchar',
-					length: '255',
-					isPrimary: false,
-					isNullable: false,
-				}, {
 					name: 'updatedAt',
 					type: 'timestamp',
 					isPrimary: false,

@@ -1,6 +1,6 @@
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-
+import { getType } from 'mime';
 import { Component, forwardRef, Input, OnDestroy, OnInit } from '@angular/core';
 import { ControlValueAccessor, FormControl, NgControl } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
@@ -67,11 +67,16 @@ export class FileInputComponent implements OnInit, OnDestroy, ControlValueAccess
 				}
 
 				if (this.multiple) {
-					return this.control.setValue([...this.control.value, ...value]);
+					return this.control.setValue([...(this.control.value || []), ...value]);
 				}
 
 				this.control.setValue(value);
 			});
+	}
+
+	public isImage(path: string): boolean {
+		const type = getType(path);
+		return type.startsWith('image/')
 	}
 
 	private propagateChange(value: any): void {

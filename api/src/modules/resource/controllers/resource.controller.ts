@@ -1,7 +1,7 @@
 import { Response } from 'express';
 import sharp from 'sharp';
 import slugify from 'slugify';
-import { Query, Res, Get, Controller, UseGuards, BadRequestException } from '@nestjs/common';
+import { Query, Res, Get, Controller, UseGuards, BadRequestException, NotFoundException } from '@nestjs/common';
 
 
 import { TenantService } from '~shared/services/tenant.service';
@@ -23,9 +23,9 @@ export class ResourceController {
 	public async find(@Query() params: any, @Res() response: Response): Promise<any> {
 		response.setHeader('Cache-Control', 'max-age: 2419200');
 		response.setHeader('Expires', new Date(Date.now() + 2592000000).toUTCString());
-		const cachePath = `${slugify(params.path)}-h_${params.h}-w_${params.w}-q_${params.q}-f_${params.f}`;
+		const cachePath = `${slugify(params.path.replace(/^(\/uploads\.)/, ''))}-h_${params.h}-w_${params.w}-q_${params.q}-f_${params.f}`;
 
-		const cachedImage = await this.imageCacheService.findOne(params.tenant, cachePath);
+		const cachedImage = await this.imageCacheService.findOne(cachePath);
 
 		if (!params.f || params.f === 'png') {
 			response.setHeader('Content-Type', 'image/png');
@@ -44,7 +44,11 @@ export class ResourceController {
 		const client = new StorageClient(tenant.settings.storageConfig);
 		await client.init();
 
-		const stream = await client.get(params.path.replace(/^\//, ''));
+		const stream = await client.get(params.path.replace(/^(\/uploads)/, '').replace(/^\//, ''));
+
+		stream.on('error', () => {
+			response.end();
+		});
 
 		try {
 			const resizer = sharp()
@@ -67,6 +71,10 @@ export class ResourceController {
 			const resizeStream = stream.pipe(resizer);
 			const chunks = [];
 
+			resizeStream.on('error', () => {
+				response.end();
+			});
+
 			resizeStream.on('data', (chunk) => {
 				response.write(chunk);
 				chunks.push(chunk);
@@ -75,7 +83,7 @@ export class ResourceController {
 			resizeStream.on('end', () => {
 				response.end();
 				const imageData = Buffer.concat(chunks);
-				this.imageCacheService.create(params.tenant, imageData, cachePath);
+				this.imageCacheService.create(imageData, cachePath);
 			});
 		} catch {
 			throw new BadRequestException()
