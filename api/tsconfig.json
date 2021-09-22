@@ -13,6 +13,7 @@
 		"incremental": true,
 		"esModuleInterop": true,
 		"resolveJsonModule": true,
+		"skipLibCheck": true,
 		"paths": {
 			"~entities/*": ["src/database/entities/*"],
 			"~entities": ["src/database/entities"],

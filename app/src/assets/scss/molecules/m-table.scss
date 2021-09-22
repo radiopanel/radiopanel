@@ -26,14 +26,15 @@
     &.m-table--selectable {
         tbody tr {
             td {
-
                 height: 68px;
             }
+
             cursor: pointer;
         }
 
-        tbody tr:hover {
-            background-color: $grey-lighter;
+        tbody tr:hover td {
+            // opacity: 0.7;
+            background-color: $grey-dark !important;
         }
     }
 
@@ -82,7 +83,7 @@
                 }
             }
 
-            &:nth-child(odd) {
+            & {
                 td:first-child {
                     border-top-left-radius: $border-radius;
                     border-bottom-left-radius: $border-radius;
@@ -92,7 +93,9 @@
                     border-top-right-radius: $border-radius;
                     border-bottom-right-radius: $border-radius;
                 }
+            }
 
+            &:nth-child(odd) {
                 td {
                     background-color: $grey-darker;
                 }

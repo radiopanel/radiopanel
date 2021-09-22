@@ -27,6 +27,14 @@
     flex: 1;
 }
 
+label {
+    cursor: pointer;
+}
+
+label > button {
+    pointer-events: none;
+}
+
 .u-text-overflow {
     white-space: nowrap;
     overflow: hidden;

@@ -36,6 +36,10 @@ const routes: Routes = [
 		loadChildren: () => import('../install/install.module').then(m => m.InstallModule),
 	},
 	{
+		path: 'resources',
+		loadChildren: () => import('../resources/resources.module').then(m => m.ResourcesModule),
+	},
+	{
 		path: '',
 		component: Components.WrapperComponent,
 		canActivate: [AuthGuard],

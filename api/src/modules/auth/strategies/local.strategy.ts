@@ -1,9 +1,10 @@
 import { Strategy as LocalStrategy } from "passport-local";
 import { Inject, Injectable, NestMiddleware, UnauthorizedException } from "@nestjs/common";
-import { UserService } from "~shared/services/user.service";
-import { User } from "~entities";
 import passport from "passport";
 import { NextFunction, Request, Response } from "express";
+
+import { UserService } from "~shared/services/user.service";
+import { User } from "~entities";
 
 @Injectable()
 export class LocalStrategyProvider implements NestMiddleware {

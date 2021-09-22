@@ -1,8 +1,11 @@
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-
+import { getType } from 'mime';
 import { Component, forwardRef, Input, OnDestroy, OnInit } from '@angular/core';
 import { ControlValueAccessor, FormControl, NgControl } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
+
+import { ResourceSelectorComponent } from '../../modals';
 
 @Component({
 	selector: 'app-file-input',
@@ -20,24 +23,18 @@ export class FileInputComponent implements OnInit, OnDestroy, ControlValueAccess
 	@Input() placeholder = '';
 	@Input() type = 'file';
 	@Input() disabled = false;
+	@Input() multiple = false;
 
 	private componentDestroyed$: Subject<boolean> = new Subject<boolean>();
 
 	public control: FormControl = new FormControl('');
 	public updateValue = (_: any) => {};
 
-	constructor(public ngControl: NgControl) {
+	constructor(
+		public ngControl: NgControl,
+		private dialog: MatDialog,
+	) {
 		ngControl.valueAccessor = this;
-	}
-
-	private propagateChange(value: any): void {
-		if (this.updateValue) {
-			return this.updateValue(value);
-		}
-
-		if (this.control) {
-			this.control.setValue(value);
-		}
 	}
 
 	public ngOnInit() {
@@ -50,6 +47,52 @@ export class FileInputComponent implements OnInit, OnDestroy, ControlValueAccess
 		).subscribe((value) => {
 			this.propagateChange(value);
 		});
+	}
+
+	public openModal() {
+		const dialogRef = this.dialog.open(ResourceSelectorComponent, {
+			data: {
+				allowedExtensions: '',
+				multiple: this.multiple,
+			}
+		});
+
+		dialogRef.afterClosed()
+			.pipe(
+				takeUntil(this.componentDestroyed$)
+			)
+			.subscribe((value) => {
+				if (!value) {
+					return;
+				}
+
+				if (this.multiple) {
+					return this.control.setValue([...(this.control.value || []), ...value]);
+				}
+
+				this.control.setValue(value);
+			});
+	}
+
+	public isImage(path: string): boolean {
+		const type = getType(path);
+		return type.startsWith('image/')
+	}
+
+	private propagateChange(value: any): void {
+		if (this.updateValue) {
+			return this.updateValue(value);
+		}
+
+		if (this.control) {
+			this.control.setValue(value);
+		}
+	}
+
+	public removeFile(index: number) {
+		const toSplice = JSON.parse(JSON.stringify(this.control.value));
+		toSplice.splice(index, 1);
+		return this.control.setValue(toSplice);
 	}
 
 	onFileChange(event) {

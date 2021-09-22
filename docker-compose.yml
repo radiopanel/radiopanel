@@ -10,9 +10,6 @@ services:
         volumes:
             - ./api:/app:delegated
             - ./uploads:/app/uploads:delegated
-            - /app/node_modules
-            - /app/data
-            - /app/dist
         env_file:
             - .env
         ports:
@@ -30,8 +27,6 @@ services:
         container_name: radiopanel-app
         volumes:
             - ./app:/app:delegated
-            - /app/node_modules
-            - /app/dist
         ports:
             - 3051:3051
         networks:

@@ -33,6 +33,7 @@ import { RulePage } from './rule-page.entity'
 import { SlotOverwrite } from './slot-overwrite.entity'
 import { ApiKeyUsage } from './api-key-usage.entity'
 import { AuthenticationMethod } from './authentication-method.entity'
+import { ImageCache } from './image-cache.entity'
 
 export { Invite } from './invite.entity'
 export { PasswordReset } from './password-reset.entity'
@@ -69,6 +70,7 @@ export { RulePage } from './rule-page.entity'
 export { SlotOverwrite } from './slot-overwrite.entity'
 export { ApiKeyUsage } from './api-key-usage.entity'
 export { AuthenticationMethod } from './authentication-method.entity'
+export { ImageCache } from './image-cache.entity'
 
 export const Entities = [
 	Invite,
@@ -106,4 +108,5 @@ export const Entities = [
 	SlotOverwrite,
 	ApiKeyUsage,
 	AuthenticationMethod,
+	ImageCache,
 ]

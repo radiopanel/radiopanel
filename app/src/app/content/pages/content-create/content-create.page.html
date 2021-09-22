@@ -13,10 +13,10 @@
             <div class="a-badge u-margin-left-xs">
                 <div [ngClass]="{
                     'a-dot': true,
-                    'a-dot--success': form.get('published')?.value,
-                    'a-dot--danger': !form.get('published')?.value
+                    'a-dot--success': form?.get('published')?.value,
+                    'a-dot--danger': !form?.get('published')?.value
                 }"></div>
-                {{ form.get('published')?.value ? 'Published' : 'Unpublished'}}
+                {{ form?.get('published')?.value ? 'Published' : 'Unpublished'}}
             </div>
         </a>
     </div>

@@ -1,3 +1,5 @@
+import { join } from 'path';
+
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
@@ -5,6 +7,8 @@ import { ScheduleModule } from '@nestjs/schedule';
 import { RedisModule} from 'nestjs-redis';
 
 // eslint-disable-next-line import/namespace
+import { ServeStaticModule } from '@nestjs/serve-static';
+
 import * as ormConfig from './ormconfig';
 import { config } from './config';
 import { TenantModule } from './modules/tenant/tenant.module';
@@ -18,7 +22,6 @@ import { RequestModule } from './modules/request/request.module';
 import { BannerModule } from './modules/banner/banner.module';
 import { RuleModule } from './modules/rule/rule.module';
 import { SongModule } from './modules/song/song.module';
-import { StorageModule } from './modules/storage/storage.module';
 import { FormModule } from './modules/form/form.module';
 import { WebhookModule } from './modules/webhook/webhook.module';
 import { AuditLogModule } from './modules/audit-log/audit-log.module';
@@ -27,8 +30,6 @@ import { ContentModule } from './modules/content/content.module';
 import { PageModule } from './modules/page/page.module';
 import { ImagingModule } from './modules/imaging/banner.module';
 import { BanModule } from './modules/ban/ban.module';
-import { ServeStaticModule } from '@nestjs/serve-static';
-import { join } from 'path';
 import { AuthModule } from './modules/auth/auth.module';
 
 @Module({
@@ -60,7 +61,6 @@ import { AuthModule } from './modules/auth/auth.module';
 		BannerModule,
 		RuleModule,
 		SongModule,
-		StorageModule,
 		FormModule,
 		WebhookModule,
 		AuditLogModule,

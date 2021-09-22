@@ -1,0 +1,16 @@
+.m-resources {
+	&__actions {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		margin-bottom: $spacer;
+	}
+
+	&__input {
+		border: none;
+		background: $white;
+		border-radius: $border-radius-small;
+		color: $grey-darkest;
+		padding: $spacer-2x-small;
+	}
+}

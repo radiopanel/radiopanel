@@ -17,7 +17,7 @@ export function Paginate<T>(classRef: Type<T>): Type<Paginated<T>> {
 }
 
 export interface StorageItem {
-	type: 'file' | 'directory';
+	type: string;
 	name: string;
 	size: number;
 	lastModified: Date;
@@ -33,6 +33,7 @@ export interface StorageService {
 	delete(path: string): Promise<void>;
 	mkdir(path: string): Promise<void>;
 	rmdir(path: string): Promise<void>;
+	move(oldPath: string, newPath: string): Promise<void>;
 }
 
 export type StorageServiceFactory = new (config: any) => StorageService;

@@ -103,4 +103,17 @@ export class ResourceService {
 				})
 			);
 	}
+
+	move(oldPath: string, newPath: string) {
+		this.resourceStore.setLoading(true);
+		return this.http.post<any>('/api/v1/storage/move', {
+			oldPath, newPath
+		})
+			.pipe(
+				tap(() => {
+					// this.resourceStore.remove(dir.split('/').pop());
+					this.resourceStore.setLoading(false);
+				})
+			);
+	}
 }

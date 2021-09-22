@@ -52,10 +52,11 @@
     </ng-container>
 
     <ng-container *ngSwitchCase="'dynamic-file-input'">
-        <app-dynamic-file-input
+        <app-file-input
             [formControl]="control"
+            [multiple]="!!config?.multiple"
             [label]="label"
-        ></app-dynamic-file-input>
+        ></app-file-input>
     </ng-container>
 
     <ng-container *ngSwitchCase="'data-input'">
