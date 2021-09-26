@@ -5,7 +5,9 @@ import { first, takeUntil } from 'rxjs/operators';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { PageTypeService, PageTypeFieldService, PageTypeFieldQuery } from '../../store';
+import { ContentTypeFieldQuery } from '~lib/store';
+
+import { PageTypeService } from '../../store';
 
 @Component({
 	templateUrl: './create.page.html'
@@ -20,13 +22,13 @@ export class CreatePageComponent implements OnInit, OnDestroy {
 
 	constructor(
 		private pageTypeService: PageTypeService,
-		private pageTypeFieldQuery: PageTypeFieldQuery,
+		private contentTypeFieldQuery: ContentTypeFieldQuery,
 		private router: Router,
 		private toastr: ToastrService
 	) { }
 
 	public ngOnInit(): void {
-		this.pageTypeFieldQuery.results$
+		this.contentTypeFieldQuery.results$
 			.pipe(
 				takeUntil(this.componentDestroyed$)
 			)

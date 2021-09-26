@@ -4,6 +4,7 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 import { PageTypeFieldQuery, PageTypeFieldService } from '../../store';
+import { first } from 'rxjs/operators';
 
 @Component({
 	selector: 'app-content-field-selector',
@@ -25,6 +26,7 @@ export class PageFieldSelectorModalComponent implements OnInit {
 		this.loading$ = this.contentTypeFieldQuery.loading$;
 
 		this.contentTypeFieldService.fetchPageFields()
+			.pipe(first())
 			.subscribe();
 	}
 
