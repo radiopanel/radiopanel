@@ -5,7 +5,8 @@ import { first, takeUntil } from 'rxjs/operators';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { PageTypeService, PageTypeFieldService } from '../../store';
+import { PageTypeService } from '../../store';
+import { ContentTypeFieldService } from '~lib/store';
 
 @Component({
 	templateUrl: './detail.page.html'
@@ -21,14 +22,14 @@ export class DetailPageComponent implements OnInit, OnDestroy {
 
 	constructor(
 		private pageTypeService: PageTypeService,
-		private pageTypeFieldService: PageTypeFieldService,
+		private contentTypeFieldService: ContentTypeFieldService,
 		private activatedRoute: ActivatedRoute,
 		private router: Router,
 		private toastr: ToastrService,
 	) { }
 
 	public ngOnInit(): void {
-		this.pageTypeFieldService.fetchPageFields()
+		this.contentTypeFieldService.fetchContentFields()
 			.pipe(
 				first()
 			).subscribe((pageFields) => {
