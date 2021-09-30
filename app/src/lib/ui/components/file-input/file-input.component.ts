@@ -75,8 +75,17 @@ export class FileInputComponent implements OnInit, OnDestroy, ControlValueAccess
 	}
 
 	public isImage(path: string): boolean {
+		if (!path) {
+			return false;
+		}
+
 		const type = getType(path);
-		return type.startsWith('image/')
+
+		if (!type) {
+			return false;
+		}
+
+		return type?.startsWith('image/');
 	}
 
 	private propagateChange(value: any): void {
