@@ -15,11 +15,11 @@
                 [formControl]="form.get('bio')"
                 label="Bio"
             ></app-textarea-input>
-            <app-dynamic-file-input
+            <app-file-input
                 [formControl]="form.get('avatar')"
                 label="Avatar"
                 [key]="'avatar-' + user?.uuid"
-            ></app-dynamic-file-input>
+            ></app-file-input>
         </div>
         <div class="o-page__section">
             <div class="o-page__section-info">

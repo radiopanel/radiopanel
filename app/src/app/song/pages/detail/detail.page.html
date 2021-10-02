@@ -18,21 +18,21 @@
                 [formControl]="form.get('album')"
                 label="Album"
             ></app-text-input>
-            <app-dynamic-file-input
+            <app-file-input
                 [formControl]="form.get('graphic').get('large')"
                 label="Large Graphic"
                 [key]="'song_large-' + song.uuid"
-            ></app-dynamic-file-input>
-            <app-dynamic-file-input
+            ></app-file-input>
+            <app-file-input
                 [formControl]="form.get('graphic').get('medium')"
                 label="Medium Graphic"
                 [key]="'song_medium-' + song.uuid"
-            ></app-dynamic-file-input>
-            <app-dynamic-file-input
+            ></app-file-input>
+            <app-file-input
                 [formControl]="form.get('graphic').get('small')"
                 label="Small Graphic"
                 [key]="'song_small-' + song.uuid"
-            ></app-dynamic-file-input>
+            ></app-file-input>
         </div>
         <div class="o-page__section">
             <div class="u-display--flex u-display--space-between">
