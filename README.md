@@ -74,6 +74,14 @@ Radiopanel provides a fast and easy way to manage your radio, 100% free of charg
 - NestJS
 - Angular
 
+## Support
+
+RadioPanel open source project. It can grow thanks to the sponsors and support by the amazing backers
+<table style="text-align:center;"><tr>
+<td>
+<a href="https://mixup.fm" target="_blank"><img src="docs/images/mixup.png" height="120" valign="middle" /></a></td>
+</tr></table>
+
 ## Getting Started
 
 If you are just trying to run radiopanel, and not develop for it. You can find a guide to just get radiopanel running from prebuild images here: https://docs.radiopanel.co/self-hosting/setup
