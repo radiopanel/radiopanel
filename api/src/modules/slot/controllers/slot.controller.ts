@@ -59,7 +59,7 @@ export class SlotController {
 	}
 
 	@Get('sync')
-	public async sync(@Headers('authorization') authorization: string): Promise<any> {
+	public async sync(): Promise<any> {
 		this.slotService.sync();
 	}
 
@@ -69,7 +69,7 @@ export class SlotController {
 		@Query('populate') populate = false,
 	): Promise<any> {
 		const [{ _embedded: slots }, tenant] = await Promise.all([
-			this.slotService.find(moment().add(2, 'days').unix().toString(), moment().subtract(2, 'days').unix().toString()),
+			this.slotService.find(moment().add(7, 'days').unix().toString(), moment().subtract(1, 'days').unix().toString()),
 			this.tenantService.findOne()
 		]);
 
