@@ -1,10 +1,9 @@
-import { Injectable, ForbiddenException } from "@nestjs/common";
+import { Injectable } from "@nestjs/common";
 import { path, set, lensPath, pathOr } from "ramda";
-
-import { Content, ContentType, ContentTypeField, Page, PageType, PageTypeField } from "~entities";
-
 import { Repository } from "typeorm";
 import { InjectRepository } from "@nestjs/typeorm";
+
+import { Content, ContentTypeField, Page, PageTypeField } from "~entities";
 
 @Injectable()
 export class PopulationService {
@@ -14,29 +13,29 @@ export class PopulationService {
 	) { }
 	
 	private createPopulateMap(
-		fields: ContentTypeField[] | PageTypeField[],
-		contentItem: Content | Page,
-		parentFields: string[] = []
+		contentFields: Record<string, unknown>,
+		contentTypeFields: ContentTypeField[] | PageTypeField[],
+		parentFields: (string | number)[] = []
 	): { fieldPath: string; contentUuid: string, type: 'content' | 'page' }[] {
-		return (fields as any[] || []).reduce((acc, field: ContentTypeField | PageTypeField) => {
+		return (contentTypeFields as any[] || []).reduce((acc, field: ContentTypeField | PageTypeField) => {
 			const fieldPath = [...parentFields, field.slug]
 
-			if (field.fieldType === 'content-input' && path(['fields', ...fieldPath])(contentItem)) {
+			if (field.fieldType === 'content-input' && path([...fieldPath])(contentFields)) {
 				return [
 					...acc,
 					{
-						contentUuid: path(['fields', ...fieldPath])(contentItem),
+						contentUuid: path([...fieldPath])(contentFields),
 						fieldPath,
 						type: 'content'
 					}
 				]
 			}
 
-			if (field.fieldType === 'page-input' && path(['fields', ...fieldPath])(contentItem)) {
+			if (field.fieldType === 'page-input' && path([...fieldPath])(contentFields)) {
 				return [
 					...acc,
 					{
-						contentUuid: path(['fields', ...fieldPath])(contentItem),
+						contentUuid: path([...fieldPath])(contentFields),
 						fieldPath,
 						type: 'page'
 					}
@@ -46,9 +45,9 @@ export class PopulationService {
 			if (field.fieldType === 'repeater') {
 				return [
 					...acc,
-					...(pathOr<any[]>([], ['fields', ...fieldPath])(contentItem) || []).reduce((subFieldAcc, _, i: number) => ([
+					...(pathOr<any[]>([], [...fieldPath])(contentFields) || []).reduce((subFieldAcc, _, i: number) => ([
 						...subFieldAcc,
-						...this.createPopulateMap(field.subfields, contentItem, [...fieldPath, i.toString()])
+						...this.createPopulateMap(contentFields, field.subfields, [...fieldPath, i])
 					]), [])
 				]
 			}
@@ -57,12 +56,12 @@ export class PopulationService {
 		}, [])
 	}
 
-	public async populateContent(contentItem: Content | Page, contentType: ContentType | PageType): Promise<Content | Page> {
-		let content = contentItem;
-		const populationMap = this.createPopulateMap(contentType.fields, contentItem);
+	public async populateContent(contentFields: Record<string, unknown>, contentTypeFields: ContentTypeField[] | PageTypeField[]): Promise<Record<string, unknown>> {
+		let fields = contentFields;
+		const populationMap = this.createPopulateMap(contentFields, contentTypeFields);
 
 		if (populationMap.length === 0) {
-			return contentItem;
+			return contentFields;
 		}
 
 		const contentItemUuids = populationMap
@@ -86,9 +85,9 @@ export class PopulationService {
 				contentItems.find(x => x.uuid === population.contentUuid) :
 				pageItems.find(x => x.pageTypeUuid === population.contentUuid);
 
-			content = set(lensPath(['fields', ...population.fieldPath]), contentItem)(content)
+			fields = set(lensPath([...population.fieldPath]), contentItem)(fields)
 		})
 		
-		return content;
+		return fields;
 	}
 }

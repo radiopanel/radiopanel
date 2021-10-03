@@ -4,6 +4,7 @@
         <div class="m-file-input__preview" *ngIf="control?.value">
             <div
                 class="m-file-input__image-preview"
+                appImageLazyLoad
                 [appImageTooltip]="control?.value"
                 [style.backgroundImage]="'url(' + control?.value + ')'"
                 *ngIf="shouldShowImage()"

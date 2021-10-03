@@ -28,7 +28,6 @@ import { Services } from './services';
 import { Modals } from './modals';
 import { Queries, Stores, StoreServices } from './store';
 import { ReactiveFormsModule } from '@angular/forms';
-import { NgxGoogleAnalyticsModule, NgxGoogleAnalyticsRouterModule } from 'ngx-google-analytics';
 
 export function tokenGetter() {
 	return localStorage.getItem('token');
@@ -75,7 +74,7 @@ export function tokenGetter() {
 			config: {
 				tokenGetter
 			}
-		})
+		}),
 	],
 	providers: [
 		{ provide: NG_ENTITY_SERVICE_CONFIG, useValue: { baseUrl: 'https://jsonplaceholder.typicode.com' } },

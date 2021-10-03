@@ -104,7 +104,10 @@ export class ContentService {
 			return contentItem;
 		}
 
-		return this.populationService.populateContent(contentItem, contentType);
+		return {
+			...contentItem,
+			fields: await this.populationService.populateContent(contentItem.fields, contentType.fields),
+		};
 	}
 
 	public async create(contentTypeUuid: string, content: Content): Promise<Content> {

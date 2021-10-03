@@ -7,10 +7,10 @@ import { Permissions, AuditLog } from '~shared/decorators';
 import { Slot } from '~entities';
 import { Paginated } from '~shared/types';
 import { AuthGuard } from '~shared/guards/auth.guard';
-import { User } from '~shared/decorators/user.decorator';
-import { UserService } from '~shared/services/user.service';
 import { SlotService } from '~shared/services/slot.service';
 import { PermissionService } from '~shared/services/permission.service';
+import { PopulationService } from '~shared/services/population.service';
+import { TenantService } from '~shared/services/tenant.service';
 
 @Controller('slots')
 @ApiTags('Slots')
@@ -20,8 +20,9 @@ export class SlotController {
 
 	constructor(
 		private slotService: SlotService, 
-		private userService: UserService,
 		private permissionService: PermissionService,
+		private populateService: PopulationService,
+		private tenantService: TenantService,
 	) { }
 
 	@Get()
@@ -32,60 +33,170 @@ export class SlotController {
 
 	@Get('/live')
 	@Permissions('timetable/read')
-	public async findLive(): Promise<any> {
-		const { _embedded: slots } = await this.slotService.find(moment().add(2, 'days').unix().toString(), moment().subtract(2, 'days').unix().toString());
+	public async findLive(
+		@Query('populate') populate = false,
+	): Promise<any> {
+		const [{ _embedded: slots }, tenant] = await Promise.all([
+			this.slotService.find(moment().add(2, 'days').unix().toString(), moment().subtract(2, 'days').unix().toString()),
+			this.tenantService.findOne()
+		]);
 
 		const currentUnixTime = moment().unix()
-		return slots.find((slot: Slot) => currentUnixTime > slot.start && currentUnixTime < slot.end)
+		const slot = slots.find((slot: Slot) => currentUnixTime > slot.start && currentUnixTime < slot.end);
+
+		if (!slot) {
+			return null;
+		}
+		
+		if (!populate || !tenant.slotFields || !tenant.slotFields.length) {
+			return slot;
+		}
+
+		return {
+			...slot,
+			customData: await this.populateService.populateContent(slot.customData, tenant.slotFields),
+		}
 	}
 
 	@Get('sync')
-	public async sync(@Headers('authorization') authorization: string): Promise<any> {
+	public async sync(): Promise<any> {
 		this.slotService.sync();
 	}
 
 	@Get('/next')
 	@Permissions('timetable/read')
-	public async findNext(): Promise<any> {
-		const { _embedded: slots } = await this.slotService.find(moment().add(7, 'days').unix().toString(), moment().subtract(1, 'days').unix().toString());
+	public async findNext(
+		@Query('populate') populate = false,
+	): Promise<any> {
+		const [{ _embedded: slots }, tenant] = await Promise.all([
+			this.slotService.find(moment().add(7, 'days').unix().toString(), moment().subtract(1, 'days').unix().toString()),
+			this.tenantService.findOne()
+		]);
 
 		const currentUnixTime = moment().unix()
-		return slots.find((slot: Slot) => slot.start > currentUnixTime)
+		const slot = slots.find((slot: Slot) => slot.start > currentUnixTime)
+
+		if (!slot) {
+			return null;
+		}
+		
+		if (!populate || !tenant.slotFields || !tenant.slotFields.length) {
+			return slot;
+		}
+
+		return {
+			...slot,
+			customData: await this.populateService.populateContent(slot.customData, tenant.slotFields),
+		}
 	}
 
 	@Get('next-hours/:hour')
 	@Permissions('timetable/read')
-	public async findInHour(@Param('hour') hour: string): Promise<any> {
-		const { _embedded: slots } = await this.slotService.find(moment().add(7, 'days').unix().toString(), moment().subtract(1, 'days').unix().toString());
+	public async findInHour(
+		@Query('populate') populate = false,
+		@Param('hour') hour: string,
+	): Promise<any> {
+		const [{ _embedded: slots }, tenant] = await Promise.all([
+			this.slotService.find(moment().add(7, 'days').unix().toString(), moment().subtract(1, 'days').unix().toString()),
+			this.tenantService.findOne(),
+		]);
 
 		const startOfHour = moment().add(Number(hour), 'hour').startOf('hour').unix();
 		const endOfHour = moment().add(Number(hour), 'hour').endOf('hour').unix();
-		return pathOr(null, [0])(slots.filter((slot: Slot) => slot.start >= startOfHour && slot.start < endOfHour))
+		const slot = pathOr(null, [0])(slots.filter((slot: Slot) => slot.start >= startOfHour && slot.start < endOfHour))
+
+		if (!slot) {
+			return null;
+		}
+		
+		if (!populate || !tenant.slotFields || !tenant.slotFields.length) {
+			return slot;
+		}
+
+		return {
+			...slot,
+			customData: await this.populateService.populateContent(slot.customData, tenant.slotFields),
+		}
 	}
 
 	@Get('/later')
 	@Permissions('timetable/read')
-	public async findLater(): Promise<any> {
-		const { _embedded: slots } = await this.slotService.find(moment().add(7, 'days').unix().toString(), moment().subtract(1, 'days').unix().toString());
+	public async findLater(
+		@Query('populate') populate = false,
+	): Promise<any> {
+		const [{ _embedded: slots }, tenant] = await Promise.all([
+			this.slotService.find(moment().add(7, 'days').unix().toString(), moment().subtract(1, 'days').unix().toString()),
+			this.tenantService.findOne()
+		]);
 
 		const currentUnixTime = moment().unix()
-		return pathOr(null, [1])(slots.filter((slot: Slot) => slot.start > currentUnixTime))
+		const slot = pathOr(null, [1])(slots.filter((slot: Slot) => slot.start > currentUnixTime))
+
+		if (!slot) {
+			return null;
+		}
+		
+		if (!populate || !tenant.slotFields || !tenant.slotFields.length) {
+			return slot;
+		}
+
+		return {
+			...slot,
+			customData: await this.populateService.populateContent(slot.customData, tenant.slotFields),
+		}
 	}
 
 	@Get('/previous')
 	@Permissions('timetable/read')
-	public async findPrevious(): Promise<any> {
-		const { _embedded: slots } = await this.slotService.find(moment().add(1, 'days').unix().toString(), moment().subtract(7, 'days').unix().toString());
+	public async findPrevious(
+		@Query('populate') populate = false,
+	): Promise<any> {
+		const [{ _embedded: slots }, tenant] = await Promise.all([
+			this.slotService.find(moment().add(1, 'days').unix().toString(), moment().subtract(7, 'days').unix().toString()),
+			this.tenantService.findOne()
+		]);
 
 		const currentUnixTime = moment().unix();
 		const foundSlots = slots.filter((slot: Slot) => slot.end < currentUnixTime);
-		return pathOr(null, [foundSlots.length - 1])(foundSlots)
+		const slot = pathOr(null, [foundSlots.length - 1])(foundSlots)
+
+		if (!slot) {
+			return null;
+		}
+		
+		if (!populate || !tenant.slotFields || !tenant.slotFields.length) {
+			return slot;
+		}
+
+		return {
+			...slot,
+			customData: await this.populateService.populateContent(slot.customData, tenant.slotFields),
+		}
 	}
 
 	@Get('/:slotUuid')
 	@Permissions('timetable/read')
-	public async findOne(@Param('slotUuid') slotUuid: string): Promise<any> {
-		return this.slotService.findOne({ uuid: slotUuid });
+	public async findOne(
+		@Query('populate') populate = false,
+		@Param('slotUuid') slotUuid: string, 
+	): Promise<any> {
+		const [slot, tenant] = await Promise.all([
+			this.slotService.findOne({ uuid: slotUuid }),
+			this.tenantService.findOne()
+		]);
+
+		if (!slot) {
+			return null;
+		}
+		
+		if (!populate || !tenant.slotFields || !tenant.slotFields.length) {
+			return slot;
+		}
+
+		return {
+			...slot,
+			customData: await this.populateService.populateContent(slot.customData, tenant.slotFields),
+		}
 	}
 
 	@Post()
