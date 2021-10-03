@@ -2,7 +2,7 @@ import { Response } from 'express';
 import sharp from 'sharp';
 import slugify from 'slugify';
 import { Query, Res, Get, Controller, UseGuards, BadRequestException, NotFoundException } from '@nestjs/common';
-
+import { ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
 
 import { TenantService } from '~shared/services/tenant.service';
 import { StorageLoader } from '~shared/helpers/StorageLoader';
@@ -11,6 +11,7 @@ import { AuthGuard } from '~shared/guards/auth.guard';
 import { ImageCacheService } from '../services/image-cache.service';
 
 @Controller('resources')
+@ApiTags('Storage')
 @UseGuards(AuthGuard)
 export class ResourceController {
 	constructor(
@@ -20,6 +21,12 @@ export class ResourceController {
 	) {}
 
 	@Get()
+	@ApiOperation({ summary: 'Get image', description: 'Get a manipulated image based on path' })
+	@ApiQuery({ name: 'f', description: 'File format', type: 'string', enum: ['png', 'jpg', 'jpeg'] })
+	@ApiQuery({ name: 'w', description: 'Width in px', type: 'string' })
+	@ApiQuery({ name: 'h', description: 'Height in px', type: 'string' })
+	@ApiQuery({ name: 'path', description: 'Path to image', type: 'string' })
+	@ApiQuery({ name: 'fit', description: 'How the image should constrain', type: 'string', enum: ['cover', 'contain', 'fill', 'inside', 'outside'] })
 	public async find(@Query() params: any, @Res() response: Response): Promise<any> {
 		response.setHeader('Cache-Control', 'max-age: 2419200');
 		response.setHeader('Expires', new Date(Date.now() + 2592000000).toUTCString());

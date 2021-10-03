@@ -44,6 +44,7 @@
                     <td>
                         <span *ngIf="resource.type === 'directory'" class="uil uil-folder"></span>
                         <img
+                            appImageLazyLoad
                             *ngIf="resource.mimeType?.startsWith('image')"
                             class="m-table__image"
                             [appImageTooltip]="'/api/v1/resources?h=1000&f=jpg&path=' + getFullPath(resource.name)"

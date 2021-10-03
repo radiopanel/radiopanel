@@ -18,7 +18,7 @@ export class PageService {
 		private populationService: PopulationService,
 	) { }
 
-	public async findOne(pageTypeUuid: string, populate: boolean = false): Promise<any> {
+	public async findOne(pageTypeUuid: string, populate = false): Promise<any> {
 		const pageType = await this.pageTypeService.findOne(pageTypeUuid);
 
 		if (!pageType) {
@@ -36,7 +36,10 @@ export class PageService {
 			return pageItem;
 		}
 
-		return this.populationService.populateContent(pageItem, pageType);
+		return {
+			...pageItem,
+			fields: this.populationService.populateContent(pageItem.fields, pageType.fields),
+		};
 	}
 
 	public async update(pageTypeUuid: string, updatedPage: Page): Promise<any> {

@@ -5,6 +5,7 @@
             <div class="m-file-input__item">
                 <div class="m-file-input__item-image" *ngIf="isImage(control.value)">
                     <img
+                        appImageLazyLoad
                         [appImageTooltip]="'/api/v1/resources?h=1000&f=jpg&path=' + control.value"
                         [src]="'/api/v1/resources?&h=100&w=100&f=jpg&path=' + control.value"
                     >
@@ -25,6 +26,7 @@
             <div class="m-file-input__item u-margin-right-xs u-margin-bottom-xs" *ngFor="let file of control.value; let i = index">
                 <div class="m-file-input__item-image" *ngIf="isImage(file)">
                     <img
+                        appImageLazyLoad
                         [appImageTooltip]="'/api/v1/resources?h=1000&f=jpg&path=' + file"
                         [src]="'/api/v1/resources?&h=100&w=100&f=jpg&path=' + file"
                     >
