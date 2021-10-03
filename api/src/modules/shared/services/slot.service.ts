@@ -4,8 +4,6 @@ import * as uuid from 'uuid';
 import { Repository, Brackets } from "typeorm";
 import moment from "moment";
 import { WebSocketGateway, WebSocketServer } from "@nestjs/websockets";
-import ical from 'ical-generator';
-import { pathOr } from "ramda";
 
 import { Slot, Tenant, SlotOverwrite } from "~entities";
 import { Paginated } from "~shared/types";

@@ -1,9 +1,9 @@
-import { Injectable, ForbiddenException } from "@nestjs/common";
+import { Injectable } from "@nestjs/common";
 import { path, set, lensPath, pathOr } from "ramda";
 import { Repository } from "typeorm";
 import { InjectRepository } from "@nestjs/typeorm";
 
-import { Content, ContentType, ContentTypeField, Page, PageType, PageTypeField } from "~entities";
+import { Content, ContentTypeField, Page, PageTypeField } from "~entities";
 
 @Injectable()
 export class PopulationService {
@@ -15,7 +15,7 @@ export class PopulationService {
 	private createPopulateMap(
 		contentFields: Record<string, unknown>,
 		contentTypeFields: ContentTypeField[] | PageTypeField[],
-		parentFields: string[] = []
+		parentFields: (string | number)[] = []
 	): { fieldPath: string; contentUuid: string, type: 'content' | 'page' }[] {
 		return (contentTypeFields as any[] || []).reduce((acc, field: ContentTypeField | PageTypeField) => {
 			const fieldPath = [...parentFields, field.slug]
@@ -47,7 +47,7 @@ export class PopulationService {
 					...acc,
 					...(pathOr<any[]>([], [...fieldPath])(contentFields) || []).reduce((subFieldAcc, _, i: number) => ([
 						...subFieldAcc,
-						...this.createPopulateMap(contentFields, field.subfields, [...fieldPath, i.toString()])
+						...this.createPopulateMap(contentFields, field.subfields, [...fieldPath, i])
 					]), [])
 				]
 			}
@@ -59,9 +59,6 @@ export class PopulationService {
 	public async populateContent(contentFields: Record<string, unknown>, contentTypeFields: ContentTypeField[] | PageTypeField[]): Promise<Record<string, unknown>> {
 		let fields = contentFields;
 		const populationMap = this.createPopulateMap(contentFields, contentTypeFields);
-
-		console.log('pop map', populationMap)
-		console.log('og fields', fields)
 
 		if (populationMap.length === 0) {
 			return contentFields;
@@ -90,8 +87,6 @@ export class PopulationService {
 
 			fields = set(lensPath([...population.fieldPath]), contentItem)(fields)
 		})
-
-		console.log('return', fields);
 		
 		return fields;
 	}
