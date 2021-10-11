@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Body, Put, Headers, UseGuards, Post, Query, ForbiddenException, Delete, UnauthorizedException, Request} from '@nestjs/common';
+import { Controller, Get, Param, Body, Put, UseGuards, Post, Query, ForbiddenException, Delete, UnauthorizedException, Request} from '@nestjs/common';
 import { ApiBasicAuth, ApiTags } from '@nestjs/swagger';
 import { omit, pathOr } from 'ramda';
 import moment from 'moment';
@@ -27,8 +27,27 @@ export class SlotController {
 
 	@Get()
 	@Permissions('timetable/read')
-	public async find(@Query('beforeDate') beforeDate: string, @Query('afterDate') afterDate: string): Promise<Paginated<Slot> | undefined> {
-		return this.slotService.find(beforeDate, afterDate);
+	public async find(
+		@Query('populate') populate = false,
+		@Query('beforeDate') beforeDate: string,
+		@Query('afterDate') afterDate: string,
+	): Promise<Paginated<Slot> | undefined> {
+		const [slots, tenant] = await Promise.all([
+			this.slotService.find(beforeDate, afterDate),
+			this.tenantService.findOne()
+		]);
+		
+		if (!populate || !tenant.slotFields || !tenant.slotFields.length) {
+			return slots;
+		}
+
+		return {
+			...slots,
+			_embedded: await Promise.all(slots._embedded.map(async (slot) => ({
+				...slot,
+				customData: await this.populateService.populateContent(slot.customData, tenant.slotFields),
+			})))
+		}
 	}
 
 	@Get('/live')
