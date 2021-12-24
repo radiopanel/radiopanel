@@ -35,6 +35,8 @@ export class ContentService {
 
 		const query = this.contentRepository.createQueryBuilder('Content')
 			.where('Content.contentTypeUuid = :contentTypeUuid', { contentTypeUuid: contentType.uuid })
+			.leftJoinAndSelect('Content.createdBy', 'CreatedBy')
+			.leftJoinAndSelect('Content.updatedBy', 'UpdatedBy');
 
 		if (sortField && sortField?.startsWith('fields.')) {
 			query.orderBy(`"Content".fields->>'${sortField.replace('fields.', '').replace(/[^a-zA-Z0-9]+/g, "-")}'`, sortDirection)
@@ -138,7 +140,7 @@ export class ContentService {
 		});
 		return;
 	}
-	
+
 	@Cron('* * * * *')
 	public async sync(): Promise<void> {
 		const contentToPublish = await this.contentRepository.find({
@@ -147,7 +149,7 @@ export class ContentService {
 				published: false,
 			},
 		});
-		
+
 		contentToPublish.forEach((content) => {
 			this.contentRepository.save({
 				...content,
@@ -163,7 +165,7 @@ export class ContentService {
 				published: true,
 			},
 		});
-		
+
 		contentToUnPublish.forEach((content) => {
 			this.contentRepository.save({
 				...content,
