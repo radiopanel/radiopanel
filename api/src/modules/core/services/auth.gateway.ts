@@ -27,15 +27,20 @@ export class AuthGateway {
 		if (!(client.handshake as any)?.session?.passport?.user?.uuid) {
 			return;
 		}
-		
+
 		try {
 			const userData = await this.userService.findOne({ uuid: (client.handshake as any)?.session?.passport?.user?.uuid });
-			(userData.tenants || []).forEach(async (tenant: Tenant) => {
-				try {
-					this.server.of('/').adapter.remoteJoin(client.id, tenant.uuid);
-				} catch (e) {}
-			})
+
+			if (!userData) {
+				return;
+			}
+
+			client.join('authenticated-users');
+			client.emit('auth-ok', {
+				rooms: ['authenticated-users']
+			});
 		} catch (e) {
+			console.error(e)
 			return
 		}
 		return;
@@ -46,7 +51,7 @@ export class AuthGateway {
 		@MessageBody() data: any,
 		@ConnectedSocket() client: Socket,
 	): Promise<any> {
-		if (!data.apiKey || !data.tenant) {
+		if (!data.apiKey) {
 			return client.emit('missing-data');
 		}
 
@@ -61,14 +66,17 @@ export class AuthGateway {
 
 			(apiKeyData.permissions || []).forEach((permission: ApiKeyPermission) => {
 				try {
-					this.server.of('/').adapter.remoteJoin(client.id, `${data.tenant}/${permission.permission}`);
-				} catch (e) {}
+					client.join(`authenticated-clients/${permission.permission}`);
+				} catch (e) {
+					console.error(e)
+				}
 			});
-			
+
 			client.emit('auth-ok', {
-				rooms: (apiKeyData.permissions || []).map((x) => `${data.tenant}/${x.permission}`)
+				rooms: (apiKeyData.permissions || []).map((x) => `authenticated-clients/${x.permission}`)
 			});
 		} catch (e) {
+			console.error(e)
 			return
 		}
 

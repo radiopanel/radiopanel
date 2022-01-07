@@ -24,7 +24,12 @@ export class SongHistoryController {
 
 	@Get()
 	@Permissions('song-history/read')
-	public async find(@Query('page') page, @Query('pagesize') pagesize): Promise<any> {
-		return this.songService.findSongHistory(page, pagesize);
+	public async find(
+		@Query('page') page,
+		@Query('pagesize') pagesize,
+		@Query('beforeDate') beforeDate?: string,
+		@Query('afterDate') afterDate?: string,
+	): Promise<any> {
+		return this.songService.findSongHistory(page, pagesize, beforeDate, afterDate);
 	}
 }

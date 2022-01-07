@@ -64,7 +64,7 @@ export class TenantService {
 
 	public update(id: string, tenant: Tenant): Promise<Tenant> {
 		tenant.uuid = id;
-		this.server.to(id).emit('tenant-updated');
+		this.server.to('authenticated-users').emit('tenant-updated');
 		return this.tenantsRepository.save(tenant);
 	}
 

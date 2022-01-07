@@ -140,10 +140,10 @@ export class SongService {
 			} as SongPlay);
 
 			const songPlay = await this.fetchLatestSongFromDatabase()
-	
-			this.server.to(tenant.uuid).emit('current-song-updated', cleanResponse(songPlay));
-			this.server.to(`${tenant.uuid}/song-history/read`).emit('current-song-updated', cleanResponse(songPlay));
-			
+
+			this.server.to('authenticated-users').emit('current-song-updated', cleanResponse(songPlay));
+			this.server.to(`authenticated-clients/song-history/read`).emit('current-song-updated', cleanResponse(songPlay));
+
 			return;
 		}
 
@@ -166,8 +166,8 @@ export class SongService {
 
 		const songPlay = await this.fetchLatestSongFromDatabase()
 
-		this.server.to(tenant.uuid).emit('current-song-updated', cleanResponse(songPlay));
-		this.server.to(`${tenant.uuid}/song-history/read`).emit('current-song-updated', cleanResponse(songPlay));
+		this.server.to('authenticated-users').emit('current-song-updated', cleanResponse(songPlay));
+		this.server.to(`authenticated-clients/song-history/read`).emit('current-song-updated', cleanResponse(songPlay));
 	}
 
 	public async fetchFromApi(tenant: Tenant, originalTitle: string, matchingService: string): Promise<any> {
@@ -235,13 +235,21 @@ export class SongService {
 		}
 	}
 
-	public async findSongHistory(page = 1, pagesize = 20): Promise<Paginated<SongPlay>> {
+	public async findSongHistory(page = 1, pagesize = 20, beforeDate?: string, afterDate?: string): Promise<Paginated<SongPlay>> {
 		const query = this.songPlayRepository.createQueryBuilder('SongPlay')
 			.leftJoinAndSelect('SongPlay.song', 'Song')
 			.leftJoinAndSelect('SongPlay.slot', 'Slot')
 			.leftJoinAndSelect('Slot.user', 'User')
 			.leftJoinAndSelect('User._userMeta', 'UserMeta')
 			.orderBy('SongPlay.createdAt', 'DESC');
+
+		if (beforeDate) {
+			query.andWhere('SongPlay.createdAt < :beforeDate', { beforeDate: moment.unix(Number(beforeDate)).toISOString() })
+		}
+
+		if (afterDate) {
+			query.andWhere('SongPlay.createdAt > :afterDate', { afterDate: moment.unix(Number(afterDate)).toISOString() })
+		}
 
 		return {
 			_embedded: await query
@@ -296,7 +304,7 @@ export class SongService {
 
 		(async () => {
 			const songHistory = await this.findSongHistory(1, 20);
-			this.server.to(`song-history/read`).emit('song-history-updated', cleanResponse(songHistory?._embedded || []));
+			this.server.to(`authenticated-clients/song-history/read`).emit('song-history-updated', cleanResponse(songHistory?._embedded || []));
 		})()
 
 		return updatedSong;
