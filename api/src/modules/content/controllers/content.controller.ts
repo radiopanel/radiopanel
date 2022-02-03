@@ -3,7 +3,7 @@ import { ApiBasicAuth, ApiTags } from '@nestjs/swagger';
 
 import { Paginated } from '~shared/types';
 import { AuthGuard } from '~shared/guards/auth.guard';
-import { AuditLog } from '~shared/decorators';
+import { AuditLog, Webhook } from '~shared/decorators';
 import { PermissionService } from '~shared/services/permission.service';
 
 import { ContentService } from '../services/content.service';
@@ -52,6 +52,7 @@ export class ContentController {
 	}
 
 	@Post()
+	@Webhook('content/create')
 	public async create(
 		@Param('contentTypeUuid') contentTypeUuid: string,
 		@Body() content: any,

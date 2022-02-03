@@ -1,15 +1,27 @@
 export const webhooks = [
 	{
-		value: "posts/create",
-		label: "Post created",
+		value: "content/create",
+		label: "Content created",
 	},
 	{
-		value: "posts/update",
-		label: "Post updated",
+		value: "content/update",
+		label: "Content updated",
 	},
 	{
-		value: 'posts/published',
-		label: "Post published"
+		value: 'content/published',
+		label: "Content published"
+	},
+	{
+		value: "pages/create",
+		label: "Pages created",
+	},
+	{
+		value: "pages/update",
+		label: "Pages updated",
+	},
+	{
+		value: 'pages/published',
+		label: "Pages published"
 	},
 	{
 		value: "song-history/create",
@@ -18,10 +30,6 @@ export const webhooks = [
 	{
 		value: 'slots/start',
 		label: "Start of a slot"
-	},
-	{
-		value: 'podcast-entries/create',
-		label: "Podcast entry created"
 	},
 	{
 		value: 'form-entries/create',

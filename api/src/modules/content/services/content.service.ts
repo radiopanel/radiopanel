@@ -9,6 +9,7 @@ import { ContentType, Content } from '~entities';
 import { Paginated } from '~shared/types';
 import { PopulationService } from '~shared/services/population.service';
 import { ContentTypeService } from '~shared/services/content-type.service';
+import { WebhookService } from '~shared/services/webhook.service';
 
 
 @Injectable()
@@ -19,6 +20,7 @@ export class ContentService {
 		@InjectRepository(ContentType) private contentTypeRepository: Repository<ContentType>,
 		private contentTypeService: ContentTypeService,
 		private populationService: PopulationService,
+		private webhookService: WebhookService,
 	) { }
 
 	public async findByContentType(contentTypeUuid: string, page = 1, pagesize = 20, filters: Record<string, string>, showUnpublished = false, sortField?: string, sortDirection?: 'ASC' | 'DESC'): Promise<Paginated<Content>> {
@@ -116,6 +118,10 @@ export class ContentService {
 		// Look up the contentType
 		const contentType = await this.contentTypeRepository.findOne(contentTypeUuid);
 
+		if (content.published === true) {
+			this.webhookService.executeWebhook('content/published', content);
+		}
+
 		content.contentType = contentType;
 		content.createdAt = new Date();
 		content.updatedAt = new Date();
@@ -130,7 +136,12 @@ export class ContentService {
 		content.updatedAt = new Date();
 		content.uuid = entryUuid;
 		content.updatedAt = new Date();
-		content.publishedAt = published === false && content.published === true ? new Date() : publishedAt
+		content.publishedAt = published === false && content.published === true ? new Date() : publishedAt;
+
+		if (published === false && content.published === true) {
+			this.webhookService.executeWebhook('content/published', content);
+		}
+
 		return this.contentRepository.update({ uuid: entryUuid }, content);
 	}
 
