@@ -46,7 +46,7 @@
             <div *ngFor="let field of authenticationConfigFields; let i = index">
                 <app-dynamic-input
                     [label]="field.name"
-                    [config]="{ placeholder: '' }"
+                    [config]="field.config"
                     [component]="field.fieldType"
                     [formControl]="form.get('config')?.get(field.slug)"
                     [multiLanguage]="false"

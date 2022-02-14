@@ -4,19 +4,25 @@ export const authMethodConfig = {
 		{
 			name: 'Certificate',
 			slug: 'cert',
-			config: {},
+			config: {
+				placeholder: ''
+			},
 			fieldType: 'textarea-input'
 		},
 		{
 			name: 'Issuer',
 			slug: 'issuer',
-			config: {},
+			config: {
+				placeholder: ''
+			},
 			fieldType: 'text-input'
 		},
 		{
 			name: 'Entrypoint',
 			slug: 'entryPoint',
-			config: {},
+			config: {
+				placeholder: ''
+			},
 			fieldType: 'text-input'
 		},
 	],
@@ -24,31 +30,49 @@ export const authMethodConfig = {
 		{
 			name: 'Authorization URL',
 			slug: 'authorizationURL',
-			config: {},
+			config: {
+				placeholder: ''
+			},
 			fieldType: 'text-input'
 		},
 		{
 			name: 'Token URL',
 			slug: 'tokenURL',
-			config: {},
+			config: {
+				placeholder: ''
+			},
 			fieldType: 'text-input'
 		},
 		{
 			name: 'Userinfo URL',
 			slug: 'userinfoURL',
-			config: {},
+			config: {
+				placeholder: ''
+			},
 			fieldType: 'text-input'
 		},
 		{
 			name: 'Client ID',
 			slug: 'clientID',
-			config: {},
+			config: {
+				placeholder: ''
+			},
 			fieldType: 'text-input'
 		},
 		{
 			name: 'Client Secret',
 			slug: 'clientSecret',
-			config: {},
+			config: {
+				placeholder: ''
+			},
+			fieldType: 'text-input'
+		},
+		{
+			name: 'Scope',
+			slug: 'scope',
+			config: {
+				placeholder: 'openid profile email'
+			},
 			fieldType: 'text-input'
 		},
 	],

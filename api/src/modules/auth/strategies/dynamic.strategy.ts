@@ -38,7 +38,7 @@ export class DynamicStrategyProvider implements NestMiddleware {
 		if (authMethod.type === 'saml') {
 			return this.createSamlStrategy(authMethod);
 		}
-		
+
 		if (authMethod.type === 'oauth2') {
 			return this.createOAuthStrategy(authMethod);
 		}
@@ -85,7 +85,7 @@ export class DynamicStrategyProvider implements NestMiddleware {
 				clientID: authMethod.config.clientID,
 				clientSecret: authMethod.config.clientSecret,
 				callbackURL: `${this.configService.get('app.frontendBaseUrl')}/api/v1/auth/login/${authMethod.uuid}`,
-				scope: 'openid profile email'
+				scope: authMethod.config.scope || 'openid profile email'
 			},
 			async (accessToken: string, _, __, done: Function): Promise<any> => {
 				await got.get(authMethod.config.userinfoURL, {
@@ -106,11 +106,11 @@ export class DynamicStrategyProvider implements NestMiddleware {
 					}>()
 					.then(async (result) => {
 						const existingUser = await this.userService.findOne({ email: result.email, authenticationMethodUuid: authMethod.uuid });
-		
+
 						if (existingUser) {
 							return done(null, existingUser);
 						}
-		
+
 						const createdUser = await this.userService.create({
 							uuid: uuid.v4(),
 							password: bcryptjs.hashSync(this.generatePassword(50)),
@@ -121,9 +121,9 @@ export class DynamicStrategyProvider implements NestMiddleware {
 							createdAt: new Date(),
 							avatar: result.picture,
 						});
-		
+
 						await this.userService.assignRole(createdUser.uuid, authMethod.defaultRoleUuid);
-		
+
 						return done(null, createdUser)
 					})
 			}
