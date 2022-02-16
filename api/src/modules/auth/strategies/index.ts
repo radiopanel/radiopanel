@@ -3,5 +3,5 @@ import { DynamicStrategyProvider } from './dynamic.strategy';
 
 export const Strategies = [
 	LocalStrategyProvider,
-	DynamicStrategyProvider
+	DynamicStrategyProvider,
 ]

@@ -76,4 +76,22 @@ export const authMethodConfig = {
 			fieldType: 'text-input'
 		},
 	],
+	discord: [
+		{
+			name: 'Client ID',
+			slug: 'clientID',
+			config: {
+				placeholder: ''
+			},
+			fieldType: 'text-input'
+		},
+		{
+			name: 'Client Secret',
+			slug: 'clientSecret',
+			config: {
+				placeholder: ''
+			},
+			fieldType: 'text-input'
+		}
+	],
 };

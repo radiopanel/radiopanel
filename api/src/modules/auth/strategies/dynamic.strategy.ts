@@ -42,6 +42,10 @@ export class DynamicStrategyProvider implements NestMiddleware {
 		if (authMethod.type === 'oauth2') {
 			return this.createOAuthStrategy(authMethod);
 		}
+
+		if (authMethod.type === 'discord') {
+			return this.createDiscordStrategy(authMethod);
+		}
 	}
 
 	private async createSamlStrategy(authMethod: AuthenticationMethod): Promise<SamlStrategy> {
@@ -128,6 +132,104 @@ export class DynamicStrategyProvider implements NestMiddleware {
 					})
 			}
 		);
+	}
+	private async createDiscordStrategy(authMethod: AuthenticationMethod): Promise<OAuthStrategy> {
+		const strategy = new OAuthStrategy(
+			{
+				authorizationURL: 'https://discord.com/api/oauth2/authorize',
+				tokenURL: 'https://discord.com/api/oauth2/token',
+				clientID: authMethod.config.clientID,
+				clientSecret: authMethod.config.clientSecret,
+				callbackURL: `${this.configService.get('app.frontendBaseUrl')}/api/v1/auth/login/${authMethod.uuid}`,
+				scope: 'identify email guilds',
+			},
+			async (accessToken: string, _, __, done: Function): Promise<any> => {
+				console.log(accessToken)
+				await got.get('https://discord.com/api/users/@me', {
+					headers: {
+						'authorization': `Bearer ${accessToken}`
+					},
+					resolveBodyOnly: true,
+					responseType: 'json'
+				})
+					.json<{
+						id: string;
+						username: string;
+						avatar: string;
+						email: string;
+					}>()
+					.then(async (result) => {
+						const existingUser = await this.userService.findOne({ email: result.email, authenticationMethodUuid: authMethod.uuid });
+
+						if (existingUser) {
+							return done(null, existingUser);
+						}
+
+						const createdUser = await this.userService.create({
+							uuid: uuid.v4(),
+							password: bcryptjs.hashSync(this.generatePassword(50)),
+							email: result.email,
+							authenticationMethodUuid: authMethod.uuid,
+							username: result.username,
+							updatedAt: new Date(),
+							createdAt: new Date(),
+							avatar: result.ava,
+						});
+
+						await this.userService.assignRole(createdUser.uuid, authMethod.defaultRoleUuid);
+
+						return done(null, createdUser)
+					})
+					.catch((e) => console.error(e.response.body))
+			}
+		);
+
+		// (strategy as any).checkScope = function(scope, accessToken, cb) {
+		// 	if (this._scope && this._scope.indexOf(scope) !== -1) {
+		// 		this._oauth2.get('https://discord.com/api/users/@me/' + scope, accessToken, function(err, body, res) {
+		// 			try {
+		// 				var json = JSON.parse(body);
+		// 			}
+		// 			catch (e) {
+		// 				return cb(new Error('Failed to parse user\'s ' + scope));
+		// 			}
+		// 			cb(null, json);
+		// 		});
+		// 	} else {
+		// 		cb(null, null);
+		// 	}
+		// }
+
+		// strategy.userProfile = function(accessToken: string, done: Function) {
+		// 	this._oauth2.get('https://discord.com/api/v6/users/@me', accessToken, (err, body, res) => {
+		// 		console.log(body, err)
+		// 		try {
+		// 			var parsedData = JSON.parse(body);
+		// 		} catch (e) {
+		// 			return done(new Error('Failed to parse the user profile.'));
+		// 		}
+
+		// 		var profile = parsedData; // has the basic user stuff
+		// 		profile.provider = 'discord';
+		// 		profile.accessToken = accessToken;
+
+		// 		this.checkScope('connections', accessToken, function(errx, connections) {
+		// 			if (errx) done(errx);
+
+		// 			if (connections) profile.connections = connections;
+
+		// 			this.checkScope('guilds', accessToken, function(erry, guilds) {
+		// 				if (erry) done(erry);
+		// 				if (guilds) profile.guilds = guilds;
+
+		// 				profile.fetchedAt = new Date();
+		// 				return done(null, profile)
+		// 			});
+		// 		});
+		// 	});
+		// };
+
+		return strategy;
 	}
 
 	private generatePassword = (
