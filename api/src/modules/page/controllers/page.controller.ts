@@ -25,8 +25,8 @@ export class PageController {
 		@Query('populate') populate: string,
 		@Request() req,
 	): Promise<any | undefined> {
-		if (!await this.permissionService.hasPermission(req.user?.uuid || req.headers.authorization, [`pages/${pageTypeUuid}/update`])) {
-			throw new ForbiddenException(`Missing permissions: content/${pageTypeUuid}/read`)
+		if (!await this.permissionService.hasPermission(req.user?.uuid || req.headers.authorization, [`pages/${pageTypeUuid}/read`])) {
+			throw new ForbiddenException(`Missing permissions: pages/${pageTypeUuid}/read`)
 		}
 
 		return this.pageService.findOne(pageTypeUuid, populate === "true");
@@ -42,9 +42,9 @@ export class PageController {
 		if (!await this.pageService.findOne(pageTypeUuid)) {
 			throw new UnauthorizedException()
 		}
-		
+
 		if (!await this.permissionService.hasPermission(req.user?.uuid || req.headers.authorization, [`pages/${pageTypeUuid}/update`])) {
-			throw new ForbiddenException(`Missing permissions: content/${pageTypeUuid}/read`)
+			throw new ForbiddenException(`Missing permissions: pages/${pageTypeUuid}/update`)
 		}
 
 		return this.pageService.update(pageTypeUuid, {

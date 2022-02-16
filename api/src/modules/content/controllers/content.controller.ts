@@ -59,7 +59,7 @@ export class ContentController {
 		@Request() req,
 	): Promise<any> {
 		if (!await this.permissionService.hasPermission(req.user?.uuid || req.headers.authorization, [`content/${contentTypeUuid}/create`])) {
-			throw new ForbiddenException(`Missing permissions: content/${contentTypeUuid}/read`)
+			throw new ForbiddenException(`Missing permissions: content/${contentTypeUuid}/create`)
 		}
 
 		return this.contentService.create(contentTypeUuid, {
@@ -78,7 +78,7 @@ export class ContentController {
 		@Request() req,
 	): Promise<any> {
 		if (!await this.permissionService.hasPermission(req.user?.uuid || req.headers.authorization, [`content/${contentTypeUuid}/update`])) {
-			throw new ForbiddenException(`Missing permissions: content/${contentTypeUuid}/read`)
+			throw new ForbiddenException(`Missing permissions: content/${contentTypeUuid}/update`)
 		}
 
 		return this.contentService.update(contentTypeUuid, uuid, {
@@ -95,7 +95,7 @@ export class ContentController {
 		@Request() req,
 	): Promise<void> {
 		if (!await this.permissionService.hasPermission(req.user?.uuid || req.headers.authorization, [`content/${contentTypeUuid}/delete`])) {
-			throw new ForbiddenException(`Missing permissions: content/${contentTypeUuid}/read`)
+			throw new ForbiddenException(`Missing permissions: content/${contentTypeUuid}/delete`)
 		}
 
 		return await this.contentService.delete(contentTypeUuid, uuid);
