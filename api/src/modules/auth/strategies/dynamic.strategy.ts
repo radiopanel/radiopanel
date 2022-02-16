@@ -173,7 +173,7 @@ export class DynamicStrategyProvider implements NestMiddleware {
 							username: result.username,
 							updatedAt: new Date(),
 							createdAt: new Date(),
-							avatar: result.ava,
+							avatar: `https://cdn.discordapp.com/avatars/${result.id}/${result.avatar}.png`,
 						});
 
 						await this.userService.assignRole(createdUser.uuid, authMethod.defaultRoleUuid);
@@ -183,51 +183,6 @@ export class DynamicStrategyProvider implements NestMiddleware {
 					.catch((e) => console.error(e.response.body))
 			}
 		);
-
-		// (strategy as any).checkScope = function(scope, accessToken, cb) {
-		// 	if (this._scope && this._scope.indexOf(scope) !== -1) {
-		// 		this._oauth2.get('https://discord.com/api/users/@me/' + scope, accessToken, function(err, body, res) {
-		// 			try {
-		// 				var json = JSON.parse(body);
-		// 			}
-		// 			catch (e) {
-		// 				return cb(new Error('Failed to parse user\'s ' + scope));
-		// 			}
-		// 			cb(null, json);
-		// 		});
-		// 	} else {
-		// 		cb(null, null);
-		// 	}
-		// }
-
-		// strategy.userProfile = function(accessToken: string, done: Function) {
-		// 	this._oauth2.get('https://discord.com/api/v6/users/@me', accessToken, (err, body, res) => {
-		// 		console.log(body, err)
-		// 		try {
-		// 			var parsedData = JSON.parse(body);
-		// 		} catch (e) {
-		// 			return done(new Error('Failed to parse the user profile.'));
-		// 		}
-
-		// 		var profile = parsedData; // has the basic user stuff
-		// 		profile.provider = 'discord';
-		// 		profile.accessToken = accessToken;
-
-		// 		this.checkScope('connections', accessToken, function(errx, connections) {
-		// 			if (errx) done(errx);
-
-		// 			if (connections) profile.connections = connections;
-
-		// 			this.checkScope('guilds', accessToken, function(erry, guilds) {
-		// 				if (erry) done(erry);
-		// 				if (guilds) profile.guilds = guilds;
-
-		// 				profile.fetchedAt = new Date();
-		// 				return done(null, profile)
-		// 			});
-		// 		});
-		// 	});
-		// };
 
 		return strategy;
 	}

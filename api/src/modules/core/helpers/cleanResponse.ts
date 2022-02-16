@@ -20,7 +20,7 @@ const removeProps = (obj: any, propsToRemove: string[], maxLevel = 10) => {
 	return obj
 }
 
-export const GENERIC_CLEAN = ['password', 'key', 'email', 'patreonAccessToken', 'azuraCastApiKey', 'spotifyClientSecret', 'spotifyClientId', 'streamUrl'];
+export const GENERIC_CLEAN = ['password', 'key', 'email', 'patreonAccessToken', 'azuraCastApiKey', 'spotifyClientSecret', 'spotifyClientId', 'streamUrl', 'clientSecret'];
 
 export const cleanResponse = (data: any, toClean = GENERIC_CLEAN) => {
 	return removeProps(data, toClean)

@@ -23,9 +23,10 @@ export class UserService {
 
 	public async find(page = 1, pagesize = 200): Promise<Paginated<any>> {
 		const query = this.userRepository.createQueryBuilder('User')
-			.leftJoinAndSelect('User.roles', 'Roles')
-			.leftJoinAndSelect('User._userMeta', 'UserMeta')
-			.leftJoinAndSelect('User.authenticationMethod', 'AuthenticationMethod');
+			.leftJoin('User.roles', 'Roles')
+			.leftJoin('User._userMeta', 'UserMeta')
+			.leftJoin('User.authenticationMethod', 'AuthenticationMethod')
+			.select(['User', 'Roles', 'UserMeta', 'AuthenticationMethod.name']);
 
 		const embedded = await query
 			.skip((page - 1) * pagesize)
