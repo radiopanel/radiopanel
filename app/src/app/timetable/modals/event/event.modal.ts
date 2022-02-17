@@ -35,7 +35,7 @@ export class EventModalComponent implements OnInit, OnDestroy {
 	public form: FormGroup;
 	public slotTypes$: Observable<any[]>;
 	public tenant: any;
-	public conflictingSlots: Slot[];
+	public validationInfo: [any,Slot[]];
 	public activeTab = 'general';
 	public maxSlotTime: Date;
 
@@ -73,7 +73,7 @@ export class EventModalComponent implements OnInit, OnDestroy {
 							...this.data.event,
 							...this.data.event.meta.originalTimings
 						});
-						this.ensureNoConflicts();
+						this.ensureNoIssues();
 					}
 				})
 			).subscribe(tenant => this.tenant = tenant);
@@ -84,7 +84,7 @@ export class EventModalComponent implements OnInit, OnDestroy {
 				debounceTime(100)
 			)
 			.subscribe(() => setTimeout(() => {
-				this.ensureNoConflicts();
+				this.ensureNoIssues();
 			}));
 
 		// TODO: add takeuntil
@@ -100,7 +100,7 @@ export class EventModalComponent implements OnInit, OnDestroy {
 		this.maxSlotTime = moment(this.form.get('start').value).add(this.data.tenant?.settings?.maximumSlotDuration || 1440, 'm').toDate();
 	}
 
-	private ensureNoConflicts(): void {
+	private ensureNoIssues(): void {
 		this.slotService.verify({
 			...this.form.value,
 			uuid: pathOr(null, ['event', 'uuid'])(this.data),
@@ -108,7 +108,7 @@ export class EventModalComponent implements OnInit, OnDestroy {
 			end: moment(this.form.value.end).unix(),
 		})
 		.toPromise()
-		.then((slots) => this.conflictingSlots = slots);
+		.then((slots) => this.validationInfo = slots);
 	}
 
 	public canBookForOtherUsers(): boolean {

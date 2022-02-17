@@ -18,10 +18,14 @@
                 'm-tab__item--active': activeTab === 'customData'
             }" href="#" (click)="setActiveTab($event, 'customData')">Custom Data</a>
         </div>
-        <div class="m-alert m-alert--danger" *ngIf="conflictingSlots?.length !== 0">
+		<div class="m-alert m-alert--danger" style="margin-bottom: 5px;" *ngIf="validationInfo[0].error">
+			<h4 class="m-alert__title">{{validationInfo[0].msg}}</h4>
+			<p>Slots must be between {{validationInfo[0].minLength}} and {{validationInfo[0].maxLength}} minutes. Your slot is currently {{validationInfo[0].slotLength}} minutes in length</p>
+		</div>
+        <div class="m-alert m-alert--danger" style="margin-bottom: 5px;" *ngIf="validationInfo[1].length !== 0">
             <h4 class="m-alert__title">The following slot conflicts have been found:</h4>
             <ul>
-                <li *ngFor="let slot of conflictingSlots">
+                <li *ngFor="let slot of validationInfo[1]">
                     {{ slot.title }}: {{ slot.start * 1000 | amDateFormat:'HH:mm D MMMM' }} - {{ slot.end * 1000 | amDateFormat:'HH:mm D MMMM' }}
                 </li>
             </ul>
@@ -84,7 +88,7 @@
     <div class="o-modal__footer">
         <div class="u-display--flex u-display--justify-space-between">
             <div>
-                <button class="a-button a-button--success" (click)="save($event)" [disabled]="conflictingSlots?.length !== 0">Save</button>
+                <button class="a-button a-button--success" (click)="save($event)" [disabled]="validationInfo[1].length !== 0 || validationInfo[0].error ">Save</button>
                 <button class="a-button a-button--warning a-button--outline" (click)="close($event)">Cancel</button>
             </div>
 
