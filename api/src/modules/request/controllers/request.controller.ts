@@ -38,9 +38,12 @@ export class RequestController {
 
 	@Post()
 	@Permissions('requests/create')
-	public async create(@Headers('authorization') authorization: string, @Body() request: RequestEntity, @Req() req: Request): Promise<any> {
-		const remoteAddress = req.headers['x-forwarded-for'] as string || "internal";
-
+	public async create(
+		@Headers('authorization') authorization: string,
+		@Body() request: RequestEntity,
+		@Req() req: Request
+	): Promise<any> {
+		const remoteAddress = req.headers['x-real-ip'] as string || "internal";
 
 		// first of all check for ban
 		if (await this.banService.findOne({
@@ -52,7 +55,7 @@ export class RequestController {
 			throw new NotAcceptableException('You have been banned from this radio');
 		}
 
-		if (await this.permissionService.hasPermission(authorization, ['requests/ignore-timeout'])) {
+		if (await this.permissionService.hasPermission((req.user as any)?.uuid || req.headers.authorization, ['requests/ignore-timeout'])) {
 			return this.requestService.create({
 				requestOrigin: 'website',
 				...request,

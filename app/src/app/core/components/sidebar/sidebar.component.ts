@@ -93,7 +93,7 @@ export class SidebarComponent implements OnInit, OnDestroy, AfterViewInit {
 
 	public ngAfterViewInit(): void {
 		this.scrollbarRef.scrolled.subscribe(e => {
-			if (e.target.scrollHeight - e.target.offsetHeight === e.target.scrollTop) {
+			if (e.target.scrollHeight - e.target.offsetHeight <= e.target.scrollTop + 10) {
 				this.scrolledToBottom = true;
 				this.scrolledToTop = false;
 			} else if (e.target.scrollTop === 0) {
