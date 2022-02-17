@@ -49,8 +49,12 @@ export class LoginPageComponent implements OnInit, OnDestroy {
 				if (!result) {
 					return this.router.navigate(['/', 'install'])
 				}
-				
-				this.customisation = result;
+
+				// TODO: Fix this less ugly
+				this.customisation = {
+					...result,
+					authBackground: result.authBackground || 'https://images.unsplash.com/photo-1500702790369-fe461685b3c8?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80'
+				};
 				this.customisationLoading = false;
 
 				document.documentElement.style.setProperty('--color-primary', result?.primaryColor || '#FF926B');

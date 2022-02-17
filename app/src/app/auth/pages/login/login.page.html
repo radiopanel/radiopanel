@@ -27,6 +27,6 @@
                 </ng-container>
             </ng-container>
         </div>
-        <div class="p-login__image" [style.backgroundImage]="'url(' + (customisation?.authBackground || 'https://images.unsplash.com/photo-1500702790369-fe461685b3c8?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80') + ')'"></div>
+        <div class="p-login__image" [style.backgroundImage]="'url(\'' +  customisation?.authBackground + '\')'"></div>
     </div>
 </app-loading>
