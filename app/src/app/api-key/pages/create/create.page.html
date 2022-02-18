@@ -16,7 +16,7 @@
                 label="Api key"
             ></app-text-input>
             <p class="u-hint">Fill in your own key or <a (click)="generateKey($event)" href="#">generate</a> one. Save this key before you click save because you won't be able to see it again</p>
-            <p class="u-hint" *ngIf="form.get('key').value">To use this api key in a request, apply the Basic Auth method. Or just use this: <code>Authorization: Basic {{ generateHeader() }}</code> and  <code>X-Tenant: {{ (tenant$ | async)?.uuid }}</code> </p>
+            <p class="u-hint" *ngIf="form.get('key').value">To use this api key in a request, apply the Basic Auth method. Or just use this: <code>Authorization: Basic {{ generateHeader() }}</code></p>
         </div>
         <app-permission-selector
             [formControl]="form.get('permissions')"
