@@ -84,7 +84,7 @@ RadioPanel open source project. It can grow thanks to the sponsors and support b
 
 ## Getting Started
 
-If you are just trying to run radiopanel, and not develop for it. You can find a guide to just get radiopanel running from prebuild images here: https://docs.radiopanel.co/self-hosting/setup
+If you are just trying to run radiopanel, and not develop for it. You can find a guide to just get radiopanel running from prebuild images here: https://docs.radiopanel.co/installation-and-setup/installing-radiopanel
 
 ### Prerequisites
 
