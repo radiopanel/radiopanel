@@ -114,6 +114,31 @@ export class SlotService {
 		});
 	}
 
+	private async checkSlotLength(slot: Partial<Slot>) {
+		const slotLength = (slot.end - slot.start) / 60;
+		const tenant = this.tenantService.findOne();
+		const minLength = (await tenant).settings.minimumSlotDuration || 30
+		const maxLength = (await tenant).settings.maximumSlotDuration || 1440
+		let length: number;
+		let msg: string;
+		if (slotLength < minLength) {
+			length = 1;
+			msg = "This slot is too short";
+		} else if (slotLength > maxLength) {
+			length = 2;
+			msg = "This slot is too long";
+		} else {
+			length = 0;
+		}
+		return {
+			minLength,
+			maxLength,
+			slotLength,
+			error: length > 0 ? true : false,
+			msg
+		};
+	}
+
 	private async checkNormalSlotForConflicts(slot: Partial<Slot>) {
 		// Check a normal slot against
 		const foundSlotsQuery = this.slotRepository.createQueryBuilder('Slot')
@@ -132,7 +157,9 @@ export class SlotService {
 		// Check a normal slot against a recurring
 		const recurringSlotsFound = await this.checkSlotAgainstRecurringSlots(slot);
 
-		return [...foundSlots, ...recurringSlotsFound]
+		const lengthCalc = await this.checkSlotLength(slot);
+
+		return [lengthCalc, [...foundSlots, ...recurringSlotsFound]]
 	}
 
 	private async checkSlotAgainstRecurringSlots(slot: Partial<Slot>): Promise<Slot[]> {
@@ -170,11 +197,13 @@ export class SlotService {
 				.getMany();
 			foundSlots.push(...slots)
 		}
+		const lengthCalc = await this.checkSlotLength(slot);
 
-		return [...recurringSlotsFound, ...foundSlots];
+		return [lengthCalc, [...recurringSlotsFound, ...foundSlots]];
 	}
 
-	public async verifyIntegrity(slot: Partial<Slot>): Promise<Slot[]> {
+	public async verifyIntegrity(slot: Partial<Slot>): Promise<any> {
+
 		if (slot.recurring === false) {
 			return this.checkNormalSlotForConflicts(slot)
 		}
