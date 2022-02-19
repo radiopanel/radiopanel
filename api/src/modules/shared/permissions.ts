@@ -478,7 +478,7 @@ export const permissions = (pageTypes: PageType[], contentTypes: ContentType[]) 
 		name: 'Content permissions',
 		groups: contentTypes.map((contentType) => ({
 			name: contentType.name,
-			icon: 'align-left-justify',
+			icon: contentType.icon || 'subject',
 			permissions: [
 				{
 					label: `Create ${contentType.name}`,
@@ -503,7 +503,7 @@ export const permissions = (pageTypes: PageType[], contentTypes: ContentType[]) 
 		name: 'Page permissions',
 		groups: pageTypes.map((pageType) => ({
 			name: pageType.name,
-			icon: 'file',
+			icon: pageType.icon || 'file',
 			permissions: [
 				// {
 				// 	label: `Create ${pageType.name}`,
