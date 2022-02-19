@@ -17,7 +17,7 @@ export const permissions = (pageTypes: PageType[], contentTypes: ContentType[]) 
 			},
 			{
 				name: 'Timetable',
-				icon: 'calendar',
+				icon: 'calender',
 				permissions: [
 					{
 						label: 'View timetable',
