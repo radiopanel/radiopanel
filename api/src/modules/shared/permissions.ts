@@ -17,7 +17,7 @@ export const permissions = (pageTypes: PageType[], contentTypes: ContentType[]) 
 			},
 			{
 				name: 'Timetable',
-				icon: 'calendar',
+				icon: 'calender',
 				permissions: [
 					{
 						label: 'View timetable',
@@ -478,7 +478,7 @@ export const permissions = (pageTypes: PageType[], contentTypes: ContentType[]) 
 		name: 'Content permissions',
 		groups: contentTypes.map((contentType) => ({
 			name: contentType.name,
-			icon: 'align-left-justify',
+			icon: contentType.icon || 'subject',
 			permissions: [
 				{
 					label: `Create ${contentType.name}`,
@@ -503,12 +503,8 @@ export const permissions = (pageTypes: PageType[], contentTypes: ContentType[]) 
 		name: 'Page permissions',
 		groups: pageTypes.map((pageType) => ({
 			name: pageType.name,
-			icon: 'file',
+			icon: pageType.icon || 'file',
 			permissions: [
-				{
-					label: `Create ${pageType.name}`,
-					value: `pages/${pageType.uuid}/create`,
-				},
 				{
 					label: `Read ${pageType.name}`,
 					value: `pages/${pageType.uuid}/read`,
@@ -516,10 +512,6 @@ export const permissions = (pageTypes: PageType[], contentTypes: ContentType[]) 
 				{
 					label: `Update ${pageType.name}`,
 					value: `pages/${pageType.uuid}/update`,
-				},
-				{
-					label: `Delete ${pageType.name}`,
-					value: `pages/${pageType.uuid}/delete`,
 				},
 			],
 		})),
