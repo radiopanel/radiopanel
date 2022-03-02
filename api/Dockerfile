@@ -1,5 +1,6 @@
 FROM node:fermium-alpine as builder
 
+RUN apk add --no-cache build-base python make g++
 ENV NODE_ENV build
 
 USER node
