@@ -1,6 +1,6 @@
 FROM node:fermium-alpine as builder
 
-RUN apk add --no-cache build-base python2 python3 make g++ vips-dev
+RUN apk add --update --no-cache python2 gcc make automake autoconf g++ vips vips-dev
 ENV NODE_ENV build
 
 USER node
@@ -15,6 +15,7 @@ RUN npm ci \
 
 FROM node:fermium-alpine
 
+RUN apk add --update --no-cache python2 gcc make automake autoconf g++ vips vips-dev
 ENV NODE_ENV production
 
 EXPOSE 80
