@@ -1,5 +1,6 @@
 FROM node:fermium-alpine as builder
 
+RUN apk add --no-cache build-base python2 python3 make g++ vips-dev
 ENV NODE_ENV build
 
 USER node
