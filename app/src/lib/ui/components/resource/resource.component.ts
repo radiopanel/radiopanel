@@ -69,12 +69,12 @@ export class ResourceComponent implements OnInit, OnDestroy {
 		}
 
 		if (resource.type === 'directory') {
-			return this.resourceService.removeDirectory((`/${this.folder.join('/')}` + '/' + resource.name).replace(/^\//, ''))
+			return this.resourceService.removeDirectory((`/${this.folder.join('/')}` + '/' + resource.name))
 				.pipe(first())
 				.subscribe();
 		}
 
-		this.resourceService.remove((`/${this.folder.join('/')}` + '/' + resource.name).replace(/^\//, ''))
+		this.resourceService.remove((`/${this.folder.join('/')}` + '/' + resource.name))
 				.pipe(first())
 				.subscribe();
 	}

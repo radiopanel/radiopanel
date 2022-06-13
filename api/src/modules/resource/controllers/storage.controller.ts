@@ -81,7 +81,7 @@ export class StorageController {
 		const client = new StorageClient(tenant.settings.storageConfig);
 		await client.init();
 
-		return await client.delete(dir.replace(/^(\/uploads)/, '').replace(/^\//, ''));
+		return client.delete(dir.replace(/^(\/uploads)/, '').replace(/^\//, ''));
 	}
 
 	@Post('/directory')

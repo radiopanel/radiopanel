@@ -8,9 +8,6 @@ jobs:
   push_app_to_registry:
     name: Push Docker image to Docker Hub
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        platform: [linux/amd64, linux/arm/v7, linux/arm64/v8]
     steps:
       - name: Check out the repo
         uses: actions/checkout@v2
@@ -37,16 +34,13 @@ jobs:
         with:
           push: true
           context: app/.
-          platforms: ${{ matrix.platform }}
+          platforms: linux/amd64,linux/arm/v7,linux/arm64/v8
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
 
   push_api_to_registry:
     name: Push Docker image to Docker Hub
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        platform: [linux/amd64, linux/arm/v7, linux/arm64/v8]
     steps:
       - name: Check out the repo
         uses: actions/checkout@v2
@@ -73,6 +67,6 @@ jobs:
         with:
           push: true
           context: api/.
-          platforms: ${{ matrix.platform }}
+          platforms: linux/amd64,linux/arm/v7,linux/arm64/v8
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
