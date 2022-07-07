@@ -16,14 +16,6 @@ const routes: Routes = [
 		loadChildren: () => import('../auth/auth.module').then(m => m.AuthModule)
 	},
 	{
-		path: 'terms-of-service',
-		component: Pages.TosPageComponent
-	},
-	{
-		path: 'privacy-policy',
-		component: Pages.PrivacyPageComponent
-	},
-	{
 		path: 'onboarding',
 		loadChildren: () => import('../onboarding/onboarding.module').then(m => m.OnboardingModule)
 	},
