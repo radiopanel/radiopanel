@@ -68,12 +68,12 @@ export const permissions = (pageTypes: PageType[], contentTypes: ContentType[]) 
 						value: 'storage/upload',
 					},
 					{
-						label: 'Delete file',
-						value: 'storage/delete',
-					},
-					{
 						label: 'Edit file',
 						value: 'storage/edit',
+					},
+					{
+						label: 'Delete file',
+						value: 'storage/delete',
 					},
 					{
 						label: 'Create directory',
@@ -90,12 +90,8 @@ export const permissions = (pageTypes: PageType[], contentTypes: ContentType[]) 
 				icon: 'comment-lines',
 				permissions: [
 					{
-						label: 'Create requests',
-						value: 'requests/create',
-					},
-					{
-						label: 'Ignore request timeout',
-						value: 'requests/ignore-timeout',
+						label: 'Read requests',
+						value: 'requests/read',
 					},
 					{
 						label: 'View request origin',
@@ -106,16 +102,16 @@ export const permissions = (pageTypes: PageType[], contentTypes: ContentType[]) 
 					// 	value: 'requests/read-context',
 					// },
 					{
-						label: 'Read requests',
-						value: 'requests/read',
-					},
-					{
-						label: 'Update requests',
-						value: 'requests/update',
+						label: 'Create requests',
+						value: 'requests/create',
 					},
 					{
 						label: 'Delete requests',
 						value: 'requests/delete',
+					},
+					{
+						label: 'Ignore request timeout',
+						value: 'requests/ignore-timeout',
 					},
 				],
 			},
@@ -168,12 +164,12 @@ export const permissions = (pageTypes: PageType[], contentTypes: ContentType[]) 
 				icon: 'notes',
 				permissions: [
 					{
-						label: 'Create forms',
-						value: 'forms/create',
-					},
-					{
 						label: 'Read forms',
 						value: 'forms/read',
+					},
+					{
+						label: 'Create forms',
+						value: 'forms/create',
 					},
 					{
 						label: 'Update forms',
@@ -184,12 +180,12 @@ export const permissions = (pageTypes: PageType[], contentTypes: ContentType[]) 
 						value: 'forms/delete',
 					},
 					{
-						label: 'Create form entries',
-						value: 'form-entries/create',
-					},
-					{
 						label: 'Read form entries',
 						value: 'form-entries/read',
+					},
+					{
+						label: 'Create form entries',
+						value: 'form-entries/create',
 					},
 					{
 						label: 'Update form entries',
@@ -225,13 +221,13 @@ export const permissions = (pageTypes: PageType[], contentTypes: ContentType[]) 
 				icon: 'user-plus',
 				permissions: [
 					{
-						label: 'Create users',
-						value: 'users/create',
-					},
-					{
 						label: 'Read users',
 						value: 'users/read',
 					},
+					//{
+					//	label: 'Create users',
+					//	value: 'users/create',
+					//},
 					{
 						label: 'Update users',
 						value: 'users/update',
@@ -247,12 +243,12 @@ export const permissions = (pageTypes: PageType[], contentTypes: ContentType[]) 
 				icon: 'shield',
 				permissions: [
 					{
-						label: 'Create roles',
-						value: 'roles/create',
-					},
-					{
 						label: 'Read roles',
 						value: 'roles/read',
+					},
+					{
+						label: 'Create roles',
+						value: 'roles/create',
 					},
 					{
 						label: 'Update roles',
@@ -269,12 +265,12 @@ export const permissions = (pageTypes: PageType[], contentTypes: ContentType[]) 
 				icon: 'user-plus',
 				permissions: [
 					{
-						label: 'Create invites',
-						value: 'invites/create',
-					},
-					{
 						label: 'Read invites',
 						value: 'invites/read',
+					},
+					{
+						label: 'Create invites',
+						value: 'invites/create',
 					},
 					{
 						label: 'Update invites',
@@ -313,12 +309,12 @@ export const permissions = (pageTypes: PageType[], contentTypes: ContentType[]) 
 				icon: 'cog',
 				permissions: [
 					{
-						label: 'Create webhooks',
-						value: 'webhooks/create',
-					},
-					{
 						label: 'Read webhooks',
 						value: 'webhooks/read',
+					},
+					{
+						label: 'Create webhooks',
+						value: 'webhooks/create',
 					},
 					{
 						label: 'Update webhooks',
@@ -335,12 +331,12 @@ export const permissions = (pageTypes: PageType[], contentTypes: ContentType[]) 
 				icon: 'key-skeleton-alt',
 				permissions: [
 					{
-						label: 'Create api keys',
-						value: 'api-keys/create',
-					},
-					{
 						label: 'Read api keys',
 						value: 'api-keys/read',
+					},
+					{
+						label: 'Create api keys',
+						value: 'api-keys/create',
 					},
 					{
 						label: 'Update api keys',
@@ -357,12 +353,12 @@ export const permissions = (pageTypes: PageType[], contentTypes: ContentType[]) 
 				icon: 'align-left-justify',
 				permissions: [
 					{
-						label: 'Create content-types',
-						value: 'content-types/create',
-					},
-					{
 						label: 'Read content-types',
 						value: 'content-types/read',
+					},
+					{
+						label: 'Create content-types',
+						value: 'content-types/create',
 					},
 					{
 						label: 'Update content-types',
@@ -379,12 +375,12 @@ export const permissions = (pageTypes: PageType[], contentTypes: ContentType[]) 
 				icon: 'file',
 				permissions: [
 					{
-						label: 'Create page-types',
-						value: 'page-types/create',
-					},
-					{
 						label: 'Read page-types',
 						value: 'page-types/read',
+					},
+					{
+						label: 'Create page-types',
+						value: 'page-types/create',
 					},
 					{
 						label: 'Update page-types',
@@ -401,12 +397,12 @@ export const permissions = (pageTypes: PageType[], contentTypes: ContentType[]) 
 				icon: 'ban',
 				permissions: [
 					{
-						label: 'Create bans',
-						value: 'bans/create',
-					},
-					{
 						label: 'Read bans',
 						value: 'bans/read',
+					},
+					{
+						label: 'Create bans',
+						value: 'bans/create',
 					},
 					{
 						label: 'Update bans',
@@ -423,12 +419,12 @@ export const permissions = (pageTypes: PageType[], contentTypes: ContentType[]) 
 				icon: 'book-alt',
 				permissions: [
 					{
-						label: 'Create rule pages',
-						value: 'rule-pages/create',
-					},
-					{
 						label: 'Read rule pages',
 						value: 'rule-pages/read',
+					},
+					{
+						label: 'Create rule pages',
+						value: 'rule-pages/create',
 					},
 					{
 						label: 'Update rule pages',
@@ -455,12 +451,12 @@ export const permissions = (pageTypes: PageType[], contentTypes: ContentType[]) 
 				icon: 'eye',
 				permissions: [
 					{
-						label: 'Create auth methods',
-						value: 'authentication-methods/create',
-					},
-					{
 						label: 'Read auth methods',
 						value: 'authentication-methods/read',
+					},
+					{
+						label: 'Create auth methods',
+						value: 'authentication-methods/create',
 					},
 					{
 						label: 'Update auth methods',
@@ -481,12 +477,12 @@ export const permissions = (pageTypes: PageType[], contentTypes: ContentType[]) 
 			icon: contentType.icon || 'subject',
 			permissions: [
 				{
-					label: `Create ${contentType.name}`,
-					value: `content/${contentType.uuid}/create`,
-				},
-				{
 					label: `Read ${contentType.name}`,
 					value: `content/${contentType.uuid}/read`,
+				},
+				{
+					label: `Create ${contentType.name}`,
+					value: `content/${contentType.uuid}/create`,
 				},
 				{
 					label: `Update ${contentType.name}`,
