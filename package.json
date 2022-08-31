@@ -1,6 +1,6 @@
 {
   "name": "radiopanel",
-  "version": "1.0.0-rc.31",
+  "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
